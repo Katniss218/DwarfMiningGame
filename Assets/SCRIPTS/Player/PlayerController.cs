@@ -24,15 +24,28 @@ namespace DwarfMiningGame.Player
             _inventory = this.GetComponent<PlayerInventory>();
         }
 
+        void UsePickaxe()
+        {
+            PickaxeItem pickaxe = _inventory.Pickaxe;
+            if( pickaxe == null )
+            {
+                return;
+            }
+
+            (int x, int y) = TileMap.GetTilePosition( this.transform.position );
+            Tile tile = TileMap.GetTile( x, y - 1 );
+            if( tile == null )
+            {
+                return;
+            }
+            tile.Mine( pickaxe.MiningPower );
+        }
+
         void Update()
         {
             if( Input.GetKey( KeyCode.Mouse0 ) )
             {
-                PickaxeItem pickaxe = _inventory.Pickaxe;
-
-                (int x, int y) = TileMap.GetTilePosition( this.transform.position );
-                Tile tile = TileMap.GetTile( x, y - 1 );
-                tile.Mine( pickaxe.MiningPower );
+                UsePickaxe();
             }
         }
 

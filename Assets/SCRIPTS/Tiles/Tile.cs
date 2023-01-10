@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using DwarfMiningGame.Drops;
+using DwarfMiningGame.Loot;
+using UnityEngine;
 
 namespace DwarfMiningGame.Tiles
 {
@@ -98,8 +100,10 @@ namespace DwarfMiningGame.Tiles
             tile._maxHealth = 1.0f;
             tile._health = tile._maxHealth;
 
+            LootDropper ld = gameObject.AddComponent<LootDropper>();
+            ld.Loot = data.LootTable;
+
             return tile;
         }
-
     }
 }

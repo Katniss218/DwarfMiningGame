@@ -1,24 +1,30 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace DwarfMiningGame.Items
 {
     public class Inventory : MonoBehaviour
     {
+        [Serializable]
         public class ItemStack
         {
+            [field: SerializeField]
             public Item Item { get; set; }
+            [field: SerializeField]
             public int Amt { get; set; }
 
-            public ItemStack(Item item, int amt )
+            public ItemStack( Item item, int amt )
             {
                 this.Item = item;
                 this.Amt = amt;
             }
         }
 
+        [field: SerializeField]
         public float MaxCapacity { get; set; }
 
+        [SerializeField]
         // list of items, each contributes to a count.
         List<ItemStack> _items = new List<ItemStack>();
 
@@ -41,7 +47,7 @@ namespace DwarfMiningGame.Items
             float acc = 0;
             foreach( ItemStack stack in _items )
             {
-                if( stack.Item == item )
+                if( stack.Item.ID == item.ID )
                 {
                     acc += stack.Amt * stack.Item.Size;
                 }
@@ -84,17 +90,21 @@ namespace DwarfMiningGame.Items
         public virtual int Add( Item item, int amt )
         {
             int amountAdded = GetAmountAdded( item, amt );
+            if( amountAdded == 0 )
+            {
+                return 0;
+            }
 
             foreach( ItemStack stack in _items )
             {
-                if( stack.Item == item )
+                if( stack.Item.ID == item.ID )
                 {
                     stack.Amt += amountAdded;
                     return amountAdded;
                 }
             }
 
-            _items.Add( new ItemStack( item, amountAdded ));
+            _items.Add( new ItemStack( item, amountAdded ) );
             return amountAdded;
         }
 
@@ -103,7 +113,7 @@ namespace DwarfMiningGame.Items
         {
             foreach( ItemStack stack in _items )
             {
-                if( stack.Item == item )
+                if( stack.Item.ID == item.ID )
                 {
                     int amtRemoved = amt;
                     if( stack.Amt < amtRemoved )

@@ -16,6 +16,11 @@ namespace DwarfMiningGame.Drops
 
         void OnDestroy()
         {
+            if( !this.gameObject.scene.isLoaded ) // player closed.
+            {
+                return;
+            }
+
             List<(Item, int)> dropped = Loot.Generate();
 
             foreach( (Item item, int amt) in dropped )

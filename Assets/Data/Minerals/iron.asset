@@ -14,5 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: mineral.iron
   Hardness: 5
+  LootTable:
+    <Entries>k__BackingField:
+    - <ItemID>k__BackingField: item.iron
+      <AmtMin>k__BackingField: 1
+      <AmtMax>k__BackingField: 1
+      <DropChance>k__BackingField: 1
   Mesh: {fileID: 0}
   Material: {fileID: 0}

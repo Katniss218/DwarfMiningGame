@@ -13,6 +13,7 @@ namespace DwarfMiningGame.Items
         float _maxCapacityEmpty;
 
         /// Pickaxe lets you mine stuff.
+        [field: SerializeField]
         public PickaxeItem Pickaxe { get; set; }
 
         private BagItem _bag;

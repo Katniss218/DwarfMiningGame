@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DwarfMiningGame.Loot;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,7 @@ namespace DwarfMiningGame.Tiles
     {
         public string ID;
         public float Hardness;
+        public LootTable LootTable;
 
         public Mesh Mesh;
         public Material Material;

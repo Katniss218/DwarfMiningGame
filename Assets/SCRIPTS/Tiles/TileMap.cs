@@ -22,16 +22,24 @@ namespace DwarfMiningGame.Tiles
 
         public static (int x, int y) GetTilePosition( Vector3 position )
         {
-            return ((int)position.x, (int)position.y);
+            return (Mathf.FloorToInt(position.x + 0.5f), Mathf.FloorToInt( position.y + 0.5f));
         }
 
         public static Tile GetTile( int x, int y )
         {
+            if( x < 0 || x >= Width || y < 0 || y >= Height )
+            {
+                return null;
+            }
             return _tiles[x, y];
         }
 
         public static void SetTile( int x, int y, Tile tile )
         {
+            if( x < 0 || x >= Width || y < 0 || y >= Height )
+            {
+                throw new InvalidOperationException( "Can't set a tile outside bounds" );
+            }
             tile.transform.position = GetWorldPosition( x, y );
 
             _tiles[x, y] = tile;

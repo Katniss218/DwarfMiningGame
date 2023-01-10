@@ -184,6 +184,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 28b600cd09980eb45827ae3d47457fc8, type: 2}
   _registeredTiles:
   - {fileID: 11400000, guid: 49e10d2c9ed14ff40838366e3304e2dd, type: 2}
+  _registeredItems:
+  - {fileID: 11400000, guid: a7c0f8c5248a33243880bb013accce4a, type: 2}
+  - {fileID: 11400000, guid: 3184f0d97d2a16b4db699ae4887e90c4, type: 2}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -386,11 +389,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 989360000}
-  - component: {fileID: 989360003}
-  - component: {fileID: 989359999}
-  - component: {fileID: 989359998}
   - component: {fileID: 989360002}
   - component: {fileID: 989360001}
+  - component: {fileID: 989360003}
+  - component: {fileID: 989359999}
+  - component: {fileID: 989360004}
+  - component: {fileID: 989359998}
+  - component: {fileID: 989360005}
   m_Layer: 0
   m_Name: player
   m_TagString: Untagged
@@ -506,3 +511,31 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.4
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &989360004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 989359997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0d6e51c7913c164fb37a72e4b63d567, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <MaxCapacity>k__BackingField: 5
+  _items: []
+  _maxCapacityEmpty: 5
+  <Pickaxe>k__BackingField: {fileID: 11400000, guid: 3184f0d97d2a16b4db699ae4887e90c4, type: 2}
+--- !u!114 &989360005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 989359997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83df42993e2327d4aa001f2c8840b9f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

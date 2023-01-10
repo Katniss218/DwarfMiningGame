@@ -14,5 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: tile.dirt
   Hardness: 3
+  LootTable:
+    <Entries>k__BackingField:
+    - <ItemID>k__BackingField: item.dirt
+      <AmtMin>k__BackingField: 1
+      <AmtMax>k__BackingField: 1
+      <DropChance>k__BackingField: 1
   Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
   Material: {fileID: 10302, guid: 0000000000000000f000000000000000, type: 0}
