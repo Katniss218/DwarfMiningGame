@@ -71,26 +71,18 @@ namespace DwarfMiningGame.Items
             return MaxCapacity - GetSize();
         }
 
-        /// Returns how many items can be added.
-        protected virtual int GetAmountAdded( Item item, int amt )
-        {
-            float sizeAdded = item.Size * amt;
-            float sizeLeft = GetSpaceLeft();
-            if( sizeAdded < sizeLeft )
-            {
-                sizeAdded = sizeLeft;
-            }
-
-            int amountAdded = Mathf.FloorToInt( sizeAdded / item.Size );
-
-            return amountAdded;
-        }
-
         /// returns amount added.
         public virtual int Add( Item item, int amt )
         {
-            int amountAdded = GetAmountAdded( item, amt );
-            if( amountAdded == 0 )
+            float spaceLeft = GetSpaceLeft();
+            int amtLeft = Mathf.FloorToInt( spaceLeft / item.Size );
+            int amountAdded = amt;
+            if( amtLeft < amountAdded )
+            {
+                amountAdded = amtLeft;
+            }
+
+            if( amountAdded <= 0 )
             {
                 return 0;
             }

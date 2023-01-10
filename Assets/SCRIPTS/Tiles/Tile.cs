@@ -79,12 +79,15 @@ namespace DwarfMiningGame.Tiles
             Destroy( this.gameObject );
         }
 
+        const int LAYER = 9;
+
         /// <summary>
         /// Creates a new tile prefab.
         /// </summary>
-        public static Tile Create( TileData data )
+        public static Tile Create( TileData data, MineralData mineral = null )
         {
             GameObject gameObject = new GameObject( "TILE" );
+            gameObject.layer = LAYER;
 
             BoxCollider collider = gameObject.AddComponent<BoxCollider>();
             collider.size = new Vector3( 1.0f, 1.0f, 1.0f );
@@ -102,6 +105,11 @@ namespace DwarfMiningGame.Tiles
 
             LootDropper ld = gameObject.AddComponent<LootDropper>();
             ld.Loot = data.LootTable;
+
+            if( mineral != null )
+            {
+                Mineral.Create( gameObject, mineral );
+            }
 
             return tile;
         }

@@ -33,7 +33,20 @@ namespace DwarfMiningGame.Player
             }
 
             (int x, int y) = TileMap.GetTilePosition( this.transform.position );
-            Tile tile = TileMap.GetTile( x, y - 1 );
+
+            int dirX = 0;
+            int dirY = 0;
+
+            if( Input.GetKey( KeyCode.S ) )
+            {
+                dirY = -1;
+            }
+            else
+            {
+                dirX = this.transform.forward.x < 0 ? -1 : 1;
+            }
+
+            Tile tile = TileMap.GetTile( x + dirX, y + dirY );
             if( tile == null )
             {
                 return;
@@ -52,7 +65,7 @@ namespace DwarfMiningGame.Player
         void FixedUpdate()
         {
             Vector3 totalForce = Vector3.zero;
-
+            
             if( Input.GetKey( KeyCode.A ) )
             {
                 totalForce += new Vector3( -MoveForce, 0.0f, 0.0f );
@@ -69,6 +82,15 @@ namespace DwarfMiningGame.Player
             if( Input.GetKey( KeyCode.S ) )
             {
                 totalForce += new Vector3( 0.0f, -LiftForce, 0.0f );
+            }
+
+            if( totalForce.x < 0 )
+            {
+                this.transform.forward = Vector3.left;
+            }
+            else if(totalForce.x > 0)
+            {
+                this.transform.forward = Vector3.right;
             }
 
             this._rigidbody.AddForce( totalForce );

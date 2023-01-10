@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ID>k__BackingField: item.dirt
   <Size>k__BackingField: 1
-  <Mesh>k__BackingField: {fileID: 0}
-  <Material>k__BackingField: {fileID: 0}
+  <Mesh>k__BackingField: {fileID: 1418424957976056274, guid: 88564592b13d929459d97120daadfcdb, type: 3}
+  <Material>k__BackingField: {fileID: 2100000, guid: a9cccd4bf9da5a544a4fa144087e2985, type: 2}

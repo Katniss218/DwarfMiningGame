@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c9f1976b83cdec4f8faf96702c176af, type: 3}
+  m_Name: iron
+  m_EditorClassIdentifier: 
+  ID: mineral.iron
+  Hardness: 5
+  LootTable:
+    <Entries>k__BackingField:
+    - <ItemID>k__BackingField: item.iron
+      <AmtMin>k__BackingField: 1
+      <AmtMax>k__BackingField: 1
+      <DropChance>k__BackingField: 1
+  Mesh: {fileID: -5607468175000365419, guid: 8950139df63ece143823f3cbc867410a, type: 3}
+  Material: {fileID: 2100000, guid: a9cccd4bf9da5a544a4fa144087e2985, type: 2}

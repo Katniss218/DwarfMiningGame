@@ -17,19 +17,26 @@ namespace DwarfMiningGame.Drops
         public void OnTake( int amt )
         {
             this.Amt -= amt;
-            if( amt <= 0 )
+            if( this.Amt <= 0 )
             {
                 Destroy( this.gameObject );
             }
         }
 
+        const int LAYER = 10;
+
         public static DroppedItem Create( Vector3 position, Item item, int amt )
         {
             GameObject go = new GameObject( "Item" );
-            go.transform.position = position;
+            go.layer = LAYER;
+            go.transform.position = position + new Vector3( UnityEngine.Random.Range( -0.125f, 0.125f ), UnityEngine.Random.Range( -0.125f, 0.125f ), 0.0f );
+
+            Rigidbody rb = go.AddComponent<Rigidbody>();
+            rb.constraints = RigidbodyConstraints.FreezePositionZ;
 
             SphereCollider c = go.AddComponent<SphereCollider>();
             c.radius = 0.25f;
+           // c.isTrigger = true;
 
             MeshFilter mf = go.AddComponent<MeshFilter>();
             mf.mesh = item.Mesh;

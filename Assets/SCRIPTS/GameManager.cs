@@ -15,7 +15,7 @@ namespace DwarfMiningGame
         {
             TileMap.CreateMap( 200, 200 );
 
-            WorldGenerator.Run();
+            new WorldGenerator().Run();
         }
     }
 }

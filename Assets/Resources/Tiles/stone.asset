@@ -10,15 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 98a9504a8427e3d4e816a72d8491c9ea, type: 3}
-  m_Name: dirt
+  m_Name: stone
   m_EditorClassIdentifier: 
-  ID: tile.dirt
-  Hardness: 3
+  ID: tile.stone
+  Hardness: 10
   LootTable:
-    <Entries>k__BackingField:
-    - <ItemID>k__BackingField: item.dirt
-      <AmtMin>k__BackingField: 1
-      <AmtMax>k__BackingField: 1
-      <DropChance>k__BackingField: 1
-  Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
-  Material: {fileID: 10302, guid: 0000000000000000f000000000000000, type: 0}
+    <Entries>k__BackingField: []
+  Mesh: {fileID: -8134003407345992923, guid: 2cccce0b270d44e409d3325fa6423fab, type: 3}
+  Material: {fileID: 2100000, guid: a9cccd4bf9da5a544a4fa144087e2985, type: 2}

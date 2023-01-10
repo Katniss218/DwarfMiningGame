@@ -41,6 +41,7 @@ namespace DwarfMiningGame.Tiles
                 throw new InvalidOperationException( "Can't set a tile outside bounds" );
             }
             tile.transform.position = GetWorldPosition( x, y );
+            tile.gameObject.isStatic = true;
 
             _tiles[x, y] = tile;
         }

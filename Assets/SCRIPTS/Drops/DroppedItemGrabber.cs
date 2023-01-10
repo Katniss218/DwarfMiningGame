@@ -38,5 +38,4 @@ namespace DwarfMiningGame.Drops
             stack.OnTake( amtPickedUp );
         }
     }
-
 }
