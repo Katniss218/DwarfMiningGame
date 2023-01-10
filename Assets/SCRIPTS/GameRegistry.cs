@@ -1,7 +1,9 @@
-﻿using DwarfMiningGame.Tiles;
+﻿using DwarfMiningGame.Items;
+using DwarfMiningGame.Tiles;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace DwarfMiningGame
@@ -14,10 +16,20 @@ namespace DwarfMiningGame
         [SerializeField]
         private TileData[] _registeredTiles;
 
+        [SerializeField]
+        private Item[] _registeredItems;
+
 
         public static MineralData[] RegisteredMinerals { get => _instance._registeredMinerals; }
 
         public static TileData[] RegisteredTiles { get => _instance._registeredTiles; }
+
+        public static Item[] RegisteredItems { get => _instance._registeredItems; }
+
+        public static Item GetItem( string id )
+        {
+            return RegisteredItems.FirstOrDefault( n => n.ID == id );
+        }
 
         private static GameRegistry ___instance;
         private static GameRegistry _instance

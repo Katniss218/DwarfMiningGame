@@ -20,6 +20,11 @@ namespace DwarfMiningGame.Tiles
             return new Vector3( x, y, 0 );
         }
 
+        public static (int x, int y) GetTilePosition( Vector3 position )
+        {
+            return ((int)position.x, (int)position.y);
+        }
+
         public static Tile GetTile( int x, int y )
         {
             return _tiles[x, y];
