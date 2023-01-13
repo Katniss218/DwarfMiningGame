@@ -9,9 +9,11 @@ using UnityEngine;
 namespace DwarfMiningGame.Tiles
 {
     [CreateAssetMenu( fileName = "mineral", menuName = "DwarfMiningGame/Mineral", order = 20 )]
-    public class MineralData : ScriptableObject
+    public class MineralData : ScriptableObject, IIdentifiable
     {
-        public string ID;
+        [field: SerializeField]
+        public string ID { get; set; }
+
         public float Hardness;
         public LootTable LootTable;
 

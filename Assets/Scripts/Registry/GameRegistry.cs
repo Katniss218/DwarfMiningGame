@@ -26,6 +26,11 @@ namespace DwarfMiningGame
 
         public static Item[] RegisteredItems { get => _instance._registeredItems; }
 
+        public static TileData GetTile( string id )
+        {
+            return RegisteredTiles.FirstOrDefault( n => n.ID == id );
+        }
+
         public static Item GetItem( string id )
         {
             return RegisteredItems.FirstOrDefault( n => n.ID == id );

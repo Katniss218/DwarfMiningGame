@@ -53,7 +53,7 @@ namespace DwarfMiningGame.Loot
                     amt = rand.Next( entry.AmtMin, entry.AmtMax );
                 }
 
-                Item i = GameRegistry.GetItem( entry.ItemID );
+                Item i = Registry<Item>.Get( entry.ItemID );
                 if( i == null )
                 {
                     continue;

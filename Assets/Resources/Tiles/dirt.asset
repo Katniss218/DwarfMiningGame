@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98a9504a8427e3d4e816a72d8491c9ea, type: 3}
   m_Name: dirt
   m_EditorClassIdentifier: 
-  ID: tile.dirt
+  <ID>k__BackingField: tile.dirt
   Hardness: 3
   LootTable:
     <Entries>k__BackingField:

@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c9f1976b83cdec4f8faf96702c176af, type: 3}
   m_Name: iron
   m_EditorClassIdentifier: 
-  ID: mineral.iron
+  <ID>k__BackingField: mineral.iron
   Hardness: 5
   LootTable:
     <Entries>k__BackingField:
-    - <ItemID>k__BackingField: item.iron
+    - <ItemID>k__BackingField: item.dwarven_pickaxe
       <AmtMin>k__BackingField: 1
       <AmtMax>k__BackingField: 1
       <DropChance>k__BackingField: 1

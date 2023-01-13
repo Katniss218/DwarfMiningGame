@@ -5,18 +5,17 @@ using UnityEngine;
 namespace DwarfMiningGame.Items
 {
     [CreateAssetMenu( fileName = "item", menuName = "DwarfMiningGame/Item", order = 30 )]
-    public class Item : ScriptableObject
+    public class Item : ScriptableObject, IIdentifiable
     {
         [field: SerializeField]
         public string ID { get; set; }
 
-        [field: SerializeField]
-        public float Size { get; set; } = 1.0f;
+        public float Size = 1.0f;
 
-        [field: SerializeField]
-        public Mesh Mesh { get; set; }
+        public Mesh Mesh;
 
-        [field: SerializeField]
-        public Material Material { get; set; }
+        public Material Material;
+
+        public Sprite Icon;
     }
 }

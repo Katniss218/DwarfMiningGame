@@ -9,13 +9,17 @@ using UnityEngine;
 
 namespace DwarfMiningGame.Drops
 {
-    public class LootDropper : MonoBehaviour
+    public class LootDropper : MonoBehaviour, IKillCallback
     {
         [field: SerializeField]
         public LootTable Loot { get; set; }
 
-        void OnDestroy()
+        public void OnKill( bool silent )
         {
+            if( silent )
+            {
+                return;
+            }
             if( !this.gameObject.scene.isLoaded ) // player closed.
             {
                 return;

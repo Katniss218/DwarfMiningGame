@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using DwarfMiningGame.Drops;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,16 +22,17 @@ namespace DwarfMiningGame.Tiles
             gameObject.transform.localRotation = Quaternion.identity;
             gameObject.transform.localScale = Vector3.one;
 
-
             MeshFilter meshFilter = gameObject.AddComponent<MeshFilter>();
             meshFilter.mesh = data.Mesh;
 
             MeshRenderer meshRenderer = gameObject.AddComponent<MeshRenderer>();
             meshRenderer.material = data.Material;
 
-
             Mineral min = tile.AddComponent<Mineral>();
             min.Hardness = data.Hardness;
+
+            LootDropper ld = tile.AddComponent<LootDropper>();
+            ld.Loot = data.LootTable;
         }
     }
 }

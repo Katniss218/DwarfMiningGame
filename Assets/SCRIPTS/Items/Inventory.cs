@@ -12,12 +12,12 @@ namespace DwarfMiningGame.Items
             [field: SerializeField]
             public Item Item { get; set; }
             [field: SerializeField]
-            public int Amt { get; set; }
+            public int Amount { get; set; }
 
             public ItemStack( Item item, int amt )
             {
                 this.Item = item;
-                this.Amt = amt;
+                this.Amount = amt;
             }
         }
 
@@ -28,6 +28,12 @@ namespace DwarfMiningGame.Items
         // list of items, each contributes to a count.
         List<ItemStack> _items = new List<ItemStack>();
 
+        [SerializeField]
+        public Action<(Item item, int amt)> OnAdd;
+
+        [SerializeField]
+        public Action<(Item item, int amt)> OnRemove;
+
         public virtual int GetCount( Item item )
         {
             int acc = 0;
@@ -35,7 +41,7 @@ namespace DwarfMiningGame.Items
             {
                 if( stack.Item == item )
                 {
-                    acc += stack.Amt;
+                    acc += stack.Amount;
                 }
             }
             return acc;
@@ -49,7 +55,7 @@ namespace DwarfMiningGame.Items
             {
                 if( stack.Item.ID == item.ID )
                 {
-                    acc += stack.Amt * stack.Item.Size;
+                    acc += stack.Amount * stack.Item.Size;
                 }
             }
             return acc;
@@ -60,7 +66,7 @@ namespace DwarfMiningGame.Items
             float acc = 0;
             foreach( ItemStack stack in _items )
             {
-                acc += stack.Amt * stack.Item.Size;
+                acc += stack.Amount * stack.Item.Size;
             }
             return acc;
         }
@@ -72,14 +78,14 @@ namespace DwarfMiningGame.Items
         }
 
         /// returns amount added.
-        public virtual int Add( Item item, int amt )
+        public virtual int Add( Item item, int amount )
         {
             float spaceLeft = GetSpaceLeft();
-            int amtLeft = Mathf.FloorToInt( spaceLeft / item.Size );
-            int amountAdded = amt;
-            if( amtLeft < amountAdded )
+            int amountLeft = Mathf.FloorToInt( spaceLeft / item.Size );
+            int amountAdded = amount;
+            if( amountLeft < amountAdded )
             {
-                amountAdded = amtLeft;
+                amountAdded = amountLeft;
             }
 
             if( amountAdded <= 0 )
@@ -91,34 +97,37 @@ namespace DwarfMiningGame.Items
             {
                 if( stack.Item.ID == item.ID )
                 {
-                    stack.Amt += amountAdded;
+                    stack.Amount += amountAdded;
+                    OnAdd?.Invoke( (item, amountAdded) );
                     return amountAdded;
                 }
             }
 
+            OnAdd?.Invoke( (item, amountAdded) );
             _items.Add( new ItemStack( item, amountAdded ) );
             return amountAdded;
         }
 
         /// returns amount removed.
-        public virtual int Remove( Item item, int amt )
+        public virtual int Remove( Item item, int amount )
         {
             foreach( ItemStack stack in _items )
             {
                 if( stack.Item.ID == item.ID )
                 {
-                    int amtRemoved = amt;
-                    if( stack.Amt < amtRemoved )
+                    int amountRemoved = amount;
+                    if( stack.Amount < amountRemoved )
                     {
-                        amtRemoved = stack.Amt;
+                        amountRemoved = stack.Amount;
                     }
 
-                    stack.Amt -= amtRemoved;
-                    if( stack.Amt <= 0 )
+                    stack.Amount -= amountRemoved;
+                    if( stack.Amount <= 0 )
                     {
                         _items.Remove( stack );
                     }
-                    return amtRemoved;
+                    OnRemove?.Invoke( (item, amountRemoved) );
+                    return amountRemoved;
                 }
             }
             return 0;
