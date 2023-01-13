@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98a9504a8427e3d4e816a72d8491c9ea, type: 3}
+  m_Name: dirt.2
+  m_EditorClassIdentifier: 
+  <ID>k__BackingField: tile.dirt.2
+  Hardness: 3
+  LootTable: {fileID: 11400000, guid: 6c8884ecd39bd7f489a6f216156d08a4, type: 2}
+  Mesh: {fileID: 5032858190490050443, guid: b9527639cc876814ab3d959998cd2a64, type: 3}
+  Material: {fileID: 2100000, guid: a9cccd4bf9da5a544a4fa144087e2985, type: 2}

@@ -37,7 +37,7 @@ namespace DwarfMiningGame.WorldGen
             }
         }
 
-        public void PlaceVein( int startX, int startY, int steps, Tile tile, Mineral min, Func<float, float> radiusFunc, Func<float, float> chanceFunc, float closeness = 1.125f )
+        public void PlaceVein( int startX, int startY, int steps, Func<Tile, (Tile, Mineral)> tileSelector, Func<float, float> radiusFunc, Func<float, float> chanceFunc, float closeness = 1.125f )
         {
             // Makes a series of spheres that intersect with each other.
             // radiusFunc takes in [0 to 1], 0 being at the beginning and 1 at the end, and spits out [0 to 1].
@@ -71,7 +71,14 @@ namespace DwarfMiningGame.WorldGen
                             TileBehaviour t = TileMap.GetTile( x, y );
                             if( t != null )
                             {
+                                (Tile tile, Mineral min) = tileSelector( t.OriginalTile );
                                 t.Kill( true );
+                                // tile not specified, mineral specified - add just the mineral.
+                                if( tile == null && min != null )
+                                {
+                                    TileMap.SetTile( x, y, TileBehaviour.Create( t.OriginalTile, min ) );
+                                }
+                                // tile specified - replace tile, possibly mineral too.
                                 if( tile != null )
                                 {
                                     TileMap.SetTile( x, y, TileBehaviour.Create( tile, min ) );
@@ -90,6 +97,19 @@ namespace DwarfMiningGame.WorldGen
             }
         }
 
+        private Tile GetRandom(string baseId, int numVariants )
+        {
+            int r = rand.Next( 0, numVariants );
+
+            string var = "";
+
+            if( r > 0 )
+            {
+                var = $".{(r + 1)}";
+            }
+
+            return Registry<Tile>.Get( $"{baseId}{var}" );
+        }
 
         public void Run()
         {
@@ -97,7 +117,6 @@ namespace DwarfMiningGame.WorldGen
             {
                 for( int y = 0; y < TileMap.Height; y++ )
                 {
-                    int r = rand.Next( 0, 2 );
                     int yJitter = y + rand.Next( -50, 51 );
 
                     float depth = (float)yJitter / (float)TileMap.Height;
@@ -107,21 +126,11 @@ namespace DwarfMiningGame.WorldGen
 
                     if( chance )
                     {
-                        if( r == 0 || r == 1 )
-                        {
-                            TileMap.SetTile( x, y, TileBehaviour.Create( Registry<Tile>.Get("tile.dirt") ) );
-                        }
+                        TileMap.SetTile( x, y, TileBehaviour.Create( GetRandom( "tile.dirt", 3 ) ) );
                     }
                     else
                     {
-                        if( r == 0 )
-                        {
-                            TileMap.SetTile( x, y, TileBehaviour.Create( Registry<Tile>.Get( "tile.stone" ) ) );
-                        }
-                        if( r == 1 )
-                        {
-                            TileMap.SetTile( x, y, TileBehaviour.Create( Registry<Tile>.Get( "tile.stone.2" ) ) );
-                        }
+                        TileMap.SetTile( x, y, TileBehaviour.Create( GetRandom( "tile.stone", 3 ) ) );
                     }
                 }
             }
@@ -131,7 +140,7 @@ namespace DwarfMiningGame.WorldGen
                 int x = rand.Next( 0, TileMap.Width );
                 int y = rand.Next( 0, TileMap.Height );
 
-                PlaceVein( x, y, 25, Registry<Tile>.Get( "tile.dirt" ), null, ( n ) => (1 - n) * 2.5f, ( n ) => 0.75f );
+                PlaceVein( x, y, 25, ( t ) => (GetRandom( "tile.dirt", 3 ), null), ( n ) => (1 - n) * 2.5f, ( n ) => 0.75f );
             }
 
             for( int i = 0; i < (TileMap.Width + TileMap.Height) / 5; i++ )
@@ -139,15 +148,7 @@ namespace DwarfMiningGame.WorldGen
                 int x = rand.Next( 0, TileMap.Width );
                 int y = rand.Next( 0, TileMap.Height );
 
-                PlaceVein( x, y, 20, Registry<Tile>.Get( "tile.stone" ), null, ( n ) => (1 - n) * 2.5f, ( n ) => 0.75f );
-            }
-            
-            for( int i = 0; i < (TileMap.Width + TileMap.Height) / 5; i++ )
-            {
-                int x = rand.Next( 0, TileMap.Width );
-                int y = rand.Next( 0, TileMap.Height );
-
-                PlaceVein( x, y, 30, null, null, ( n ) => (1 - n) * 3.5f, ( n ) => 1.0f );
+                PlaceVein( x, y, 20, ( t ) => (GetRandom( "tile.stone", 3 ), null), ( n ) => (1 - n) * 2.5f, ( n ) => 0.75f );
             }
 
             for( int i = 0; i < (TileMap.Width + TileMap.Height) / 5; i++ )
@@ -155,7 +156,15 @@ namespace DwarfMiningGame.WorldGen
                 int x = rand.Next( 0, TileMap.Width );
                 int y = rand.Next( 0, TileMap.Height );
 
-                PlaceVein( x, y, 3, Registry<Tile>.Get( "tile.stone.2" ), Registry<Mineral>.Get( "mineral.iron" ), ( n ) => (1 - n) * 2.5f, ( n ) => 0.5f );
+                PlaceVein( x, y, 30, ( t ) => (null, null), ( n ) => (1 - n) * 3.5f, ( n ) => 1.0f );
+            }
+
+            for( int i = 0; i < (TileMap.Width + TileMap.Height) / 5; i++ )
+            {
+                int x = rand.Next( 0, TileMap.Width );
+                int y = rand.Next( 0, TileMap.Height );
+
+                PlaceVein( x, y, 3, ( t ) => (null, Registry<Mineral>.Get( "mineral.iron" )), ( n ) => (1 - n) * 2.5f, ( n ) => 0.5f );
             }
         }
     }

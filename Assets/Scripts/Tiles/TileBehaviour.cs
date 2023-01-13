@@ -15,7 +15,7 @@ namespace DwarfMiningGame.Tiles
         // They can contain a type and amount of resource. Different amounts are displayed differently (bigger veins).
         // They take time to break, time can be dependant on the type of tile and resource inside.
 
-        public string OriginalTileID { get; private set; } = "invalid";
+        public Tile OriginalTile { get; private set; }
 
         /// <summary>
         /// Describes how hard it is to break the tile.
@@ -86,7 +86,7 @@ namespace DwarfMiningGame.Tiles
             Destroy( this.gameObject );
         }
 
-        const int LAYER = 9;
+        public const int LAYER = 9;
 
         /// <summary>
         /// Creates a new tile prefab.
@@ -109,7 +109,7 @@ namespace DwarfMiningGame.Tiles
             tile.BaseHardness = data.Hardness;
             tile._maxHealth = 1.0f;
             tile._health = tile._maxHealth;
-            tile.OriginalTileID = data.ID;
+            tile.OriginalTile = data;
 
             LootDropper ld = gameObject.AddComponent<LootDropper>();
             ld.Loot = data.LootTable;

@@ -12,4 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b51813511773ef24c8b5b7db03e0b751, type: 3}
   m_Name: loot.iron
   m_EditorClassIdentifier: 
-  <Entries>k__BackingField: []
+  <Entries>k__BackingField:
+  - <Item>k__BackingField: {fileID: 11400000, guid: 3184f0d97d2a16b4db699ae4887e90c4, type: 2}
+    <AmtMin>k__BackingField: 1
+    <AmtMax>k__BackingField: 1
+    <DropChance>k__BackingField: 1

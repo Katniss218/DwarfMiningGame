@@ -7,6 +7,7 @@ using UnityEngine;
 namespace DwarfMiningGame.Player
 {
     [RequireComponent( typeof( Rigidbody ) )]
+    [RequireComponent( typeof( Collider ) )]
     public class PlayerController : MonoBehaviour
     {
         [field: SerializeField]
@@ -16,35 +17,44 @@ namespace DwarfMiningGame.Player
         public float LiftForce { get; set; }
 
         Rigidbody _rigidbody;
+        Collider _collider;
         PlayerInventory _inventory;
+
+        [field: SerializeField]
+        public bool IsOnGround { get; private set; }
 
         void Awake()
         {
             _rigidbody = this.GetComponent<Rigidbody>();
+            _collider = this.GetComponent<Collider>();
             _inventory = this.GetComponent<PlayerInventory>();
         }
 
         void UsePickaxe()
         {
-            PickaxeItem pickaxe = _inventory.Pickaxe;
+            ItemPickaxe pickaxe = _inventory.Pickaxe;
             if( pickaxe == null )
             {
                 return;
             }
 
-            (int x, int y) = TileMap.GetTilePosition( this.transform.position );
-
             int dirX = 0;
             int dirY = 0;
 
-            if( Input.GetKey( KeyCode.S ) )
+            if( Input.GetKey( KeyCode.S ) ) // pressing S - mine down no matter what.
             {
                 dirY = -1;
             }
-            else
+            else if( IsOnGround ) // not pressing S - mine sideways only if on ground.
             {
                 dirX = this.transform.forward.x < 0 ? -1 : 1;
             }
+            else
+            {
+                return;
+            }
+
+            (int x, int y) = TileMap.GetTilePosition( this.transform.position );
 
             TileBehaviour tile = TileMap.GetTile( x + dirX, y + dirY );
             if( tile == null )
@@ -64,8 +74,17 @@ namespace DwarfMiningGame.Player
 
         void FixedUpdate()
         {
+            if( Physics.Raycast( this.transform.position, Vector3.down, this._collider.bounds.extents.y + 0.05f, 1 << TileBehaviour.LAYER ) )
+            {
+                IsOnGround = true;
+            }
+            else
+            {
+                IsOnGround = false;
+            }
+
             Vector3 totalForce = Vector3.zero;
-            
+
             if( Input.GetKey( KeyCode.A ) )
             {
                 totalForce += new Vector3( -MoveForce, 0.0f, 0.0f );
@@ -77,6 +96,7 @@ namespace DwarfMiningGame.Player
 
             if( Input.GetKey( KeyCode.W ) )
             {
+                IsOnGround = false;
                 totalForce += new Vector3( 0.0f, LiftForce, 0.0f );
             }
             if( Input.GetKey( KeyCode.S ) )
@@ -88,7 +108,7 @@ namespace DwarfMiningGame.Player
             {
                 this.transform.forward = Vector3.left;
             }
-            else if(totalForce.x > 0)
+            else if( totalForce.x > 0 )
             {
                 this.transform.forward = Vector3.right;
             }

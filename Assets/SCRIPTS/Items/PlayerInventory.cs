@@ -14,13 +14,13 @@ namespace DwarfMiningGame.Items
 
         /// Pickaxe lets you mine stuff.
         [field: SerializeField]
-        public PickaxeItem Pickaxe { get; set; }
+        public ItemPickaxe Pickaxe { get; set; }
 
-        private BagItem _bag;
+        private ItemBag _bag;
 
         /// Bag changes the size of your inventory.
         // when changing the bag, if you unequip it, the capacity changes, but items are not dropped.
-        public BagItem Bag
+        public ItemBag Bag
         {
             get
             {

@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace DwarfMiningGame.Items
 { 
-    [CreateAssetMenu( fileName = "pickaxe item", menuName = "DwarfMiningGame/Item-Pickaxe", order = 310 )]
-    public class PickaxeItem : Item
+    [CreateAssetMenu( fileName = "pickaxe item", menuName = "DwarfMiningGame/Item (Pickaxe)", order = 310 )]
+    public class ItemPickaxe : Item
     {
         [field: SerializeField]
         public float MiningPower { get; set; }
