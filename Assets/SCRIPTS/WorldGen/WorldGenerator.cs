@@ -37,7 +37,7 @@ namespace DwarfMiningGame.WorldGen
             }
         }
 
-        public void PlaceVein( int startX, int startY, int steps, TileData tile, MineralData min, Func<float, float> radiusFunc, Func<float, float> chanceFunc, float closeness = 1.125f )
+        public void PlaceVein( int startX, int startY, int steps, Tile tile, Mineral min, Func<float, float> radiusFunc, Func<float, float> chanceFunc, float closeness = 1.125f )
         {
             // Makes a series of spheres that intersect with each other.
             // radiusFunc takes in [0 to 1], 0 being at the beginning and 1 at the end, and spits out [0 to 1].
@@ -68,13 +68,13 @@ namespace DwarfMiningGame.WorldGen
 
                         if( rnd < thr )
                         {
-                            Tile t = TileMap.GetTile( x, y );
+                            TileBehaviour t = TileMap.GetTile( x, y );
                             if( t != null )
                             {
                                 t.Kill( true );
                                 if( tile != null )
                                 {
-                                    TileMap.SetTile( x, y, Tile.Create( tile, min ) );
+                                    TileMap.SetTile( x, y, TileBehaviour.Create( tile, min ) );
                                 }
                             }
                         }
@@ -109,18 +109,18 @@ namespace DwarfMiningGame.WorldGen
                     {
                         if( r == 0 || r == 1 )
                         {
-                            TileMap.SetTile( x, y, Tile.Create( Registry<TileData>.Get("tile.dirt") ) );
+                            TileMap.SetTile( x, y, TileBehaviour.Create( Registry<Tile>.Get("tile.dirt") ) );
                         }
                     }
                     else
                     {
                         if( r == 0 )
                         {
-                            TileMap.SetTile( x, y, Tile.Create( Registry<TileData>.Get( "tile.stone" ) ) );
+                            TileMap.SetTile( x, y, TileBehaviour.Create( Registry<Tile>.Get( "tile.stone" ) ) );
                         }
                         if( r == 1 )
                         {
-                            TileMap.SetTile( x, y, Tile.Create( Registry<TileData>.Get( "tile.stone.2" ) ) );
+                            TileMap.SetTile( x, y, TileBehaviour.Create( Registry<Tile>.Get( "tile.stone.2" ) ) );
                         }
                     }
                 }
@@ -131,7 +131,7 @@ namespace DwarfMiningGame.WorldGen
                 int x = rand.Next( 0, TileMap.Width );
                 int y = rand.Next( 0, TileMap.Height );
 
-                PlaceVein( x, y, 25, Registry<TileData>.Get( "tile.dirt" ), null, ( n ) => (1 - n) * 2.5f, ( n ) => 0.75f );
+                PlaceVein( x, y, 25, Registry<Tile>.Get( "tile.dirt" ), null, ( n ) => (1 - n) * 2.5f, ( n ) => 0.75f );
             }
 
             for( int i = 0; i < (TileMap.Width + TileMap.Height) / 5; i++ )
@@ -139,7 +139,7 @@ namespace DwarfMiningGame.WorldGen
                 int x = rand.Next( 0, TileMap.Width );
                 int y = rand.Next( 0, TileMap.Height );
 
-                PlaceVein( x, y, 20, Registry<TileData>.Get( "tile.stone" ), null, ( n ) => (1 - n) * 2.5f, ( n ) => 0.75f );
+                PlaceVein( x, y, 20, Registry<Tile>.Get( "tile.stone" ), null, ( n ) => (1 - n) * 2.5f, ( n ) => 0.75f );
             }
             
             for( int i = 0; i < (TileMap.Width + TileMap.Height) / 5; i++ )
@@ -155,7 +155,7 @@ namespace DwarfMiningGame.WorldGen
                 int x = rand.Next( 0, TileMap.Width );
                 int y = rand.Next( 0, TileMap.Height );
 
-                PlaceVein( x, y, 3, Registry<TileData>.Get( "tile.stone.2" ), Registry<MineralData>.Get( "mineral.iron" ), ( n ) => (1 - n) * 2.5f, ( n ) => 0.5f );
+                PlaceVein( x, y, 3, Registry<Tile>.Get( "tile.stone.2" ), Registry<Mineral>.Get( "mineral.iron" ), ( n ) => (1 - n) * 2.5f, ( n ) => 0.5f );
             }
         }
     }

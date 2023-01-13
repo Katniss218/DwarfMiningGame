@@ -9,22 +9,23 @@ using UnityEngine;
 namespace DwarfMiningGame.Loot
 {
     /// Stores loot to be dropped by something.
-    [Serializable]
-    public class LootTable
+
+    [CreateAssetMenu( fileName = "loot_table", menuName = "DwarfMiningGame/Loot Table", order = 400 )]
+    public class LootTable : ScriptableObject
     {
         [Serializable]
         public class Entry
         {
             [field: SerializeField]
-            public string ItemID { get; set; }
+            public Item Item { get; set; } = null;
 
             [field: SerializeField]
-            public int AmtMin { get; set; }
+            public int AmtMin { get; set; } = 1;
             [field: SerializeField]
-            public int AmtMax { get; set; }
+            public int AmtMax { get; set; } = 1;
 
             [field: SerializeField]
-            public float DropChance { get; set; }
+            public float DropChance { get; set; } = 1;
         }
 
         [field: SerializeField]
@@ -53,15 +54,9 @@ namespace DwarfMiningGame.Loot
                     amt = rand.Next( entry.AmtMin, entry.AmtMax );
                 }
 
-                Item i = Registry<Item>.Get( entry.ItemID );
-                if( i == null )
-                {
-                    continue;
-                }
-                result.Add( (i, amt) );
+                result.Add( (entry.Item, amt) );
             }
             return result;
         }
     }
-
 }

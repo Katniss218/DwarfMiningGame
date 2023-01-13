@@ -46,7 +46,7 @@ namespace DwarfMiningGame.Player
                 dirX = this.transform.forward.x < 0 ? -1 : 1;
             }
 
-            Tile tile = TileMap.GetTile( x + dirX, y + dirY );
+            TileBehaviour tile = TileMap.GetTile( x + dirX, y + dirY );
             if( tile == null )
             {
                 return;

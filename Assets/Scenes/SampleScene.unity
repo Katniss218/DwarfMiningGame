@@ -133,7 +133,6 @@ GameObject:
   m_Component:
   - component: {fileID: 49534563}
   - component: {fileID: 49534564}
-  - component: {fileID: 49534565}
   m_Layer: 0
   m_Name: MAIN
   m_TagString: Untagged
@@ -168,27 +167,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 706bd1d86e9fb2b4fb100d391940da55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &49534565
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 49534562}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 058ff096097072d40b2faed4e4c9e8d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _registeredMinerals:
-  - {fileID: 11400000, guid: 28b600cd09980eb45827ae3d47457fc8, type: 2}
-  _registeredTiles:
-  - {fileID: 11400000, guid: 49e10d2c9ed14ff40838366e3304e2dd, type: 2}
-  - {fileID: 11400000, guid: 9572f7d93e39fe041b9b247bc98a7ae3, type: 2}
-  - {fileID: 11400000, guid: ab289d2fb464cc944ac1366927063507, type: 2}
-  _registeredItems:
-  - {fileID: 11400000, guid: a7c0f8c5248a33243880bb013accce4a, type: 2}
-  - {fileID: 11400000, guid: 3184f0d97d2a16b4db699ae4887e90c4, type: 2}
 --- !u!1 &228516042
 GameObject:
   m_ObjectHideFlags: 0
@@ -535,7 +513,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 228516043}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.999996
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1554,7 +1532,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000051156367}
+  m_AnchoredPosition: {x: 0, y: 0.0008765329}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1884462120

@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ID>k__BackingField: tile.stone
   Hardness: 10
-  LootTable:
-    <Entries>k__BackingField: []
+  LootTable: {fileID: 11400000, guid: da736f433a1845f45ba7edede278d268, type: 2}
   Mesh: {fileID: -8134003407345992923, guid: 2cccce0b270d44e409d3325fa6423fab, type: 3}
   Material: {fileID: 2100000, guid: a9cccd4bf9da5a544a4fa144087e2985, type: 2}

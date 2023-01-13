@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace DwarfMiningGame.Items
 {
-    [CreateAssetMenu( fileName = "item", menuName = "DwarfMiningGame/Item", order = 30 )]
+    [CreateAssetMenu( fileName = "item", menuName = "DwarfMiningGame/Item", order = 300 )]
     public class Item : ScriptableObject, IIdentifiable
     {
         [field: SerializeField]

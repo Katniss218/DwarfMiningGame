@@ -9,7 +9,7 @@ namespace DwarfMiningGame.Tiles
 {
     public class TileMap
     {
-        private static Tile[,] _tiles;
+        private static TileBehaviour[,] _tiles;
 
         public static int Width { get => _tiles.GetLength( 0 ); }
 
@@ -25,7 +25,7 @@ namespace DwarfMiningGame.Tiles
             return (Mathf.FloorToInt(position.x + 0.5f), Mathf.FloorToInt( position.y + 0.5f));
         }
 
-        public static Tile GetTile( int x, int y )
+        public static TileBehaviour GetTile( int x, int y )
         {
             if( x < 0 || x >= Width || y < 0 || y >= Height )
             {
@@ -34,7 +34,7 @@ namespace DwarfMiningGame.Tiles
             return _tiles[x, y];
         }
 
-        public static void SetTile( int x, int y, Tile tile )
+        public static void SetTile( int x, int y, TileBehaviour tile )
         {
             if( x < 0 || x >= Width || y < 0 || y >= Height )
             {
@@ -48,7 +48,7 @@ namespace DwarfMiningGame.Tiles
 
         public static void CreateMap( int width, int height )
         {
-            _tiles = new Tile[width, height];
+            _tiles = new TileBehaviour[width, height];
         }
     }
 }

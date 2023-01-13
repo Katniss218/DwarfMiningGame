@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -17,7 +18,7 @@ namespace DwarfMiningGame
             _isInitialized = true;
             _obj = new Dictionary<string, T>();
 
-            T[] assets = Resources.LoadAll<T>("");
+            T[] assets = Resources.LoadAll<T>( "" );
 
             foreach( var asset in assets )
             {
@@ -39,7 +40,7 @@ namespace DwarfMiningGame
 
             return _obj.ContainsKey( id );
         }
-        
+
         public static bool Exists( string id, out T obj )
         {
             InitIfNotInitialized();
@@ -53,7 +54,7 @@ namespace DwarfMiningGame
 
             return _obj[id];
         }
-        
+
         public static void RegisterObj( T obj )
         {
             InitIfNotInitialized();
