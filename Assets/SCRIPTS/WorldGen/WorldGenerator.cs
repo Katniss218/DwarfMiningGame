@@ -69,21 +69,32 @@ namespace DwarfMiningGame.WorldGen
                         if( rnd < thr )
                         {
                             TileBehaviour t = TileMap.GetTile( x, y );
+
+                            Tile originalTile = t.OriginalTile;
+
+                            (Tile tile, Mineral min) = tileSelector( originalTile );
                             if( t != null )
                             {
-                                (Tile tile, Mineral min) = tileSelector( t.OriginalTile );
                                 t.Kill( true );
-                                // tile not specified, mineral specified - add just the mineral.
-                                if( tile == null && min != null )
-                                {
-                                    TileMap.SetTile( x, y, TileBehaviour.Create( t.OriginalTile, min ) );
-                                }
-                                // tile specified - replace tile, possibly mineral too.
-                                if( tile != null )
-                                {
-                                    TileMap.SetTile( x, y, TileBehaviour.Create( tile, min ) );
-                                }
                             }
+
+                            if( tile == null && min == null ) // tile null, mineral null - set to air.
+                            {
+                                continue;
+                            }
+                            // tile not specified, mineral specified - add just the mineral.
+                            if( tile == null && min != null )
+                            {
+                                TileMap.SetTile( x, y, TileBehaviour.Create( originalTile, min ) );
+                                continue;
+                            }
+                            // tile specified - replace tile, possibly mineral too.
+                            if( tile != null )
+                            {
+                                TileMap.SetTile( x, y, TileBehaviour.Create( tile, min ) );
+                                continue;
+                            }
+                            // no way to set tile and preserve mineral.
                         }
                     }
                 }
@@ -97,7 +108,7 @@ namespace DwarfMiningGame.WorldGen
             }
         }
 
-        private Tile GetRandom(string baseId, int numVariants )
+        private Tile GetRandom( string baseId, int numVariants )
         {
             int r = rand.Next( 0, numVariants );
 
@@ -164,7 +175,7 @@ namespace DwarfMiningGame.WorldGen
                 int x = rand.Next( 0, TileMap.Width );
                 int y = rand.Next( 0, TileMap.Height );
 
-                PlaceVein( x, y, 3, ( t ) => (null, Registry<Mineral>.Get( "mineral.iron" )), ( n ) => (1 - n) * 2.5f, ( n ) => 0.5f );
+                PlaceVein( x, y, 3, ( t ) => (null, t == null ? null : Registry<Mineral>.Get( "mineral.iron" )), ( n ) => (1 - n) * 2.5f, ( n ) => 0.5f );
             }
         }
     }
