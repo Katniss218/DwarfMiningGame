@@ -9,11 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f70cfb6f358bacb4da8cec7bee63ac87, type: 3}
-  m_Name: mineral.copper
+  m_Script: {fileID: 11500000, guid: 8ccbadc43548134489757b0a8ab0535f, type: 3}
+  m_Name: item.gold
   m_EditorClassIdentifier: 
-  <ID>k__BackingField: mineral.copper
-  Hardness: 5
-  LootTable: {fileID: 11400000, guid: 7af1c71d5f1d744469575c7a0bfadcfb, type: 2}
-  Mesh: {fileID: 6628907312925966407, guid: 018f4c9be75a4194da03d93b3a49db18, type: 3}
+  <ID>k__BackingField: item.gold
+  Size: 1
+  <Value>k__BackingField: 1000
+  Mesh: {fileID: 4306747591942989996, guid: f6c84449ff1391e428356f670a62a17e, type: 3}
   Material: {fileID: 2100000, guid: a9cccd4bf9da5a544a4fa144087e2985, type: 2}
+  Icon: {fileID: 21300000, guid: 22c10742024cc3744931da4bfc6d08d3, type: 3}

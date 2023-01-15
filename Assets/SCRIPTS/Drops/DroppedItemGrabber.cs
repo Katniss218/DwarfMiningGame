@@ -34,7 +34,7 @@ namespace DwarfMiningGame.Drops
 
         private void PickUp( DroppedItem stack )
         {
-            int amtPickedUp = _inventory.Add( stack.Item, stack.Amt );
+            int amtPickedUp = _inventory.TryAdd( stack.Item, stack.Amt );
             stack.OnTake( amtPickedUp );
         }
     }

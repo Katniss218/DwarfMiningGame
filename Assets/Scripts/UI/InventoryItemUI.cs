@@ -14,35 +14,18 @@ namespace DwarfMiningGame.UI
         [SerializeField]
         TMPro.TextMeshProUGUI _text;
 
-        int _amount;
-
-        private void SetText()
+        public void SetAmount( float amount )
         {
-            _text.text = $"{_amount}";
-        }
-
-        public int AddAmount( int amountAdded )
-        {
-            _amount += amountAdded;
-            SetText();
-            return _amount;
-        }
-
-        public int RemoveAmount( int amountRemoved )
-        {
-            _amount -= amountRemoved;
-            SetText();
-            return _amount;
+            _text.text = $"{amount}";
         }
 
         public void SetItem( Item item, int amount )
         {
-            _amount = amount;
             _icon.sprite = item.Icon;
-            SetText();
+            SetAmount( amount );
         }
 
-        public static InventoryItemUI Create( RectTransform invList, Item item, int amount )
+        public static InventoryItemUI Create( RectTransform invList, Inventory.ItemSlot slot )
         {
             GameObject go = new GameObject( "Item UI" );
             RectTransform rt = go.AddComponent<RectTransform>();
@@ -82,7 +65,7 @@ namespace DwarfMiningGame.UI
             text.enableWordWrapping = false;
             ui._text = text;
 
-            ui.SetItem( item, amount );
+            ui.SetItem( slot.Item, slot.Amount );
 
             return ui;
         }

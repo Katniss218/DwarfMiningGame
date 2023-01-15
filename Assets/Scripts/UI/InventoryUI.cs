@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace DwarfMiningGame.UI
 {
@@ -16,41 +17,53 @@ namespace DwarfMiningGame.UI
         [SerializeField]
         RectTransform _list;
 
-        Dictionary<Item, InventoryItemUI> _uis = new Dictionary<Item, InventoryItemUI>();
+        Dictionary<Inventory.ItemSlot, InventoryItemUI> _uis = new Dictionary<Inventory.ItemSlot, InventoryItemUI>();
 
-        void Awake()
+        protected virtual void Awake()
         {
-            this.Inventory.OnAdd += this.OnAdd;
-            this.Inventory.OnRemove += this.OnRemove;
+            this.Inventory.OnAfterSlotChanged += this.OnAfterSlotChanged;
+            this.Inventory.OnSlotAdded += this.OnSlotAdded;
+            this.Inventory.OnSlotRemoved += this.OnSlotRemoved;
         }
 
-        public void OnAdd( (Item item, int amt) e )
+        void OnAfterSlotChanged( Inventory.ItemSlot slot )
         {
-            if( _uis.TryGetValue( e.item, out InventoryItemUI ui ) )
+            if( _uis.TryGetValue( slot, out InventoryItemUI ui ) )
             {
-                ui.AddAmount( e.amt );
+                ui.SetAmount( slot.Amount );
             }
             else
             {
-                ui = InventoryItemUI.Create( _list, e.item, e.amt );
-                _uis.Add( e.item, ui );
+                Debug.LogError( $"Inventory desync, slot {slot} wasn't added to the inventory UI." );
             }
         }
 
-        public void OnRemove( (Item item, int amt) e )
+        void OnSlotAdded( Inventory.ItemSlot slot )
         {
-            if( _uis.TryGetValue( e.item, out InventoryItemUI ui ) )
+            if( !_uis.ContainsKey( slot ) )
             {
-                int left = ui.RemoveAmount( e.amt );
-                if( left <= 0 )
-                {
-                    Destroy( ui.gameObject );
-                    _uis.Remove( e.item );
-                }
+                InventoryItemUI ui = InventoryItemUI.Create( _list, slot );
+
+#warning TODO - remove after a proper shop is implemented.
+                Image raycastImage = ui.gameObject.AddComponent<Image>();
+                raycastImage.raycastTarget = true;
+                raycastImage.color = new Color( 0.0f, 0.0f, 0.0f, 0.0f ); // transparent.
+
+                LeftClickAction aui = ui.gameObject.AddComponent<LeftClickAction>();
+
+                var slotTemp = slot;
+                aui.OnClick += () => ((PlayerInventory)Inventory).TrySellItem( slotTemp.Item, slotTemp.Amount );
+
+                _uis.Add( slot, ui );
             }
-            else
+        }
+
+        void OnSlotRemoved( Inventory.ItemSlot slot )
+        {
+            if( _uis.TryGetValue( slot, out InventoryItemUI ui ) )
             {
-                Debug.LogError( $"Inventory desync, item {e.item} wasn't added to the inventory UI." );
+                Destroy( ui.gameObject );
+                _uis.Remove( slot );
             }
         }
 

@@ -7,6 +7,8 @@ namespace DwarfMiningGame.Items
     [CreateAssetMenu( fileName = "item", menuName = "DwarfMiningGame/Item", order = 300 )]
     public class Item : ScriptableObject, IIdentifiable
     {
+        public static float SellValueMultiplier = 0.25f;
+
         [field: SerializeField]
         public string ID { get; set; }
 

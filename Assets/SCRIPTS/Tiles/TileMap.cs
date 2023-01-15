@@ -133,11 +133,16 @@ namespace DwarfMiningGame.Tiles
             {
                 Vector3 worldPos = GetWorldPosition( x, y );
 
-                List<(Item, int)> dropped = info.tile.LootTable.Generate();
+                List<(Item, int)> dropped = new List<(Item, int)>();
 
-                if( info.mineral != null )
+                if( info.tile.LootTable != null )
                 {
-                    dropped.Union( info.mineral.LootTable.Generate() );
+                    dropped.AddRange( info.tile.LootTable.Generate() );
+                }
+
+                if( info.mineral != null && info.mineral.LootTable != null )
+                {
+                    dropped.AddRange( info.mineral.LootTable.Generate() );
                 }
 
                 foreach( (Item item, int amt) in dropped )
@@ -170,7 +175,7 @@ namespace DwarfMiningGame.Tiles
         {
             for( int j = Height - 1; j >= 0; j-- )
             {
-                if( !_tiles[x,j].IsAir())
+                if( !_tiles[x, j].IsAir() )
                 {
                     return j;
                 }

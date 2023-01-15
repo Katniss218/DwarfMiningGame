@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ID>k__BackingField: mineral.silver
   Hardness: 5
-  LootTable: {fileID: 11400000, guid: f18d280c085a7b44385a7a32f6190899, type: 2}
+  LootTable: {fileID: 11400000, guid: ae9e499ed87a06e41a1a9202fbd8a2d4, type: 2}
   Mesh: {fileID: -6281932783050825624, guid: afb3f3ddbb5e37d46a5be35e6c2445ad, type: 3}
   Material: {fileID: 2100000, guid: a9cccd4bf9da5a544a4fa144087e2985, type: 2}

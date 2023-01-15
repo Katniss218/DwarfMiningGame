@@ -24,7 +24,12 @@ namespace DwarfMiningGame
         {
             TileMap.CreateMap( width, height );
 
-            new WorldGenerator(randomSeed ? new System.Random().Next() : seed).Run();
+            if( randomSeed )
+            {
+                seed = new System.Random().Next();
+            }
+
+            new WorldGenerator( seed ).Run();
 
             _player.transform.position = TileMap.GetWorldPosition( width / 2, TileMap.GetTop( width / 2 ) + 1 );
 
