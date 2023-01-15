@@ -8,7 +8,12 @@ namespace DwarfMiningGame.WorldGen
 {
     public class WorldGenerator
     {
-        public Random rand = new Random();
+        public Random rand;
+
+        public WorldGenerator( int seed )
+        {
+            rand = new Random( seed );
+        }
 
         public void PlaceFeature( int startX, int startY, char[,] mask, Dictionary<char, (Tile, Mineral)> key )
         {
@@ -123,6 +128,21 @@ namespace DwarfMiningGame.WorldGen
             return Registry<Tile>.Get( $"{baseId}{var}" );
         }
 
+        private void OreRunner( int minX, int maxX, int minY, int maxY, float blockChance, Action<int, int> callee )
+        {
+            float area = (maxX - minX) * (maxY - minY);
+            int numCalls = Mathf.FloorToInt( area * blockChance );
+
+            for( int i = 0; i < numCalls; i++ )
+            {
+                int x = rand.Next( minX, maxX + 1 );
+                int y = rand.Next( minY, maxY + 1 );
+
+                callee.Invoke( x, y );
+                //PlaceVein( x, y, 2, ( t ) => (null, t == null ? null : Registry<Mineral>.Get( "mineral.copper" )), ( n ) => (1 - n) * 1.5f, ( n ) => 0.5f );
+            }
+        }
+
         public void Run()
         {
             int terrainHeight = Mathf.FloorToInt( TileMap.Height * 0.9f );
@@ -219,42 +239,26 @@ namespace DwarfMiningGame.WorldGen
                 PlaceVein( x, y, 2, ( t ) => (null, null), ( n ) => Mathf.Lerp( 3.75f, 5.0f, n ), ( n ) => 1.0f );
             }
 
-            const float COPPER_CHANCE = 0.01f;
-            const float IRON_CHANCE = 0.01f;
-            const float SILVER_CHANCE = 0.005f;
-            const float GOLD_CHANCE = 0.005f;
-
-            for( int i = 0; i < (TileMap.Width * TileMap.Height) * COPPER_CHANCE; i++ )
+            OreRunner( 0, TileMap.Width - 1, Mathf.RoundToInt( TileMap.Height * 0.7f ), Mathf.RoundToInt( TileMap.Height * 1.0f ), 0.025f, ( x, y ) =>
             {
-                int x = rand.Next( 0, TileMap.Width );
-                int y = rand.Next( Mathf.RoundToInt( TileMap.Height * 0.5f ), Mathf.RoundToInt( TileMap.Height * 1.0f ) );
-
+                PlaceVein( x, y, 2, ( t ) => (null, t == null ? null : Registry<Mineral>.Get( "mineral.coal" )), ( n ) => (1 - n) * 1.5f, ( n ) => 0.75f );
+            } );
+            OreRunner( 0, TileMap.Width - 1, Mathf.RoundToInt( TileMap.Height * 0.5f ), Mathf.RoundToInt( TileMap.Height * 1.0f ), 0.0125f, ( x, y ) =>
+            {
                 PlaceVein( x, y, 2, ( t ) => (null, t == null ? null : Registry<Mineral>.Get( "mineral.copper" )), ( n ) => (1 - n) * 1.5f, ( n ) => 0.5f );
-            }
-
-            for( int i = 0; i < (TileMap.Width * TileMap.Height) * IRON_CHANCE; i++ )
+            } );
+            OreRunner( 0, TileMap.Width - 1, Mathf.RoundToInt( TileMap.Height * 0.2f ), Mathf.RoundToInt( TileMap.Height * 1.0f ), 0.0125f, ( x, y ) =>
             {
-                int x = rand.Next( 0, TileMap.Width );
-                int y = rand.Next( Mathf.RoundToInt( TileMap.Height * 0.2f ), Mathf.RoundToInt( TileMap.Height * 1.0f ) );
-
                 PlaceVein( x, y, 2, ( t ) => (null, t == null ? null : Registry<Mineral>.Get( "mineral.iron" )), ( n ) => (1 - n) * 1.5f, ( n ) => 0.5f );
-            }
-
-            for( int i = 0; i < (TileMap.Width * TileMap.Height) * SILVER_CHANCE; i++ )
+            } );
+            OreRunner( 0, TileMap.Width - 1, Mathf.RoundToInt( TileMap.Height * 0.1f ), Mathf.RoundToInt( TileMap.Height * 0.9f ), 0.0125f, ( x, y ) =>
             {
-                int x = rand.Next( 0, TileMap.Width );
-                int y = rand.Next( Mathf.RoundToInt( TileMap.Height * 0.1f ), Mathf.RoundToInt( TileMap.Height * 0.9f ) );
-
                 PlaceVein( x, y, 2, ( t ) => (null, t == null ? null : Registry<Mineral>.Get( "mineral.silver" )), ( n ) => (1 - n) * 1.5f, ( n ) => 0.5f );
-            }
-
-            for( int i = 0; i < (TileMap.Width * TileMap.Height) * GOLD_CHANCE; i++ )
+            } );
+            OreRunner( 0, TileMap.Width - 1, Mathf.RoundToInt( TileMap.Height * 0.0f ), Mathf.RoundToInt( TileMap.Height * 0.55f ), 0.0125f, ( x, y ) =>
             {
-                int x = rand.Next( 0, TileMap.Width );
-                int y = rand.Next( Mathf.RoundToInt( TileMap.Height * 0.0f ), Mathf.RoundToInt( TileMap.Height * 0.5f ) );
-
-                PlaceVein( x, y, 2, ( t ) => (null, t == null ? null : Registry<Mineral>.Get( "mineral.gold" )), ( n ) => (1 - n) * 1.5f, ( n ) => 0.5f );
-            }
+                PlaceVein( x, y, 2, ( t ) => (null, t == null ? null : Registry<Mineral>.Get( "mineral.silver" )), ( n ) => (1 - n) * 1.5f, ( n ) => 0.5f );
+            } );
 
             char[,] secret3x3 = new char[,]
             {

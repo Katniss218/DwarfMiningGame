@@ -171,6 +171,8 @@ MonoBehaviour:
   _background: {fileID: 0}
   width: 100
   height: 500
+  randomSeed: 0
+  seed: 1
 --- !u!1 &228516042
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,6 +12,9 @@ namespace DwarfMiningGame.Items
 
         public float Size = 1.0f;
 
+        [field: SerializeField]
+        public float Value { get; set; } = 0.0f;
+
         public Mesh Mesh;
 
         public Material Material;

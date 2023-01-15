@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f70cfb6f358bacb4da8cec7bee63ac87, type: 3}
-  m_Name: mineral.gold
+  m_Name: mineral.coal
   m_EditorClassIdentifier: 
-  <ID>k__BackingField: mineral.gold
+  <ID>k__BackingField: mineral.coal
   Hardness: 5
   LootTable: {fileID: 11400000, guid: f18d280c085a7b44385a7a32f6190899, type: 2}
-  Mesh: {fileID: 4306747591942989996, guid: f6c84449ff1391e428356f670a62a17e, type: 3}
+  Mesh: {fileID: -6054781872667245422, guid: 6b808015b1322dc4d97f062fb6ae207f, type: 3}
   Material: {fileID: 2100000, guid: a9cccd4bf9da5a544a4fa144087e2985, type: 2}

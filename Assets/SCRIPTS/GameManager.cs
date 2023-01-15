@@ -17,11 +17,14 @@ namespace DwarfMiningGame
         [SerializeField] int width;
         [SerializeField] int height;
 
+        [SerializeField] bool randomSeed;
+        [SerializeField] int seed;
+
         void Awake()
         {
             TileMap.CreateMap( width, height );
 
-            new WorldGenerator().Run();
+            new WorldGenerator(randomSeed ? new System.Random().Next() : seed).Run();
 
             _player.transform.position = TileMap.GetWorldPosition( width / 2, TileMap.GetTop( width / 2 ) + 1 );
 
