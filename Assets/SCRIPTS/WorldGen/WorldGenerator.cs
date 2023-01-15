@@ -239,9 +239,9 @@ namespace DwarfMiningGame.WorldGen
                 PlaceVein( x, y, 2, ( t ) => (null, null), ( n ) => Mathf.Lerp( 3.75f, 5.0f, n ), ( n ) => 1.0f );
             }
 
-            OreRunner( 0, TileMap.Width - 1, Mathf.RoundToInt( TileMap.Height * 0.7f ), Mathf.RoundToInt( TileMap.Height * 1.0f ), 0.025f, ( x, y ) =>
+            OreRunner( 0, TileMap.Width - 1, Mathf.RoundToInt( TileMap.Height * 0.85f ), Mathf.RoundToInt( TileMap.Height * 1.0f ), 0.025f, ( x, y ) =>
             {
-                PlaceVein( x, y, 2, ( t ) => (null, t == null ? null : Registry<Mineral>.Get( "mineral.coal" )), ( n ) => (1 - n) * 1.5f, ( n ) => 0.75f );
+                PlaceVein( x, y, 3, ( t ) => (null, t == null ? null : Registry<Mineral>.Get( "mineral.coal" )), ( n ) => (1 - n) * 1.5f, ( n ) => 0.5f );
             } );
             OreRunner( 0, TileMap.Width - 1, Mathf.RoundToInt( TileMap.Height * 0.5f ), Mathf.RoundToInt( TileMap.Height * 1.0f ), 0.0125f, ( x, y ) =>
             {
@@ -271,12 +271,12 @@ namespace DwarfMiningGame.WorldGen
             Dictionary<char, (Tile, Mineral)> goldSecretDict = new Dictionary<char, (Tile, Mineral)>()
             {
                 { ' ', (null, null) },
-                { 'X', (Registry<Tile>.Get( "tile.stone" ), Registry<Mineral>.Get( "mineral.gold" )) }
+                { 'X', (Registry<Tile>.Get( "tile.stone.3" ), Registry<Mineral>.Get( "mineral.gold" )) }
             };
             Dictionary<char, (Tile, Mineral)> silverSecretDict = new Dictionary<char, (Tile, Mineral)>()
             {
                 { ' ', (null, null) },
-                { 'X', (Registry<Tile>.Get( "tile.stone" ), Registry<Mineral>.Get( "mineral.silver" )) }
+                { 'X', (Registry<Tile>.Get( "tile.stone.3" ), Registry<Mineral>.Get( "mineral.silver" )) }
             };
             Dictionary<char, (Tile, Mineral)> stonebrickDict = new Dictionary<char, (Tile, Mineral)>()
             {
