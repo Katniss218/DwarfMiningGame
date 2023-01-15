@@ -139,7 +139,6 @@ namespace DwarfMiningGame.WorldGen
                 int y = rand.Next( minY, maxY + 1 );
 
                 callee.Invoke( x, y );
-                //PlaceVein( x, y, 2, ( t ) => (null, t == null ? null : Registry<Mineral>.Get( "mineral.copper" )), ( n ) => (1 - n) * 1.5f, ( n ) => 0.5f );
             }
         }
 
@@ -239,25 +238,25 @@ namespace DwarfMiningGame.WorldGen
                 PlaceVein( x, y, 2, ( t ) => (null, null), ( n ) => Mathf.Lerp( 3.75f, 5.0f, n ), ( n ) => 1.0f );
             }
 
-            OreRunner( 0, TileMap.Width - 1, Mathf.RoundToInt( TileMap.Height * 0.85f ), Mathf.RoundToInt( TileMap.Height * 1.0f ), 0.025f, ( x, y ) =>
+            OreRunner( 0, TileMap.Width - 1, Mathf.RoundToInt( TileMap.Height * 0.85f ), Mathf.RoundToInt( TileMap.Height * 1.0f ), 0.05f, ( x, y ) =>
             {
-                PlaceVein( x, y, 3, ( t ) => (null, t == null ? null : Registry<Mineral>.Get( "mineral.coal" )), ( n ) => (1 - n) * 1.5f, ( n ) => 0.5f );
+                PlaceVein( x, y, 3, ( t ) => (null, t == null ? null : Registry<Mineral>.Get( "mineral.coal" )), ( n ) => (1 - n) * 1.25f, ( n ) => 0.45f );
             } );
-            OreRunner( 0, TileMap.Width - 1, Mathf.RoundToInt( TileMap.Height * 0.5f ), Mathf.RoundToInt( TileMap.Height * 1.0f ), 0.0125f, ( x, y ) =>
+            OreRunner( 0, TileMap.Width - 1, Mathf.RoundToInt( TileMap.Height * 0.5f ), Mathf.RoundToInt( TileMap.Height * 1.0f ), 0.045f, ( x, y ) =>
             {
-                PlaceVein( x, y, 2, ( t ) => (null, t == null ? null : Registry<Mineral>.Get( "mineral.copper" )), ( n ) => (1 - n) * 1.5f, ( n ) => 0.5f );
+                PlaceVein( x, y, 2, ( t ) => (null, t == null ? null : Registry<Mineral>.Get( "mineral.copper" )), ( n ) => (1 - n) * 1.25f, ( n ) => 0.5f );
             } );
-            OreRunner( 0, TileMap.Width - 1, Mathf.RoundToInt( TileMap.Height * 0.2f ), Mathf.RoundToInt( TileMap.Height * 1.0f ), 0.0125f, ( x, y ) =>
+            OreRunner( 0, TileMap.Width - 1, Mathf.RoundToInt( TileMap.Height * 0.2f ), Mathf.RoundToInt( TileMap.Height * 1.0f ), 0.045f, ( x, y ) =>
             {
-                PlaceVein( x, y, 2, ( t ) => (null, t == null ? null : Registry<Mineral>.Get( "mineral.iron" )), ( n ) => (1 - n) * 1.5f, ( n ) => 0.5f );
+                PlaceVein( x, y, 2, ( t ) => (null, t == null ? null : Registry<Mineral>.Get( "mineral.iron" )), ( n ) => (1 - n) * 1.25f, ( n ) => 0.5f );
             } );
-            OreRunner( 0, TileMap.Width - 1, Mathf.RoundToInt( TileMap.Height * 0.1f ), Mathf.RoundToInt( TileMap.Height * 0.9f ), 0.0125f, ( x, y ) =>
+            OreRunner( 0, TileMap.Width - 1, Mathf.RoundToInt( TileMap.Height * 0.1f ), Mathf.RoundToInt( TileMap.Height * 0.9f ), 0.025f, ( x, y ) =>
             {
-                PlaceVein( x, y, 2, ( t ) => (null, t == null ? null : Registry<Mineral>.Get( "mineral.silver" )), ( n ) => (1 - n) * 1.5f, ( n ) => 0.5f );
+                PlaceVein( x, y, 2, ( t ) => (null, t == null ? null : Registry<Mineral>.Get( "mineral.silver" )), ( n ) => (1 - n) * 1.25f, ( n ) => 0.5f );
             } );
-            OreRunner( 0, TileMap.Width - 1, Mathf.RoundToInt( TileMap.Height * 0.0f ), Mathf.RoundToInt( TileMap.Height * 0.55f ), 0.0125f, ( x, y ) =>
+            OreRunner( 0, TileMap.Width - 1, Mathf.RoundToInt( TileMap.Height * 0.0f ), Mathf.RoundToInt( TileMap.Height * 0.55f ), 0.025f, ( x, y ) =>
             {
-                PlaceVein( x, y, 2, ( t ) => (null, t == null ? null : Registry<Mineral>.Get( "mineral.silver" )), ( n ) => (1 - n) * 1.5f, ( n ) => 0.5f );
+                PlaceVein( x, y, 2, ( t ) => (null, t == null ? null : Registry<Mineral>.Get( "mineral.silver" )), ( n ) => (1 - n) * 1.25f, ( n ) => 0.5f );
             } );
 
             char[,] secret3x3 = new char[,]

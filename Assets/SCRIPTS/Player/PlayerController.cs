@@ -3,6 +3,7 @@ using DwarfMiningGame.Tiles;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace DwarfMiningGame.Player
 {
@@ -87,7 +88,7 @@ namespace DwarfMiningGame.Player
 
         void Update()
         {
-            if( Input.GetKey( KeyCode.Mouse0 ) )
+            if( !EventSystem.current.IsPointerOverGameObject() && Input.GetKey( KeyCode.Mouse0 ) )
             {
                 UsePickaxe();
             }
