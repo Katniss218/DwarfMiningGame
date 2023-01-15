@@ -42,7 +42,7 @@ namespace DwarfMiningGame.UI
             rtI.anchorMax = new Vector2( 0.0f, 0.5f );
             rtI.pivot = new Vector2( 0.0f, 0.5f );
             rtI.anchoredPosition = new Vector2( 0.0f, 0.0f );
-            rtI.sizeDelta = new Vector2( 24.0f, 24.0f );
+            rtI.sizeDelta = new Vector2( 36.0f, 36.0f );
 
             Image img = goI.AddComponent<Image>();
             img.raycastTarget = false;
@@ -56,11 +56,13 @@ namespace DwarfMiningGame.UI
             rtT.anchorMax = new Vector2( 1.0f, 0.5f );
             rtT.pivot = new Vector2( 1.0f, 0.5f );
             rtT.anchoredPosition = new Vector2( 0.0f, 0.0f );
-            rtT.sizeDelta = new Vector2( 48.0f, 24.0f );
+            rtT.sizeDelta = new Vector2( 75.0f, 36.0f );
 
             TMPro.TextMeshProUGUI text = goT.AddComponent<TMPro.TextMeshProUGUI>();
+            text.fontSize = 16.0f;
             text.raycastTarget = false;
             text.horizontalAlignment = TMPro.HorizontalAlignmentOptions.Right;
+            text.verticalAlignment = TMPro.VerticalAlignmentOptions.Bottom;
             text.overflowMode = TMPro.TextOverflowModes.Overflow;
             text.enableWordWrapping = false;
             ui._text = text;
