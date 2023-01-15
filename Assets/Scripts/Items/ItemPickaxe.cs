@@ -8,6 +8,9 @@ namespace DwarfMiningGame.Items
     public class ItemPickaxe : Item
     {
         [field: SerializeField]
-        public float MiningPower { get; set; }
+        public float MiningSpeed { get; set; }
+
+        [field: SerializeField]
+        public float MaxHardness { get; set; }
     }
 }

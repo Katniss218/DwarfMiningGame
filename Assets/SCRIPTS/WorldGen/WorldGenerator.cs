@@ -1,9 +1,6 @@
 ﻿using DwarfMiningGame.Tiles;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using Random = System.Random;
 
@@ -13,27 +10,52 @@ namespace DwarfMiningGame.WorldGen
     {
         public Random rand = new Random();
 
-        public void PlaceFeature( int startX, int startY, char[,] mask, Dictionary<char, string> key )
+        public void PlaceFeature( int startX, int startY, char[,] mask, Dictionary<char, (Tile, Mineral)> key )
         {
             // mask is a 2D array of chars representing the different tiles.
             // key is a mapping from the chars to a tile ID.
 
-            for( int i = 0; i < mask.GetLength( 1 ); i++ )
+            int w = mask.GetLength( 0 );
+            int h = mask.GetLength( 1 );
+            for( int j = 0; j < h; j++ )
             {
-                for( int j = 0; j < mask.GetLength( 0 ); j++ )
+                for( int i = 0; i < w; i++ )
                 {
                     int x = startX + i;
-                    int y = startY + j;
-                    if( x < 0 || x >= TileMap.Width || y < 0 || x >= TileMap.Height )
+                    int y = startY + (w - j);
+                    if( x < 0 || x >= TileMap.Width || y < 0 || y >= TileMap.Height )
                     {
                         continue;
                     }
 
                     char chr = mask[j, i];
-                    string tileID = key[chr];
+                    (Tile tile, Mineral mineral) = key[chr];
 
-                    // place tile at x, y.
+                    SetTile( x, y, tile, mineral );
                 }
+            }
+        }
+
+        public void SetTile( int x, int y, Tile newTile, Mineral newMineral )
+        {
+            (Tile originalTile, _) = TileMap.GetTile( x, y );
+
+            if( newTile == null && newMineral == null ) // tile null, mineral null - set to air.
+            {
+                TileMap.Kill( x, y, true );
+                return;
+            }
+            // tile not specified, mineral specified - add just the mineral.
+            if( newTile == null && newMineral != null )
+            {
+                TileMap.SetTile( x, y, originalTile, newMineral );
+                return;
+            }
+            // tile specified - replace tile, possibly mineral too.
+            if( newTile != null )
+            {
+                TileMap.SetTile( x, y, newTile, newMineral );
+                return;
             }
         }
 
@@ -63,37 +85,16 @@ namespace DwarfMiningGame.WorldGen
                         }
 
                         // chance for block spawn is proportional to the chanceFunc.
-                        int rnd = rand.Next( 0, 1000 );
-                        int thr = Mathf.FloorToInt( chanceFunc( dist / currentRadius ) * 1000.0f );
+                        int random = rand.Next( 0, 1000 );
+                        int threshold = Mathf.FloorToInt( chanceFunc( dist / currentRadius ) * 1000.0f );
 
-                        if( rnd < thr )
+                        if( random < threshold )
                         {
-                            TileBehaviour t = TileMap.GetTile( x, y );
+                            (Tile originalTile, _) = TileMap.GetTile( x, y );
 
-                            Tile originalTile = t.OriginalTile;
+                            (Tile newTile, Mineral newMineral) = tileSelector( originalTile );
 
-                            (Tile tile, Mineral min) = tileSelector( originalTile );
-                            if( t != null )
-                            {
-                                t.Kill( true );
-                            }
-
-                            if( tile == null && min == null ) // tile null, mineral null - set to air.
-                            {
-                                continue;
-                            }
-                            // tile not specified, mineral specified - add just the mineral.
-                            if( tile == null && min != null )
-                            {
-                                TileMap.SetTile( x, y, TileBehaviour.Create( originalTile, min ) );
-                                continue;
-                            }
-                            // tile specified - replace tile, possibly mineral too.
-                            if( tile != null )
-                            {
-                                TileMap.SetTile( x, y, TileBehaviour.Create( tile, min ) );
-                                continue;
-                            }
+                            SetTile( x, y, newTile, newMineral );
                             // no way to set tile and preserve mineral.
                         }
                     }
@@ -124,9 +125,11 @@ namespace DwarfMiningGame.WorldGen
 
         public void Run()
         {
+            int terrainHeight = Mathf.FloorToInt( TileMap.Height * 0.9f );
+
             for( int x = 0; x < TileMap.Width; x++ )
             {
-                for( int y = 0; y < TileMap.Height; y++ )
+                for( int y = 0; y < terrainHeight; y++ )
                 {
                     int yJitter = y + rand.Next( -50, 51 );
 
@@ -137,11 +140,42 @@ namespace DwarfMiningGame.WorldGen
 
                     if( chance )
                     {
-                        TileMap.SetTile( x, y, TileBehaviour.Create( GetRandom( "tile.dirt", 3 ) ) );
+                        TileMap.SetTile( x, y, GetRandom( "tile.dirt", 3 ), null );
                     }
                     else
                     {
-                        TileMap.SetTile( x, y, TileBehaviour.Create( GetRandom( "tile.stone", 3 ) ) );
+                        TileMap.SetTile( x, y, GetRandom( "tile.stone", 3 ), null );
+                    }
+                }
+            }
+
+            // surface.
+            for( int i = 0; i < TileMap.Width / 10; i++ )
+            {
+                int x = rand.Next( 0, TileMap.Width );
+                int y = rand.Next( terrainHeight - 3, terrainHeight + 3 );
+
+                PlaceVein( x, y, 4, ( t ) => (GetRandom( "tile.dirt", 3 ), null), ( n ) => Mathf.Lerp( 5f, 10f, n ), ( n ) => 1.0f );
+            }
+            for( int x = 0; x < TileMap.Width; x++ )
+            {
+                for( int y = terrainHeight; y < TileMap.Height; y++ )
+                {
+                    (Tile t, _) = TileMap.GetTile( x, y );
+                    if( t == null )
+                    {
+                        continue;
+                    }
+
+                    if( y == TileMap.Height - 1 )
+                    {
+                        TileMap.SetTile( x, y, GetRandom( "tile.grass", 3 ), null );
+                        continue;
+                    }
+                    (Tile t2, _) = TileMap.GetTile( x, y + 1 );
+                    if( t2 == null )
+                    {
+                        TileMap.SetTile( x, y, GetRandom( "tile.grass", 3 ), null );
                     }
                 }
             }
@@ -149,7 +183,7 @@ namespace DwarfMiningGame.WorldGen
             for( int i = 0; i < (TileMap.Width + TileMap.Height) / 5; i++ )
             {
                 int x = rand.Next( 0, TileMap.Width );
-                int y = rand.Next( 0, TileMap.Height );
+                int y = rand.Next( 0, terrainHeight );
 
                 PlaceVein( x, y, 25, ( t ) => (GetRandom( "tile.dirt", 3 ), null), ( n ) => (1 - n) * 2.5f, ( n ) => 0.75f );
             }
@@ -157,25 +191,123 @@ namespace DwarfMiningGame.WorldGen
             for( int i = 0; i < (TileMap.Width + TileMap.Height) / 5; i++ )
             {
                 int x = rand.Next( 0, TileMap.Width );
-                int y = rand.Next( 0, TileMap.Height );
+                int y = rand.Next( 0, terrainHeight );
 
                 PlaceVein( x, y, 20, ( t ) => (GetRandom( "tile.stone", 3 ), null), ( n ) => (1 - n) * 2.5f, ( n ) => 0.75f );
             }
 
+            // caves
+            for( int i = 0; i < (TileMap.Width + TileMap.Height) / 7; i++ )
+            {
+                int x = rand.Next( 0, TileMap.Width );
+                int y = rand.Next( 0, TileMap.Height );
+
+                PlaceVein( x, y, 25, ( t ) => (null, null), ( n ) => Mathf.Lerp( 0.25f, 3.5f, n ), ( n ) => 1.0f );
+            }
             for( int i = 0; i < (TileMap.Width + TileMap.Height) / 5; i++ )
             {
                 int x = rand.Next( 0, TileMap.Width );
                 int y = rand.Next( 0, TileMap.Height );
 
-                PlaceVein( x, y, 30, ( t ) => (null, null), ( n ) => (1 - n) * 3.5f, ( n ) => 1.0f );
+                PlaceVein( x, y, 3, ( t ) => (null, null), ( n ) => Mathf.Lerp( 1.5f, 3f, n ), ( n ) => 1.0f );
+            }
+            for( int i = 0; i < (TileMap.Width + TileMap.Height) / 20; i++ )
+            {
+                int x = rand.Next( 0, TileMap.Width );
+                int y = rand.Next( 0, TileMap.Height );
+
+                PlaceVein( x, y, 2, ( t ) => (null, null), ( n ) => Mathf.Lerp( 3.75f, 5.0f, n ), ( n ) => 1.0f );
             }
 
-            for( int i = 0; i < (TileMap.Width + TileMap.Height) / 5; i++ )
+            const float COPPER_CHANCE = 0.01f;
+            const float IRON_CHANCE = 0.01f;
+            const float SILVER_CHANCE = 0.005f;
+            const float GOLD_CHANCE = 0.005f;
+
+            for( int i = 0; i < (TileMap.Width * TileMap.Height) * COPPER_CHANCE; i++ )
             {
                 int x = rand.Next( 0, TileMap.Width );
-                int y = rand.Next( 0, TileMap.Height );
+                int y = rand.Next( Mathf.RoundToInt( TileMap.Height * 0.5f ), Mathf.RoundToInt( TileMap.Height * 1.0f ) );
 
-                PlaceVein( x, y, 3, ( t ) => (null, t == null ? null : Registry<Mineral>.Get( "mineral.iron" )), ( n ) => (1 - n) * 2.5f, ( n ) => 0.5f );
+                PlaceVein( x, y, 2, ( t ) => (null, t == null ? null : Registry<Mineral>.Get( "mineral.copper" )), ( n ) => (1 - n) * 1.5f, ( n ) => 0.5f );
+            }
+
+            for( int i = 0; i < (TileMap.Width * TileMap.Height) * IRON_CHANCE; i++ )
+            {
+                int x = rand.Next( 0, TileMap.Width );
+                int y = rand.Next( Mathf.RoundToInt( TileMap.Height * 0.2f ), Mathf.RoundToInt( TileMap.Height * 1.0f ) );
+
+                PlaceVein( x, y, 2, ( t ) => (null, t == null ? null : Registry<Mineral>.Get( "mineral.iron" )), ( n ) => (1 - n) * 1.5f, ( n ) => 0.5f );
+            }
+
+            for( int i = 0; i < (TileMap.Width * TileMap.Height) * SILVER_CHANCE; i++ )
+            {
+                int x = rand.Next( 0, TileMap.Width );
+                int y = rand.Next( Mathf.RoundToInt( TileMap.Height * 0.1f ), Mathf.RoundToInt( TileMap.Height * 0.9f ) );
+
+                PlaceVein( x, y, 2, ( t ) => (null, t == null ? null : Registry<Mineral>.Get( "mineral.silver" )), ( n ) => (1 - n) * 1.5f, ( n ) => 0.5f );
+            }
+
+            for( int i = 0; i < (TileMap.Width * TileMap.Height) * GOLD_CHANCE; i++ )
+            {
+                int x = rand.Next( 0, TileMap.Width );
+                int y = rand.Next( Mathf.RoundToInt( TileMap.Height * 0.0f ), Mathf.RoundToInt( TileMap.Height * 0.5f ) );
+
+                PlaceVein( x, y, 2, ( t ) => (null, t == null ? null : Registry<Mineral>.Get( "mineral.gold" )), ( n ) => (1 - n) * 1.5f, ( n ) => 0.5f );
+            }
+
+            char[,] secret3x3 = new char[,]
+            {
+                { ' ', ' ', ' ', ' ', ' ' },
+                { ' ', 'X', 'X', 'X', ' ' },
+                { ' ', 'X', 'X', 'X', ' ' },
+                { ' ', 'X', 'X', 'X', ' ' },
+                { ' ', ' ', ' ', ' ', ' ' }
+            };
+            Dictionary<char, (Tile, Mineral)> goldSecretDict = new Dictionary<char, (Tile, Mineral)>()
+            {
+                { ' ', (null, null) },
+                { 'X', (Registry<Tile>.Get( "tile.stone" ), Registry<Mineral>.Get( "mineral.gold" )) }
+            };
+            Dictionary<char, (Tile, Mineral)> silverSecretDict = new Dictionary<char, (Tile, Mineral)>()
+            {
+                { ' ', (null, null) },
+                { 'X', (Registry<Tile>.Get( "tile.stone" ), Registry<Mineral>.Get( "mineral.silver" )) }
+            };
+            Dictionary<char, (Tile, Mineral)> stonebrickDict = new Dictionary<char, (Tile, Mineral)>()
+            {
+                { ' ', (null, null) },
+                { 'X', (Registry<Tile>.Get( "tile.stone_brick" ), null) }
+            };
+
+            for( int i = 0; i < (TileMap.Width * TileMap.Height) * 0.0001f; i++ )
+            {
+                int x = rand.Next( 0, TileMap.Width );
+                int y = rand.Next( Mathf.RoundToInt( terrainHeight * 0.2f ), Mathf.RoundToInt( terrainHeight * 0.95f ) );
+
+                PlaceFeature( x, y, secret3x3, silverSecretDict );
+            }
+            for( int i = 0; i < (TileMap.Width * TileMap.Height) * 0.0001f; i++ )
+            {
+                int x = rand.Next( 0, TileMap.Width );
+                int y = rand.Next( Mathf.RoundToInt( terrainHeight * 0.1f ), Mathf.RoundToInt( terrainHeight * 0.6f ) );
+
+                PlaceFeature( x, y, secret3x3, goldSecretDict );
+            }
+
+
+            char[,] s = new char[,]
+            {
+                { 'X', 'X', 'X' },
+                { 'X', 'X', 'X' },
+                { 'X', 'X', 'X' },
+            };
+            for( int i = 0; i < (TileMap.Width * TileMap.Height) * 0.0001f; i++ )
+            {
+                int x = rand.Next( 0, TileMap.Width );
+                int y = rand.Next( Mathf.RoundToInt( terrainHeight * 0.1f ), Mathf.RoundToInt( terrainHeight * 0.6f ) );
+
+                PlaceFeature( x, y, s, stonebrickDict );
             }
         }
     }

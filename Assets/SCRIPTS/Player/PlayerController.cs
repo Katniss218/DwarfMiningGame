@@ -14,14 +14,15 @@ namespace DwarfMiningGame.Player
         public float MoveForce { get; set; }
 
         [field: SerializeField]
-        public float LiftForce { get; set; }
+        public float JumpForce { get; set; }
 
         Rigidbody _rigidbody;
         Collider _collider;
         PlayerInventory _inventory;
 
-        [field: SerializeField]
         public bool IsOnGround { get; private set; }
+
+        public bool IsTouchingAWall { get; private set; }
 
         void Awake()
         {
@@ -56,12 +57,32 @@ namespace DwarfMiningGame.Player
 
             (int x, int y) = TileMap.GetTilePosition( this.transform.position );
 
-            TileBehaviour tile = TileMap.GetTile( x + dirX, y + dirY );
-            if( tile == null )
-            {
-                return;
-            }
-            tile.Mine( pickaxe.MiningPower );
+            TileMap.Mine( x + dirX, y + dirY, pickaxe.MaxHardness, pickaxe.MiningSpeed );
+        }
+
+        bool StandingOnTile()
+        {
+            return Physics.Raycast( this.transform.position, Vector3.down, this._collider.bounds.extents.y + 0.05f, 1 << Tile.LAYER );
+        }
+
+        bool TouchingTile( Vector3 dir )
+        {
+            return Physics.Raycast( this.transform.position, dir, this._collider.bounds.extents.y + 0.015f, 1 << Tile.LAYER );
+        }
+
+        bool VelocityCanWallJump()
+        {
+            return this._rigidbody.velocity.y < -0.5f && this._rigidbody.velocity.y > -2.5f;
+        }
+
+        void ResetVelocityX()
+        {
+            this._rigidbody.velocity = new Vector3( 0.0f, this._rigidbody.velocity.y, this._rigidbody.velocity.z );
+        }
+        
+        void ResetVelocityY()
+        {
+            this._rigidbody.velocity = new Vector3( this._rigidbody.velocity.x, 0.0f, this._rigidbody.velocity.z );
         }
 
         void Update()
@@ -74,46 +95,82 @@ namespace DwarfMiningGame.Player
 
         void FixedUpdate()
         {
-            if( Physics.Raycast( this.transform.position, Vector3.down, this._collider.bounds.extents.y + 0.05f, 1 << TileBehaviour.LAYER ) )
-            {
-                IsOnGround = true;
-            }
-            else
-            {
-                IsOnGround = false;
-            }
-
-            Vector3 totalForce = Vector3.zero;
+            IsOnGround = false;
+            IsTouchingAWall = false;
 
             if( Input.GetKey( KeyCode.A ) )
             {
-                totalForce += new Vector3( -MoveForce, 0.0f, 0.0f );
-            }
-            if( Input.GetKey( KeyCode.D ) )
-            {
-                totalForce += new Vector3( MoveForce, 0.0f, 0.0f );
-            }
-
-            if( Input.GetKey( KeyCode.W ) )
-            {
-                IsOnGround = false;
-                totalForce += new Vector3( 0.0f, LiftForce, 0.0f );
-            }
-            if( Input.GetKey( KeyCode.S ) )
-            {
-                totalForce += new Vector3( 0.0f, -LiftForce, 0.0f );
-            }
-
-            if( totalForce.x < 0 )
-            {
                 this.transform.forward = Vector3.left;
             }
-            else if( totalForce.x > 0 )
+            else if( Input.GetKey( KeyCode.D ) )
             {
                 this.transform.forward = Vector3.right;
             }
 
+            if( StandingOnTile() )
+            {
+                ResetVelocityY();
+                IsOnGround = true;
+            }
+
+            // clamp Y
+            if( this.transform.position.y < 0.0f )
+            {
+                ResetVelocityY();
+                this.transform.position = new Vector3( this.transform.position.x, 0.0f, this.transform.position.z );
+                IsOnGround = true;
+            }
+
+            Vector3 totalForce = Vector3.zero;
+
+            if( TouchingTile( Vector3.left ) && VelocityCanWallJump() )
+            {
+                ResetVelocityX();
+                IsTouchingAWall = true;
+            }
+            else
+            {
+                if( Input.GetKey( KeyCode.A ) )
+                {
+                    totalForce += new Vector3( -MoveForce, 0.0f, 0.0f );
+                }
+            }
+
+            if( TouchingTile( Vector3.right ) && VelocityCanWallJump() )
+            {
+                ResetVelocityX();
+                IsTouchingAWall = true;
+            }
+            else
+            {
+                if( Input.GetKey( KeyCode.D ) )
+                {
+                    totalForce += new Vector3( MoveForce, 0.0f, 0.0f );
+                }
+            }
+
+            if( Input.GetKey( KeyCode.Space ) || Input.GetKey( KeyCode.W ) )
+            {
+                if( IsOnGround || IsTouchingAWall )
+                {
+                    this._rigidbody.AddForce( new Vector3( 0.0f, JumpForce, 0.0f ), ForceMode.Impulse );
+                }
+                IsOnGround = false;
+            }
+
             this._rigidbody.AddForce( totalForce );
+
+            // clamp X
+            if( this.transform.position.x < 0.0f )
+            {
+                this.transform.position = new Vector3( 0.0f, this.transform.position.y, this.transform.position.z );
+                ResetVelocityX();
+            }
+            else if( this.transform.position.x > ((float)TileMap.Width - 1.0f) )
+            {
+                this.transform.position = new Vector3( ((float)TileMap.Width - 1.0f), this.transform.position.y, this.transform.position.z );
+                ResetVelocityX();
+            }
         }
     }
 }

@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 98a9504a8427e3d4e816a72d8491c9ea, type: 3}
-  m_Name: stone.2
+  m_Name: stone_brick
   m_EditorClassIdentifier: 
-  <ID>k__BackingField: tile.stone.2
+  <ID>k__BackingField: tile.stone_brick
   Hardness: 10
   LootTable: {fileID: 11400000, guid: da736f433a1845f45ba7edede278d268, type: 2}
-  Mesh: {fileID: -2290329133821456069, guid: 37ade7efdddcbcd459b8df13773b74e6, type: 3}
+  Mesh: {fileID: 6108244746963923287, guid: 2231d5c3fb3d9ab469a05d8186e78e42, type: 3}
   Material: {fileID: 2100000, guid: a9cccd4bf9da5a544a4fa144087e2985, type: 2}

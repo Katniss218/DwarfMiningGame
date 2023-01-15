@@ -18,5 +18,38 @@ namespace DwarfMiningGame.Tiles
 
         public Mesh Mesh;
         public Material Material;
+
+
+        public const int LAYER = 9;
+
+        /// <summary>
+        /// Creates a new tile prefab.
+        /// </summary>
+        public static GameObject Create( Tile tile, Mineral mineral = null )
+        {
+            if( tile == null )
+            {
+                throw new ArgumentNullException( "Tile must be set" );
+            }
+
+            GameObject gameObject = new GameObject( "TILE" );
+            gameObject.layer = LAYER;
+
+            BoxCollider collider = gameObject.AddComponent<BoxCollider>();
+            collider.size = new Vector3( 1.0f, 1.0f, 1.0f );
+
+            MeshFilter meshFilter = gameObject.AddComponent<MeshFilter>();
+            meshFilter.mesh = tile.Mesh;
+
+            MeshRenderer meshRenderer = gameObject.AddComponent<MeshRenderer>();
+            meshRenderer.material = tile.Material;
+
+            if( mineral != null )
+            {
+                Mineral.Create( gameObject, mineral );
+            }
+            
+            return gameObject;
+        }
     }
 }

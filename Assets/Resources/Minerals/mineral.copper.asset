@@ -9,11 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98a9504a8427e3d4e816a72d8491c9ea, type: 3}
-  m_Name: stone.2
+  m_Script: {fileID: 11500000, guid: f70cfb6f358bacb4da8cec7bee63ac87, type: 3}
+  m_Name: mineral.copper
   m_EditorClassIdentifier: 
-  <ID>k__BackingField: tile.stone.2
-  Hardness: 10
-  LootTable: {fileID: 11400000, guid: da736f433a1845f45ba7edede278d268, type: 2}
-  Mesh: {fileID: -2290329133821456069, guid: 37ade7efdddcbcd459b8df13773b74e6, type: 3}
+  <ID>k__BackingField: mineral.copper
+  Hardness: 5
+  LootTable: {fileID: 11400000, guid: f18d280c085a7b44385a7a32f6190899, type: 2}
+  Mesh: {fileID: 6628907312925966407, guid: 018f4c9be75a4194da03d93b3a49db18, type: 3}
   Material: {fileID: 2100000, guid: a9cccd4bf9da5a544a4fa144087e2985, type: 2}

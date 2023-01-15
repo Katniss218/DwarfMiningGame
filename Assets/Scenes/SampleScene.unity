@@ -167,6 +167,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 706bd1d86e9fb2b4fb100d391940da55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _player: {fileID: 989359997}
+  _background: {fileID: 0}
+  width: 100
+  height: 500
 --- !u!1 &228516042
 GameObject:
   m_ObjectHideFlags: 0
@@ -1050,7 +1054,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -50}
+  m_LocalPosition: {x: 0, y: 1, z: -35}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1070,7 +1074,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <FollowTarget>k__BackingField: {fileID: 989360000}
-  <Offset>k__BackingField: {x: 0, y: 0, z: -50}
+  <Offset>k__BackingField: {x: 0, y: 0, z: -35}
 --- !u!1 &989359997
 GameObject:
   m_ObjectHideFlags: 0
@@ -1106,9 +1110,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81cfd1f29ce6ae3488c1d788f05c89fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <MoveForce>k__BackingField: 40
-  <LiftForce>k__BackingField: 30
-  <IsOnGround>k__BackingField: 0
+  <MoveForce>k__BackingField: 14
+  <JumpForce>k__BackingField: 9
 --- !u!54 &989359999
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1572,7 +1575,7 @@ GameObject:
   - component: {fileID: 1966215961}
   - component: {fileID: 1966215960}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: BG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1636,8 +1639,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1966215958}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 100, y: 100, z: 1}
-  m_LocalScale: {x: 200, y: 200, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
