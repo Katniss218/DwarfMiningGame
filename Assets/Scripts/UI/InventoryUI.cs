@@ -26,6 +26,11 @@ namespace DwarfMiningGame.UI
             this.Inventory.OnSlotRemoved += this.OnSlotRemoved;
         }
 
+        private void Start()
+        {
+            InventoryItemSelectorWindow.Create( GameObject.Find( "Context Menu Canvas" ).GetComponent<Canvas>(), Inventory, ( slot ) => slot.Amount % 2 == 0 );
+        }
+
         void OnAfterSlotChanged( Inventory.ItemSlot slot )
         {
             if( _uis.TryGetValue( slot, out InventoryItemUI ui ) )
@@ -91,6 +96,5 @@ namespace DwarfMiningGame.UI
             // - - sliding_area
             // - - - handle
         }
-
     }
 }

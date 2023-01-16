@@ -30,6 +30,7 @@ namespace DwarfMiningGame.UI
             GameObject go = new GameObject( "Item UI" );
             RectTransform rt = go.AddComponent<RectTransform>();
             rt.SetParent( invList );
+            rt.sizeDelta = new Vector2( 100.0f, 36.0f );
             // sizing handled by the list's grid layout.
 
             InventoryItemUI ui = go.AddComponent<InventoryItemUI>();
@@ -49,7 +50,7 @@ namespace DwarfMiningGame.UI
             ui._icon = img;
 
 
-            GameObject goT = new GameObject( "Icon" );
+            GameObject goT = new GameObject( "Text" );
             RectTransform rtT = goT.AddComponent<RectTransform>();
             rtT.SetParent( rt );
             rtT.anchorMin = new Vector2( 1.0f, 0.5f );

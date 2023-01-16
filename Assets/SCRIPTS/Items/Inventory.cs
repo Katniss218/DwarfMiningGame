@@ -52,7 +52,12 @@ namespace DwarfMiningGame.Items
         [SerializeField]
         public Action<ItemSlot> OnSlotRemoved;
 
-        public virtual int GetCount( Item item )
+        public ItemSlot[] GetItems()
+        {
+            return this._items.ToArray();
+        }
+
+        public int GetCount( Item item )
         {
             int acc = 0;
             foreach( ItemSlot stack in _items )
@@ -66,7 +71,7 @@ namespace DwarfMiningGame.Items
         }
 
         /// Returns the space occupied by a specific item.
-        public virtual float GetSize( Item item )
+        public float GetSize( Item item )
         {
             float acc = 0;
             foreach( ItemSlot stack in _items )
@@ -79,7 +84,7 @@ namespace DwarfMiningGame.Items
             return acc;
         }
 
-        public virtual float GetSize()
+        public float GetSize()
         {
             float acc = 0;
             foreach( ItemSlot stack in _items )
@@ -90,7 +95,7 @@ namespace DwarfMiningGame.Items
         }
 
         /// Returns the space left.
-        public virtual float GetSpaceLeft()
+        public float GetSpaceLeft()
         {
             return MaxCapacity - GetSize();
         }
@@ -99,7 +104,7 @@ namespace DwarfMiningGame.Items
         /// Tries to add a specified amount of the specified item to the inventory. Only part will be added if the full amount can't fit in the inventory.
         /// </summary>
         /// <returns>How many items were actually added to the inventory.</returns>
-        public virtual int TryAdd( Item item, int amount )
+        public int TryAdd( Item item, int amount )
         {
             float spaceLeft = GetSpaceLeft();
             int amountLeft = Mathf.FloorToInt( spaceLeft / item.Size );
@@ -137,7 +142,7 @@ namespace DwarfMiningGame.Items
         /// Tries to remove a specified amount of the specified item from the inventory. Only part will be removed if there is not enough items present in the inventory.
         /// </summary>
         /// <returns>How many items were actually removed from the inventory.</returns>
-        public virtual int TryRemove( Item item, int amount )
+        public int TryRemove( Item item, int amount )
         {
             foreach( ItemSlot slot in _items )
             {
