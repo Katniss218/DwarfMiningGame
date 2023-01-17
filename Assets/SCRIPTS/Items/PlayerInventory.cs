@@ -36,18 +36,41 @@ namespace DwarfMiningGame.Items
 
         public Action<int, ItemSlot> OnAfterEquipmentChanged;
 
-        ItemSlot[] _equipment = new ItemSlot[] { null };
+        ItemSlot[] _equipment = new ItemSlot[] { null, null, null };
 
-        /// Pickaxe lets you mine stuff.
-        public ItemSlot Hand
+        const int SLOT_MAINHAND = 0;
+        public ItemSlot MainHand
         {
-            get => _equipment[0];
+            get => _equipment[SLOT_MAINHAND];
             set
             {
-                _equipment[0] = value;
-                OnAfterEquipmentChanged( 0, value );
+                _equipment[SLOT_MAINHAND] = value;
+                OnAfterEquipmentChanged( SLOT_MAINHAND, value );
             }
         }
+
+        const int SLOT_OFFHAND = 1;
+        public ItemSlot OffHand
+        {
+            get => _equipment[SLOT_OFFHAND];
+            set
+            {
+                _equipment[SLOT_OFFHAND] = value;
+                OnAfterEquipmentChanged( SLOT_OFFHAND, value );
+            }
+        }
+
+        const int SLOT_BAG = 2;
+        public ItemSlot Bag
+        {
+            get => _equipment[SLOT_BAG];
+            set
+            {
+                _equipment[SLOT_BAG] = value;
+                OnAfterEquipmentChanged( SLOT_BAG, value );
+            }
+        }
+
         /*
         /// Bag changes the size of your inventory.
         // when changing the bag, if you unequip it, the capacity changes, but items are not dropped.

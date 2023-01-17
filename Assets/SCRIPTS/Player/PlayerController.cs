@@ -35,7 +35,7 @@ namespace DwarfMiningGame.Player
         void UsePickaxe()
         {
             // Hand item can be not set, or set to a slot that was later removed (item was sold/etc).
-            ItemPickaxe pickaxe = _inventory.Hand?.Item as ItemPickaxe;
+            ItemPickaxe pickaxe = _inventory.MainHand?.Item as ItemPickaxe;
             if( pickaxe == null )
             {
                 return;

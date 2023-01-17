@@ -41,7 +41,7 @@ namespace DwarfMiningGame.UI
             GameObject backgroundGO = UIHelper.UIFill( rootGO.transform, "background", 0, 0, 0, 0 );
             UIHelper.MakeForegroundImage( backgroundGO );
 
-            GameObject iconGO = UIHelper.UIFill( rootGO.transform, "item_icon", 0, 0, 0, 0 );
+            GameObject iconGO = UIHelper.UI( rootGO.transform, "item_icon", new Vector2( 0.5f, 0.5f ), Vector2.zero, new Vector2( 50, 50 ) );
 
             Image itemIcon = iconGO.AddComponent<Image>();
             itemIcon.raycastTarget = false;

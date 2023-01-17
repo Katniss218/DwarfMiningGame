@@ -116,6 +116,7 @@ namespace DwarfMiningGame.UI
             isw._inventory.OnSlotRemoved += isw.OnSlotRemoved;
 
             GameObject items = UIHelper.UIFill( gameObject.transform, "items", 0, 0, 0, 0 );
+            UIHelper.MakeForegroundImage( items );
 
             GameObject content = UIHelper.MakeVerticalScrollRect( items );
 
@@ -265,8 +266,6 @@ namespace DwarfMiningGame.UI
             mask.showMaskGraphic = false;
 
             GameObject content = UIHelper.UI( viewport.transform, "content", new Vector2( 0.0f, 1.0f ), new Vector2( 1, 1 ), Vector2.zero, new Vector2( 0.0f, 280.0f ) );
-
-            MakeForegroundImage( items );
 
             ScrollRect scrollRect = items.AddComponent<ScrollRect>();
             scrollRect.content = (RectTransform)content.transform;

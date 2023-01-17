@@ -100,10 +100,18 @@ namespace DwarfMiningGame.UI
             SetMoneyText( newMoney );
         }
 
+        InventoryItemSelectorWindow currentEquipSelectorWindow = null;
+
         public void RegisterEquipment( Func<Inventory.ItemSlot, bool> canEquipItem, Action<Inventory.ItemSlot> onSelect )
         {
-            InventoryEquipmentUI ui = InventoryEquipmentUI.Create( _equipmentList,
-                () => InventoryItemSelectorWindow.Create( GameObject.Find( "Context Menu Canvas" ).GetComponent<Canvas>(), this.Inventory, canEquipItem, onSelect ) );
+            InventoryEquipmentUI ui = InventoryEquipmentUI.Create( _equipmentList, () =>
+            {
+                if( currentEquipSelectorWindow != null )
+                {
+                    currentEquipSelectorWindow.Close();
+                }
+                currentEquipSelectorWindow = InventoryItemSelectorWindow.Create( GameObject.Find( "Context Menu Canvas" ).GetComponent<Canvas>(), this.Inventory, canEquipItem, onSelect );
+            } );
 
             _equipmentUIs.Add( ui );
         }
@@ -141,7 +149,9 @@ namespace DwarfMiningGame.UI
                 ui.CreateItemUI( item );
             }
 
-            ui.RegisterEquipment( ( s ) => s.Item is ItemPickaxe, ( s ) => ui.Inventory.Hand = s );
+            ui.RegisterEquipment( ( s ) => s.Item is ItemPickaxe, ( s ) => ui.Inventory.MainHand = s );
+            ui.RegisterEquipment( ( s ) => s.Item is Item, ( s ) => ui.Inventory.OffHand = s );
+            ui.RegisterEquipment( ( s ) => s.Item is ItemBag, ( s ) => ui.Inventory.Bag = s );
 
             ui.OnMoneyChanged( inventory.Money );
 
