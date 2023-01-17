@@ -1,4 +1,6 @@
-﻿using DwarfMiningGame.Tiles;
+﻿using DwarfMiningGame.Items;
+using DwarfMiningGame.Tiles;
+using DwarfMiningGame.UI;
 using DwarfMiningGame.WorldGen;
 using System;
 using System.Collections.Generic;
@@ -12,6 +14,7 @@ namespace DwarfMiningGame
     public class GameManager : MonoBehaviour
     {
         [SerializeField] GameObject _player;
+        [SerializeField] PlayerInventory _playerInventory;
         [SerializeField] GameObject _background;
 
         [SerializeField] int width;
@@ -38,6 +41,14 @@ namespace DwarfMiningGame
                 _background.transform.localScale = new Vector3( width, height, 1.0f );
                 _background.transform.position = TileMap.GetWorldPosition( width / 2, height / 2 ) + new Vector3( -0.5f, -0.5f, 1.0f );
             }
+        }
+
+        private void Start()
+        {
+            _playerInventory.TryAdd( Registry<Item>.Get( "item.dwarven_pickaxe" ), 1 );
+            _playerInventory.Money = 200.0f;
+
+            PlayerInventoryUI.Create( (RectTransform)GameObject.Find( "Main Canvas" ).transform, _playerInventory );
         }
     }
 }

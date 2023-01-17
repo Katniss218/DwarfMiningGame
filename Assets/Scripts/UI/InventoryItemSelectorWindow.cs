@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityPlus.AssetManagement;
 
 namespace DwarfMiningGame.UI
 {
@@ -11,6 +12,7 @@ namespace DwarfMiningGame.UI
     {
         Inventory _inventory;
         Func<Inventory.ItemSlot, bool> _canEquip;
+        Action<Inventory.ItemSlot> _onSelect;
 
         RectTransform _list;
 
@@ -60,6 +62,15 @@ namespace DwarfMiningGame.UI
         void AddItem( Inventory.ItemSlot slot )
         {
             InventoryItemUI iui = InventoryItemUI.Create( _list, slot );
+            UIHelper.AddRaycastTarget( iui.gameObject );
+
+            LeftClickAction c = iui.gameObject.AddComponent<LeftClickAction>();
+            c.OnClick += () =>
+            {
+                _onSelect( slot );
+                this.Close();
+            };
+
             _activeSlots.Add( slot, iui );
         }
 
@@ -89,7 +100,7 @@ namespace DwarfMiningGame.UI
         /// <summary>
         /// Makes a window that equips an item to an equipment slot.
         /// </summary>
-        public static InventoryItemSelectorWindow Create( Canvas parent, Inventory inventory, Func<Inventory.ItemSlot, bool> canEquipItem )
+        public static InventoryItemSelectorWindow Create( Canvas parent, Inventory inventory, Func<Inventory.ItemSlot, bool> canEquipItem, Action<Inventory.ItemSlot> onSelect )
         {
             // a 1D vertical list of all the items that can be equipped in the selected slot.
             // 
@@ -98,6 +109,7 @@ namespace DwarfMiningGame.UI
 
             InventoryItemSelectorWindow isw = gameObject.AddComponent<InventoryItemSelectorWindow>();
             isw._canEquip = canEquipItem;
+            isw._onSelect = onSelect;
             isw._inventory = inventory;
             isw._inventory.OnAfterSlotChanged += isw.OnAfterSlotChanged;
             isw._inventory.OnSlotAdded += isw.OnSlotAdded;
@@ -105,48 +117,18 @@ namespace DwarfMiningGame.UI
 
             GameObject items = UIHelper.UIFill( gameObject.transform, "items", 0, 0, 0, 0 );
 
-            GameObject viewport = UIHelper.UIFill( items.transform, "viewport", 0, 0, 0, 0 );
+            GameObject content = UIHelper.MakeVerticalScrollRect( items );
 
-            Image maskImage = viewport.AddComponent<Image>();
-            Mask mask = viewport.AddComponent<Mask>();
-            mask.showMaskGraphic = false;
-
-            GameObject content = UIHelper.UI( viewport.transform, "content", new Vector2( 0.0f, 1.0f ), new Vector2( 1, 1 ), Vector2.zero, new Vector2( 0.0f, 280.0f ) );
-
-            VerticalLayoutGroup vl = content.AddComponent<VerticalLayoutGroup>();
-            vl.padding = new RectOffset( 5, 5, 5, 5 );
-            vl.spacing = 0.0f;
-            vl.childControlWidth = true;
-            vl.childControlHeight = false;
-            vl.childScaleWidth = false;
-            vl.childScaleHeight = false;
-            vl.childForceExpandWidth = true;
-            vl.childForceExpandHeight = false;
-
-            ContentSizeFitter cs = content.AddComponent<ContentSizeFitter>();
-            cs.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
-            cs.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
-
-            Image image = items.AddComponent<Image>();
-            image.sprite = UnityPlus.AssetManagement.AssetRegistry<Sprite>.GetAsset( "Sprites/ui_beveled" );
-            image.color = new Color( 0.5f, 0.5f, 0.5f, 1.0f );
-            image.type = Image.Type.Sliced;
-
-            ScrollRect scrollRect = items.AddComponent<ScrollRect>();
-            scrollRect.content = (RectTransform)content.transform;
-            scrollRect.movementType = ScrollRect.MovementType.Clamped;
-            scrollRect.horizontal = false;
-            scrollRect.vertical = true;
-            scrollRect.inertia = true;
-            scrollRect.decelerationRate = 0.5f;
-            scrollRect.scrollSensitivity = 30f;
-            scrollRect.viewport = (RectTransform)viewport.transform;
+            UIHelper.AddVerticalLayoutGroup( content, 5, 0, true );
 
             isw._list = (RectTransform)content.transform;
 
             foreach( var slot in inventory.GetItems() )
             {
-                isw.AddItem( slot );
+                if( isw._canEquip( slot ) )
+                {
+                    isw.AddItem( slot );
+                }
             }
 
             return isw;
@@ -164,6 +146,16 @@ namespace DwarfMiningGame.UI
             Vector2 sizeDelta = new Vector2( -left - right, -top - bottom );
 
             return UI( parent, name, anchorMin, anchorMax, pivot, anchoredPos, sizeDelta );
+        }
+
+        /// <summary>
+        /// Makes the UI element a raycast target.
+        /// </summary>
+        public static void AddRaycastTarget( GameObject go )
+        {
+            Image raycastImage = go.AddComponent<Image>();
+            raycastImage.raycastTarget = true;
+            raycastImage.color = new Color( 0, 0, 0, 0 ); // transparent.
         }
 
         public static GameObject UI( Transform parent, string name, Vector2 anchorPivot, Vector2 anchoredPos, Vector2 sizeDelta )
@@ -188,6 +180,105 @@ namespace DwarfMiningGame.UI
             rectTransform.sizeDelta = sizeDelta;
 
             return gameObject;
+        }
+
+        public static TMPro.TextMeshProUGUI AddText( GameObject obj, string text, TMPro.HorizontalAlignmentOptions horizontalAlign )
+        {
+            TMPro.TextMeshProUGUI tm = obj.AddComponent<TMPro.TextMeshProUGUI>();
+            tm.fontSize = 16.0f;
+            tm.raycastTarget = false;
+            tm.horizontalAlignment = horizontalAlign;
+            tm.verticalAlignment = TMPro.VerticalAlignmentOptions.Middle;
+            tm.overflowMode = TMPro.TextOverflowModes.Overflow;
+            tm.enableWordWrapping = false;
+            tm.text = text;
+
+            return tm;
+        }
+
+        public static void MakeForegroundImage( GameObject go )
+        {
+            Image image = go.AddComponent<Image>();
+            image.raycastTarget = false;
+            image.sprite = AssetRegistry<Sprite>.GetAsset( "Sprites/ui_beveled" );
+            image.color = new Color( 0.5f, 0.5f, 0.5f, 1.0f );
+            image.type = Image.Type.Sliced;
+        }
+
+        public static void MakeBackgroundImage( GameObject go )
+        {
+            Image image = go.AddComponent<Image>();
+            image.raycastTarget = false;
+            image.sprite = AssetRegistry<Sprite>.GetAsset( "Sprites/ui_beveled" );
+            image.color = new Color( 0.25f, 0.25f, 0.25f, 1.0f );
+            image.type = Image.Type.Sliced;
+        }
+
+        public static void AddVerticalLayoutGroup( GameObject go, int padding, int spacing, bool adjustToFit )
+        {
+            VerticalLayoutGroup vl = go.AddComponent<VerticalLayoutGroup>();
+            vl.padding = new RectOffset( padding, padding, padding, padding );
+            vl.spacing = spacing;
+            vl.childControlWidth = true;
+            vl.childControlHeight = false;
+            vl.childScaleWidth = false;
+            vl.childScaleHeight = false;
+            vl.childForceExpandWidth = true;
+            vl.childForceExpandHeight = false;
+
+            if( adjustToFit )
+            {
+                ContentSizeFitter cs = go.AddComponent<ContentSizeFitter>();
+                cs.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+                cs.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+            }
+        }
+
+        public static void AddColumnGridLayoutGroup( GameObject go, int padding, int spacing, Vector2 cellSize, GridLayoutGroup.Corner startCorner, TextAnchor childAlignment, int columnCount, bool adjustToFit )
+        {
+            GridLayoutGroup gl = go.AddComponent<GridLayoutGroup>();
+            gl.padding = new RectOffset( padding, padding, padding, padding );
+            gl.spacing = new Vector2( spacing, spacing );
+            gl.cellSize = cellSize;
+            gl.startCorner = startCorner;
+            gl.startAxis = GridLayoutGroup.Axis.Horizontal;
+            gl.childAlignment = childAlignment;
+            gl.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+            gl.constraintCount = columnCount;
+
+            if( adjustToFit )
+            {
+                ContentSizeFitter cs = go.AddComponent<ContentSizeFitter>();
+                cs.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+                cs.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+            }
+        }
+
+        public static GameObject MakeVerticalScrollRect( GameObject obj )
+        {
+            GameObject items = UIHelper.UIFill( obj.transform, "items", 0, 0, 0, 0 );
+
+            GameObject viewport = UIHelper.UIFill( items.transform, "viewport", 0, 0, 0, 0 );
+
+            Image maskImage = viewport.AddComponent<Image>();
+            Mask mask = viewport.AddComponent<Mask>();
+            mask.showMaskGraphic = false;
+
+            GameObject content = UIHelper.UI( viewport.transform, "content", new Vector2( 0.0f, 1.0f ), new Vector2( 1, 1 ), Vector2.zero, new Vector2( 0.0f, 280.0f ) );
+
+            MakeForegroundImage( items );
+
+            ScrollRect scrollRect = items.AddComponent<ScrollRect>();
+            scrollRect.content = (RectTransform)content.transform;
+            scrollRect.movementType = ScrollRect.MovementType.Clamped;
+            scrollRect.horizontal = false;
+            scrollRect.vertical = true;
+            scrollRect.inertia = true;
+            scrollRect.decelerationRate = 0.5f;
+            scrollRect.scrollSensitivity = 30f;
+            scrollRect.viewport = (RectTransform)viewport.transform;
+
+            return content;
         }
     }
 }

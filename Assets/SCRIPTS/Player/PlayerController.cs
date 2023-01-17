@@ -34,7 +34,8 @@ namespace DwarfMiningGame.Player
 
         void UsePickaxe()
         {
-            ItemPickaxe pickaxe = _inventory.Pickaxe;
+            // Hand item can be not set, or set to a slot that was later removed (item was sold/etc).
+            ItemPickaxe pickaxe = _inventory.Hand?.Item as ItemPickaxe;
             if( pickaxe == null )
             {
                 return;
@@ -80,7 +81,7 @@ namespace DwarfMiningGame.Player
         {
             this._rigidbody.velocity = new Vector3( 0.0f, this._rigidbody.velocity.y, this._rigidbody.velocity.z );
         }
-        
+
         void ResetVelocityY()
         {
             this._rigidbody.velocity = new Vector3( this._rigidbody.velocity.x, 0.0f, this._rigidbody.velocity.z );

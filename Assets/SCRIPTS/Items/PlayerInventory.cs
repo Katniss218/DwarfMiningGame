@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DwarfMiningGame.UI;
+using System;
 using UnityEngine;
 
 namespace DwarfMiningGame.Items
@@ -33,38 +34,44 @@ namespace DwarfMiningGame.Items
         /// </summary>
         public Action<float> OnAfterMoneyChanged;
 
+        public Action<int, ItemSlot> OnAfterEquipmentChanged;
+
+        ItemSlot[] _equipment = new ItemSlot[] { null };
+
         /// Pickaxe lets you mine stuff.
-        [field: SerializeField]
-        public ItemPickaxe Pickaxe { get; set; }
-
-        private ItemBag _bag;
-
+        public ItemSlot Hand
+        {
+            get => _equipment[0];
+            set
+            {
+                _equipment[0] = value;
+                OnAfterEquipmentChanged( 0, value );
+            }
+        }
+        /*
         /// Bag changes the size of your inventory.
         // when changing the bag, if you unequip it, the capacity changes, but items are not dropped.
-        public ItemBag Bag
+        public ItemSlot Bag
         {
-            get
-            {
-                return _bag;
-            }
+            get => _equipment[0];
             set
             {
                 float capacityWithoutOriginalBag = MaxCapacity;
-                if( _bag != null )
+                if( _equipment[0] != null )
                 {
-                    capacityWithoutOriginalBag -= _bag.MaxCapacity;
+                    capacityWithoutOriginalBag -= ((ItemBag)_equipment[0].Item).MaxCapacity;
                 }
 
                 MaxCapacity = capacityWithoutOriginalBag;
                 if( value != null )
                 {
-                    MaxCapacity += value.MaxCapacity;
+                    MaxCapacity += ((ItemBag)value.Item).MaxCapacity;
                 }
 
-                _bag = value;
+                _equipment[0] = value;
             }
         }
-
+        */
         /// <summary>
         /// buys an item and adds it to the inventory. enough money must be in the inventory. otherwise, only part will be bought.
         /// </summary>
@@ -94,11 +101,6 @@ namespace DwarfMiningGame.Items
             int amountSold = TryRemove( item, amount );
             this.Money += item.Value * Item.SellValueMultiplier * amountSold;
             return amountSold;
-        }
-
-        private void Start()
-        {
-            Money = 200.0f;
         }
     }
 }
