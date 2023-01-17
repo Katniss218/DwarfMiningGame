@@ -8,11 +8,16 @@ using UnityPlus.AssetManagement;
 
 namespace DwarfMiningGame.UI
 {
-    public class InventoryItemSelectorWindow : MonoBehaviour
+    /// <summary>
+    /// A class that lets you select an item from the inventory.
+    /// </summary>
+    public class InventorySelectorContextMenu : ContextMenu
     {
         Inventory _inventory;
         Func<Inventory.ItemSlot, bool> _canEquip;
         Action<Inventory.ItemSlot> _onSelect;
+
+        bool _closeOnSelect = false;
 
         RectTransform _list;
 
@@ -68,7 +73,10 @@ namespace DwarfMiningGame.UI
             c.OnClick += () =>
             {
                 _onSelect( slot );
-                this.Close();
+                if( _closeOnSelect )
+                {
+                    this.Close();
+                }
             };
 
             _activeSlots.Add( slot, iui );
@@ -80,11 +88,6 @@ namespace DwarfMiningGame.UI
 
             Destroy( iui.gameObject );
             _activeSlots.Remove( slot );
-        }
-
-        public void Close()
-        {
-            Destroy( this.gameObject );
         }
 
         void OnDestroy()
@@ -100,16 +103,17 @@ namespace DwarfMiningGame.UI
         /// <summary>
         /// Makes a window that equips an item to an equipment slot.
         /// </summary>
-        public static InventoryItemSelectorWindow Create( Canvas parent, Inventory inventory, Func<Inventory.ItemSlot, bool> canEquipItem, Action<Inventory.ItemSlot> onSelect )
+        public static InventorySelectorContextMenu Create( RectTransform parent, Inventory inventory, bool closeOnSelect, Func<Inventory.ItemSlot, bool> canEquipItem, Action<Inventory.ItemSlot> onSelect )
         {
             // a 1D vertical list of all the items that can be equipped in the selected slot.
             // 
 
-            GameObject gameObject = UIHelper.UI( parent.transform, "Inventory Item Selector Window", new Vector2( 0.0f, 1.0f ), new Vector2( 455.0f, -85.0f ), new Vector2( 100.0f, 280.0f ) );
+            GameObject gameObject = UIHelper.UI( parent, "Inventory Item Selector Window", new Vector2( 0.0f, 1.0f ), new Vector2( 455.0f, -85.0f ), new Vector2( 100.0f, 280.0f ) );
 
-            InventoryItemSelectorWindow isw = gameObject.AddComponent<InventoryItemSelectorWindow>();
+            InventorySelectorContextMenu isw = gameObject.AddComponent<InventorySelectorContextMenu>();
             isw._canEquip = canEquipItem;
             isw._onSelect = onSelect;
+            isw._closeOnSelect = closeOnSelect;
             isw._inventory = inventory;
             isw._inventory.OnAfterSlotChanged += isw.OnAfterSlotChanged;
             isw._inventory.OnSlotAdded += isw.OnSlotAdded;

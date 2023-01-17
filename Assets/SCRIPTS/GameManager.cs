@@ -23,6 +23,32 @@ namespace DwarfMiningGame
         [SerializeField] bool randomSeed;
         [SerializeField] int seed;
 
+        private static RectTransform _mainCanvas;
+        public static RectTransform MainCanvas
+        {
+            get
+            {
+                if( _mainCanvas == null )
+                {
+                    _mainCanvas = GameObject.Find( "Main Canvas" ).GetComponent<RectTransform>();
+                }
+                return _mainCanvas;
+            }
+        }
+
+        private static RectTransform _contextMenuCanvas;
+        public static RectTransform ContextMenuCanvas
+        {
+            get
+            {
+                if( _contextMenuCanvas == null )
+                {
+                    _contextMenuCanvas = GameObject.Find( "Context Menu Canvas" ).GetComponent<RectTransform>();
+                }
+                return _contextMenuCanvas;
+            }
+        }
+
         void Awake()
         {
             TileMap.CreateMap( width, height );
@@ -48,7 +74,7 @@ namespace DwarfMiningGame
             _playerInventory.TryAdd( Registry<Item>.Get( "item.dwarven_pickaxe" ), 1 );
             _playerInventory.Money = 200.0f;
 
-            PlayerInventoryUI.Create( (RectTransform)GameObject.Find( "Main Canvas" ).transform, _playerInventory );
+            PlayerInventoryUI.Create( MainCanvas, _playerInventory );
         }
     }
 }

@@ -100,7 +100,7 @@ namespace DwarfMiningGame.UI
             SetMoneyText( newMoney );
         }
 
-        InventoryItemSelectorWindow currentEquipSelectorWindow = null;
+        InventorySelectorContextMenu currentEquipSelectorWindow = null;
 
         public void RegisterEquipment( Func<Inventory.ItemSlot, bool> canEquipItem, Action<Inventory.ItemSlot> onSelect )
         {
@@ -110,7 +110,7 @@ namespace DwarfMiningGame.UI
                 {
                     currentEquipSelectorWindow.Close();
                 }
-                currentEquipSelectorWindow = InventoryItemSelectorWindow.Create( GameObject.Find( "Context Menu Canvas" ).GetComponent<Canvas>(), this.Inventory, canEquipItem, onSelect );
+                currentEquipSelectorWindow = InventorySelectorContextMenu.Create( GameManager.ContextMenuCanvas, this.Inventory, true, canEquipItem, onSelect );
             } );
 
             _equipmentUIs.Add( ui );
