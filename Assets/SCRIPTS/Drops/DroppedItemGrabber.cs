@@ -1,4 +1,4 @@
-﻿using DwarfMiningGame.Items;
+﻿using DwarfMiningGame.Inventories;
 using UnityEngine;
 
 

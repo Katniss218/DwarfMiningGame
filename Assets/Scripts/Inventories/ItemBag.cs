@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace DwarfMiningGame.Items
+namespace DwarfMiningGame.Inventories
 {
     /// A bag is an item that can increase your inventory size.
     [CreateAssetMenu( fileName = "bag item", menuName = "DwarfMiningGame/Item (Bag)", order = 320 )]

@@ -1,5 +1,4 @@
 ﻿using DwarfMiningGame.Drops;
-using DwarfMiningGame.Loot;
 using System;
 using System.Collections.Generic;
 using System.Linq;

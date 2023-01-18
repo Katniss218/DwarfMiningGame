@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b51813511773ef24c8b5b7db03e0b751, type: 3}
   m_Name: loot.gold
   m_EditorClassIdentifier: 
+  <ID>k__BackingField: loot.gold
   <Entries>k__BackingField:
   - <Item>k__BackingField: {fileID: 11400000, guid: 83eb10e0f60be154c8300608185ab845, type: 2}
     <AmtMin>k__BackingField: 1

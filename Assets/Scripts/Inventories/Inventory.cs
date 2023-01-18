@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace DwarfMiningGame.Items
+namespace DwarfMiningGame.Inventories
 {
     public class Inventory : MonoBehaviour
     {

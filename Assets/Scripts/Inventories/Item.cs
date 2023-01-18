@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace DwarfMiningGame.Items
+namespace DwarfMiningGame.Inventories
 {
     [CreateAssetMenu( fileName = "item", menuName = "DwarfMiningGame/Item", order = 300 )]
     public class Item : ScriptableObject, IIdentifiable

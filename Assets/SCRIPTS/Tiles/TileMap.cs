@@ -1,5 +1,5 @@
 ﻿using DwarfMiningGame.Drops;
-using DwarfMiningGame.Items;
+using DwarfMiningGame.Inventories;
 using System;
 using System.Collections.Generic;
 using System.Linq;

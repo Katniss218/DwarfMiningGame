@@ -10,11 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f29e6a0eb5a45bf47a6f445f84a8032a, type: 3}
-  m_Name: crafting_recipe
+  m_Name: recipe.bronze
   m_EditorClassIdentifier: 
+  <ID>k__BackingField: recipe.bronze
   <Ingredients>k__BackingField:
   - <Item>k__BackingField: {fileID: 11400000, guid: c1a486b7b76f85645884c1cd6ec8a658, type: 2}
-    <Amount>k__BackingField: 0
-  <Result>k__BackingField:
-    <Item>k__BackingField: {fileID: 0}
-    <Amount>k__BackingField: 0
+    <Amount>k__BackingField: 1
+  - <Item>k__BackingField: {fileID: 11400000, guid: 9e123aebfc5abcb4faaf2a10de87c962, type: 2}
+    <Amount>k__BackingField: 1
+  <Results>k__BackingField:
+  - <Item>k__BackingField: {fileID: 11400000, guid: 83eb10e0f60be154c8300608185ab845, type: 2}
+    <Amount>k__BackingField: 1

@@ -1,4 +1,4 @@
-using DwarfMiningGame.Items;
+using DwarfMiningGame.Inventories;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -140,8 +140,10 @@ namespace DwarfMiningGame.UI
         }
     }
 
-    public class UIHelper
+    public static class UIHelper
     {
+#warning TODO - move this to a separate file and clean up a bit, possibly with style parameters that are static fields.
+
         public static GameObject UIFill( Transform parent, string name, float left, float right, float top, float bottom )
         {
             Vector2 anchorMin = new Vector2( 0.0f, 0.0f );

@@ -1,4 +1,4 @@
-﻿using DwarfMiningGame.Items;
+﻿using DwarfMiningGame.Inventories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,11 +8,14 @@ using UnityEngine;
 
 namespace DwarfMiningGame.Crafting
 {
-    [CreateAssetMenu( fileName = "crafting_recipe", menuName = "DwarfMiningGame/Crafting Recipe", order = 500 )]
-    public class CraftingRecipe : ScriptableObject
+    /// <summary>
+    /// A definition of a crafting recipe.
+    /// </summary>
+    [CreateAssetMenu( fileName = "crafting_recipe", menuName = "DwarfMiningGame/Crafting Recipe", order = 510 )]
+    public class CraftingRecipe : ScriptableObject, IIdentifiable
     {
         [Serializable]
-        public class RecipeItem
+        public class Entry
         {
             [field: SerializeField]
             public Item Item { get; set; }
@@ -22,9 +25,12 @@ namespace DwarfMiningGame.Crafting
         }
 
         [field: SerializeField]
-        public RecipeItem[] Ingredients { get; set; }
+        public string ID { get; set; }
 
         [field: SerializeField]
-        public RecipeItem Result { get; set; }
+        public Entry[] Ingredients { get; set; }
+
+        [field: SerializeField]
+        public Entry[] Results { get; set; }
     }
 }

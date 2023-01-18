@@ -1,4 +1,4 @@
-using DwarfMiningGame.Items;
+using DwarfMiningGame.Inventories;
 using System;
 using System.Collections;
 using System.Collections.Generic;

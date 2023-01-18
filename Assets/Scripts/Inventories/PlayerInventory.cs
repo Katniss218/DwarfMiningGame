@@ -2,7 +2,7 @@
 using System;
 using UnityEngine;
 
-namespace DwarfMiningGame.Items
+namespace DwarfMiningGame.Inventories
 {
     public class PlayerInventory : Inventory
     {

@@ -1,4 +1,4 @@
-﻿using DwarfMiningGame.Items;
+﻿using DwarfMiningGame.Inventories;
 using DwarfMiningGame.Tiles;
 using DwarfMiningGame.UI;
 using DwarfMiningGame.WorldGen;
@@ -11,8 +11,24 @@ using UnityEngine;
 
 namespace DwarfMiningGame
 {
+    [DisallowMultipleComponent]
     public class GameManager : MonoBehaviour
     {
+        private static GameManager _instance;
+        public static GameManager Instance
+        {
+            get
+            {
+                if( _instance == null )
+                {
+                    _instance = FindObjectOfType<GameManager>();
+                }
+                return _instance;
+            }
+        }
+
+        [field: SerializeField] public PlayerData PlayerData { get; private set; }
+
         [SerializeField] GameObject _player;
         [SerializeField] PlayerInventory _playerInventory;
         [SerializeField] GameObject _background;
@@ -49,7 +65,7 @@ namespace DwarfMiningGame
             }
         }
 
-        void Awake()
+        public void StartGame()
         {
             TileMap.CreateMap( width, height );
 
@@ -67,14 +83,17 @@ namespace DwarfMiningGame
                 _background.transform.localScale = new Vector3( width, height, 1.0f );
                 _background.transform.position = TileMap.GetWorldPosition( width / 2, height / 2 ) + new Vector3( -0.5f, -0.5f, 1.0f );
             }
-        }
 
-        private void Start()
-        {
+
             _playerInventory.TryAdd( Registry<Item>.Get( "item.dwarven_pickaxe" ), 1 );
             _playerInventory.Money = 200.0f;
 
             PlayerInventoryUI.Create( MainCanvas, _playerInventory );
+        }
+
+        void Start()
+        {
+            StartGame();
         }
     }
 }

@@ -1,4 +1,4 @@
-using DwarfMiningGame.Items;
+using DwarfMiningGame.Inventories;
 using DwarfMiningGame.Tiles;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,6 +9,7 @@ namespace DwarfMiningGame.Player
 {
     [RequireComponent( typeof( Rigidbody ) )]
     [RequireComponent( typeof( Collider ) )]
+    [RequireComponent( typeof( InteractorBehaviour ) )]
     public class PlayerController : MonoBehaviour
     {
         [field: SerializeField]
@@ -17,9 +18,13 @@ namespace DwarfMiningGame.Player
         [field: SerializeField]
         public float JumpForce { get; set; }
 
+        [field: SerializeField]
+        public float InteractionRange { get; set; }
+
         Rigidbody _rigidbody;
         Collider _collider;
         PlayerInventory _inventory;
+        InteractorBehaviour _interactor;
 
         public bool IsOnGround { get; private set; }
 
@@ -30,6 +35,7 @@ namespace DwarfMiningGame.Player
             _rigidbody = this.GetComponent<Rigidbody>();
             _collider = this.GetComponent<Collider>();
             _inventory = this.GetComponent<PlayerInventory>();
+            _interactor = this.GetComponent<InteractorBehaviour>();
         }
 
         void UsePickaxe()
@@ -62,6 +68,28 @@ namespace DwarfMiningGame.Player
             TileMap.Mine( x + dirX, y + dirY, pickaxe.MaxHardness, pickaxe.MiningSpeed );
         }
 
+        void InteractWithClosest()
+        {
+            InteractibleBehaviour[] interactibleBehaviours = FindObjectsOfType<InteractibleBehaviour>();
+            InteractibleBehaviour closest = null;
+            float closestDist = InteractionRange;
+
+            foreach( var ib in interactibleBehaviours )
+            {
+                float currDist = Vector2.Distance( ib.gameObject.transform.position, this.transform.position );
+                if( currDist < closestDist )
+                {
+                    closest = ib;
+                    closestDist = currDist;
+                }
+            }
+
+            if( closest != null )
+            {
+                closest.Interact( this._interactor );
+            }
+        }
+
         bool StandingOnTile()
         {
             return Physics.Raycast( this.transform.position, Vector3.down, this._collider.bounds.extents.y + 0.05f, 1 << Tile.LAYER );
@@ -92,6 +120,11 @@ namespace DwarfMiningGame.Player
             if( !EventSystem.current.IsPointerOverGameObject() && Input.GetKey( KeyCode.Mouse0 ) )
             {
                 UsePickaxe();
+            }
+
+            if( !EventSystem.current.IsPointerOverGameObject() && Input.GetKeyDown( KeyCode.F ) )
+            {
+                InteractWithClosest();
             }
         }
 

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b51813511773ef24c8b5b7db03e0b751, type: 3}
   m_Name: loot.copper
   m_EditorClassIdentifier: 
+  <ID>k__BackingField: loot.copper
   <Entries>k__BackingField:
   - <Item>k__BackingField: {fileID: 11400000, guid: 43239590e576b04499ff5e4dcc0779e4, type: 2}
     <AmtMin>k__BackingField: 1

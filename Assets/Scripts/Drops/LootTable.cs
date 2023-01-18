@@ -1,4 +1,4 @@
-﻿using DwarfMiningGame.Items;
+﻿using DwarfMiningGame.Inventories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,12 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace DwarfMiningGame.Loot
+namespace DwarfMiningGame.Drops
 {
     /// Stores loot to be dropped by something.
 
     [CreateAssetMenu( fileName = "loot_table", menuName = "DwarfMiningGame/Loot Table", order = 400 )]
-    public class LootTable : ScriptableObject
+    public class LootTable : ScriptableObject, IIdentifiable
     {
         [Serializable]
         public class Entry
@@ -27,6 +27,9 @@ namespace DwarfMiningGame.Loot
             [field: SerializeField]
             public float DropChance { get; set; } = 1;
         }
+
+        [field: SerializeField]
+        public string ID { get; set; }
 
         [field: SerializeField]
         public Entry[] Entries { get; set; }

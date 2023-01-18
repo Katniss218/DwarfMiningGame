@@ -1,0 +1,14 @@
+﻿
+
+
+Name convention:
+
+_name => privates, protecteds
+name => public
+
+Name => properties, methods, classes.
+
+
+Behaviour - something that allows a functionality on an object (e.g. an interactible object, a crafting station object, a pickupable object, etc).
+Controller - something that controls something else.
+Manager - something that manages an aspect of the game.

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b51813511773ef24c8b5b7db03e0b751, type: 3}
   m_Name: loot.dirt
   m_EditorClassIdentifier: 
+  <ID>k__BackingField: loot.dirt
   <Entries>k__BackingField:
   - <Item>k__BackingField: {fileID: 11400000, guid: c1a486b7b76f85645884c1cd6ec8a658, type: 2}
     <AmtMin>k__BackingField: 1
