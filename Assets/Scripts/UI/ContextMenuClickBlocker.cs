@@ -29,7 +29,7 @@ namespace DwarfMiningGame.UI
         {
             GameObject go = UIHelper.UIFill( GameManager.ContextMenuCanvas, "_ CLICK BLOCKER _", 0, 0, 0, 0 );
             go.transform.SetAsFirstSibling(); // make all windows appear in front.
-            UIHelper.AddRaycastTarget( go );
+            UIHelper.MakeRaycastTarget( go );
 
             ContextMenuClickBlocker cmb = go.AddComponent<ContextMenuClickBlocker>();
 

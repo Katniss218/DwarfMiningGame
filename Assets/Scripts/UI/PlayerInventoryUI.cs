@@ -86,7 +86,7 @@ namespace DwarfMiningGame.UI
 
         void CreateItemUI( Inventory.ItemSlot slot )
         {
-            InventoryItemUI ui = InventoryItemUI.Create( _itemsList, slot );
+            InventoryItemUI ui = InventoryItemUI.Create( _itemsList, slot.Item, slot.Amount );
             _itemUIs.Add( slot, ui );
         }
 
@@ -121,21 +121,21 @@ namespace DwarfMiningGame.UI
         {
             GameObject root = UIHelper.UI( panel, "Inventory UI", new Vector2( 0, 1 ), Vector2.zero, new Vector2( 455, 365 ) );
 
-            UIHelper.MakeBackgroundImage( root );
+            UIHelper.MakeBackground( root );
 
             GameObject moneyGO = UIHelper.UI( root.transform, "$money", new Vector2( 1, 1 ), new Vector2( -5, -5 ), new Vector2( 200, 25 ) );
-            TMPro.TextMeshProUGUI moneyText = UIHelper.AddText( moneyGO, "<$money>", TMPro.HorizontalAlignmentOptions.Right );
+            TMPro.TextMeshProUGUI moneyText = UIHelper.MakeText( moneyGO, "<$money>", TMPro.HorizontalAlignmentOptions.Right );
 
             GameObject items = UIHelper.UI( root.transform, "items", new Vector2( 0, 0 ), new Vector2( 0, 1 ), new Vector2( 0, -42.5f ), new Vector2( 385, -85 ) );
-            UIHelper.MakeForegroundImage( items );
+            UIHelper.MakeForeground( items );
 
-            GameObject itemsContent = UIHelper.MakeVerticalScrollRect( items );
-            UIHelper.AddColumnGridLayoutGroup( itemsContent, 5, 0, new Vector2( 75, 36 ), GridLayoutGroup.Corner.UpperLeft, TextAnchor.UpperLeft, 5, true );
+            GameObject itemsContent = UIHelper.AddScrollRect( items, false, true );
+            UIHelper.MakeColumnGridLayoutGroup( itemsContent, 5, 0, new Vector2( InventoryItemUI.WIDTH, InventoryItemUI.HEIGHT ), GridLayoutGroup.Corner.UpperLeft, TextAnchor.UpperLeft, 5, true );
 
             GameObject equipment = UIHelper.UI( root.transform, "equipment", new Vector2( 1, 0 ), new Vector2( 1, 1 ), new Vector2( 0, -42.5f ), new Vector2( 70, -85 ) );
 
-            GameObject equipmentContent = UIHelper.MakeVerticalScrollRect( equipment );
-            UIHelper.AddVerticalLayoutGroup( equipmentContent, 0, 0, true );
+            GameObject equipmentContent = UIHelper.AddScrollRect( equipment, false, true );
+            UIHelper.MakeVerticalLayoutGroup( equipmentContent, 0, 0, true );
 
 
             PlayerInventoryUI ui = root.AddComponent<PlayerInventoryUI>();

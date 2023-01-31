@@ -66,8 +66,8 @@ namespace DwarfMiningGame.UI
 
         void AddItem( Inventory.ItemSlot slot )
         {
-            InventoryItemUI iui = InventoryItemUI.Create( _list, slot );
-            UIHelper.AddRaycastTarget( iui.gameObject );
+            InventoryItemUI iui = InventoryItemUI.Create( _list, slot.Item, slot.Amount );
+            UIHelper.MakeRaycastTarget( iui.gameObject );
 
             LeftClickAction c = iui.gameObject.AddComponent<LeftClickAction>();
             c.OnClick += () =>
@@ -120,11 +120,11 @@ namespace DwarfMiningGame.UI
             isw._inventory.OnSlotRemoved += isw.OnSlotRemoved;
 
             GameObject items = UIHelper.UIFill( gameObject.transform, "items", 0, 0, 0, 0 );
-            UIHelper.MakeForegroundImage( items );
+            UIHelper.MakeForeground( items );
 
-            GameObject content = UIHelper.MakeVerticalScrollRect( items );
+            GameObject content = UIHelper.AddScrollRect( items, false, true );
 
-            UIHelper.AddVerticalLayoutGroup( content, 5, 0, true );
+            UIHelper.MakeVerticalLayoutGroup( content, 5, 0, true );
 
             isw._list = (RectTransform)content.transform;
 
@@ -144,6 +144,9 @@ namespace DwarfMiningGame.UI
     {
 #warning TODO - move this to a separate file and clean up a bit, possibly with style parameters that are static fields.
 
+        // Make - doesn't create any new objects.
+        // Add - creates new objects.
+
         public static GameObject UIFill( Transform parent, string name, float left, float right, float top, float bottom )
         {
             Vector2 anchorMin = new Vector2( 0.0f, 0.0f );
@@ -155,10 +158,21 @@ namespace DwarfMiningGame.UI
             return UI( parent, name, anchorMin, anchorMax, pivot, anchoredPos, sizeDelta );
         }
 
+        public static GameObject UIFillPercent( Transform parent, string name, float left, float right, float top, float bottom )
+        {
+            Vector2 anchorMin = new Vector2( left, bottom );
+            Vector2 anchorMax = new Vector2( 1.0f - right, 1.0f - top );
+            Vector2 pivot = new Vector2( 0.5f, 0.5f );
+            Vector2 anchoredPos = new Vector2( left, -top );
+            Vector2 sizeDelta = new Vector2( -left - right, -top - bottom );
+
+            return UI( parent, name, anchorMin, anchorMax, pivot, anchoredPos, sizeDelta );
+        }
+
         /// <summary>
         /// Makes the UI element a raycast target.
         /// </summary>
-        public static void AddRaycastTarget( GameObject go )
+        public static void MakeRaycastTarget( GameObject go )
         {
             Image raycastImage = go.AddComponent<Image>();
             raycastImage.raycastTarget = true;
@@ -189,7 +203,7 @@ namespace DwarfMiningGame.UI
             return gameObject;
         }
 
-        public static TMPro.TextMeshProUGUI AddText( GameObject obj, string text, TMPro.HorizontalAlignmentOptions horizontalAlign )
+        public static TMPro.TextMeshProUGUI MakeText( GameObject obj, string text, TMPro.HorizontalAlignmentOptions horizontalAlign )
         {
             TMPro.TextMeshProUGUI tm = obj.AddComponent<TMPro.TextMeshProUGUI>();
             tm.fontSize = 16.0f;
@@ -203,27 +217,31 @@ namespace DwarfMiningGame.UI
             return tm;
         }
 
-        public static void MakeForegroundImage( GameObject go )
+        public static readonly Color FOREGROUND_COLOR = new Color( 0.5f, 0.5f, 0.5f, 1.0f );
+        public static readonly Color BACKGROUND_COLOR = new Color( 0.25f, 0.25f, 0.25f, 1.0f );
+
+        public static void MakeForeground( GameObject go )
         {
             Image image = go.AddComponent<Image>();
             image.raycastTarget = false;
             image.sprite = AssetRegistry<Sprite>.GetAsset( "Sprites/ui_beveled" );
-            image.color = new Color( 0.5f, 0.5f, 0.5f, 1.0f );
+            image.color = FOREGROUND_COLOR;
             image.type = Image.Type.Sliced;
         }
 
-        public static void MakeBackgroundImage( GameObject go )
+        public static void MakeBackground( GameObject go )
         {
             Image image = go.AddComponent<Image>();
             image.raycastTarget = false;
             image.sprite = AssetRegistry<Sprite>.GetAsset( "Sprites/ui_beveled" );
-            image.color = new Color( 0.25f, 0.25f, 0.25f, 1.0f );
+            image.color = BACKGROUND_COLOR;
             image.type = Image.Type.Sliced;
         }
 
-        public static void AddVerticalLayoutGroup( GameObject go, int padding, int spacing, bool adjustToFit )
+        public static void MakeVerticalLayoutGroup( GameObject go, int padding, int spacing, bool containerFitsContents, bool reversed = false )
         {
             VerticalLayoutGroup vl = go.AddComponent<VerticalLayoutGroup>();
+            vl.childAlignment = reversed ? TextAnchor.LowerRight : TextAnchor.UpperLeft;
             vl.padding = new RectOffset( padding, padding, padding, padding );
             vl.spacing = spacing;
             vl.childControlWidth = true;
@@ -233,7 +251,7 @@ namespace DwarfMiningGame.UI
             vl.childForceExpandWidth = true;
             vl.childForceExpandHeight = false;
 
-            if( adjustToFit )
+            if( containerFitsContents )
             {
                 ContentSizeFitter cs = go.AddComponent<ContentSizeFitter>();
                 cs.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
@@ -241,7 +259,28 @@ namespace DwarfMiningGame.UI
             }
         }
 
-        public static void AddColumnGridLayoutGroup( GameObject go, int padding, int spacing, Vector2 cellSize, GridLayoutGroup.Corner startCorner, TextAnchor childAlignment, int columnCount, bool adjustToFit )
+        public static void MakeHorizontalLayoutGroup( GameObject go, int padding, int spacing, bool containerFitsContents, bool reversed = false )
+        {
+            HorizontalLayoutGroup vl = go.AddComponent<HorizontalLayoutGroup>();
+            vl.childAlignment = reversed ? TextAnchor.LowerRight : TextAnchor.UpperLeft;
+            vl.padding = new RectOffset( padding, padding, padding, padding );
+            vl.spacing = spacing;
+            vl.childControlWidth = false;
+            vl.childControlHeight = true;
+            vl.childScaleWidth = false;
+            vl.childScaleHeight = false;
+            vl.childForceExpandWidth = false;
+            vl.childForceExpandHeight = true;
+
+            if( containerFitsContents )
+            {
+                ContentSizeFitter cs = go.AddComponent<ContentSizeFitter>();
+                cs.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+                cs.verticalFit = ContentSizeFitter.FitMode.Unconstrained;
+            }
+        }
+
+        public static void MakeColumnGridLayoutGroup( GameObject go, int padding, int spacing, Vector2 cellSize, GridLayoutGroup.Corner startCorner, TextAnchor childAlignment, int columnCount, bool containerFitsContents )
         {
             GridLayoutGroup gl = go.AddComponent<GridLayoutGroup>();
             gl.padding = new RectOffset( padding, padding, padding, padding );
@@ -253,7 +292,7 @@ namespace DwarfMiningGame.UI
             gl.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
             gl.constraintCount = columnCount;
 
-            if( adjustToFit )
+            if( containerFitsContents )
             {
                 ContentSizeFitter cs = go.AddComponent<ContentSizeFitter>();
                 cs.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
@@ -261,7 +300,11 @@ namespace DwarfMiningGame.UI
             }
         }
 
-        public static GameObject MakeVerticalScrollRect( GameObject obj )
+        /// <summary>
+        /// Doesn't include a scrollbar, doesn't include any layout for the content.
+        /// </summary>
+        /// <returns>The gameobject that will contain the contents.</returns>
+        public static GameObject AddScrollRect( GameObject obj, bool horizontal, bool vertical )
         {
             GameObject items = UIHelper.UIFill( obj.transform, "items", 0, 0, 0, 0 );
 
@@ -276,8 +319,8 @@ namespace DwarfMiningGame.UI
             ScrollRect scrollRect = items.AddComponent<ScrollRect>();
             scrollRect.content = (RectTransform)content.transform;
             scrollRect.movementType = ScrollRect.MovementType.Clamped;
-            scrollRect.horizontal = false;
-            scrollRect.vertical = true;
+            scrollRect.horizontal = horizontal;
+            scrollRect.vertical = vertical;
             scrollRect.inertia = true;
             scrollRect.decelerationRate = 0.5f;
             scrollRect.scrollSensitivity = 30f;

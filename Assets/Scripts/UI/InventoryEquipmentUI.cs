@@ -34,12 +34,12 @@ namespace DwarfMiningGame.UI
         public static InventoryEquipmentUI Create( RectTransform invList, Action onClick, Inventory.ItemSlot slot = null )
         {
             GameObject rootGO = UIHelper.UI( invList, "item_ui", Vector2.zero, Vector2.zero, new Vector2( SIZE, SIZE ) );
-            UIHelper.AddRaycastTarget( rootGO );
+            UIHelper.MakeRaycastTarget( rootGO );
 
             InventoryEquipmentUI ui = rootGO.AddComponent<InventoryEquipmentUI>();
 
             GameObject backgroundGO = UIHelper.UIFill( rootGO.transform, "background", 0, 0, 0, 0 );
-            UIHelper.MakeForegroundImage( backgroundGO );
+            UIHelper.MakeForeground( backgroundGO );
 
             GameObject iconGO = UIHelper.UI( rootGO.transform, "item_icon", new Vector2( 0.5f, 0.5f ), Vector2.zero, new Vector2( 50, 50 ) );
 

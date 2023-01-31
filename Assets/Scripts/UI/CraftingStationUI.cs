@@ -47,8 +47,8 @@ namespace DwarfMiningGame.UI
         {
             GameObject rootGO = UIHelper.UI( mainCanvas.transform, "crafting station", new Vector2( 0.5f, 0.5f ), Vector2.zero, new Vector2( 100, 280 ) );
 
-            UIHelper.MakeVerticalScrollRect( rootGO );
-            UIHelper.MakeBackgroundImage( rootGO );
+            UIHelper.AddScrollRect( rootGO, false, true );
+            UIHelper.MakeBackground( rootGO );
 
             CraftingStationUI cs = rootGO.AddComponent<CraftingStationUI>();
             cs.SetCraftingStation( craftingStation );

@@ -11,6 +11,10 @@ namespace DwarfMiningGame.UI
     /// </summary>
     public class InventoryItemUI : MonoBehaviour
     {
+        public const float WIDTH = 75.0f;
+
+        public const float HEIGHT = 36.0f;
+
         [SerializeField]
         Image _icon;
 
@@ -35,25 +39,24 @@ namespace DwarfMiningGame.UI
             SetAmount( amount );
         }
 
-        public static InventoryItemUI Create( RectTransform invList, Inventory.ItemSlot slot )
+        public static InventoryItemUI Create( RectTransform list, Item item, int amount )
         {
-            GameObject go = UIHelper.UI( invList, "equipment item UI", new Vector2( 0, 1 ), new Vector2( 0, 1 ), Vector2.zero, new Vector2( 100, 36 ) );
-            
+            GameObject go = UIHelper.UI( list, "equipment item UI", new Vector2( 0.0f, 1.0f ), new Vector2( 0.0f, 1.0f ), Vector2.zero, new Vector2( WIDTH, HEIGHT ) );
+
             InventoryItemUI ui = go.AddComponent<InventoryItemUI>();
 
-
-            GameObject goI = UIHelper.UI( go.transform, "icon", new Vector2( 0.0f, 0.5f ), new Vector2( 0.0f, 0.0f ), new Vector2( 36.0f, 36.0f ) );
+            GameObject goI = UIHelper.UI( go.transform, "icon", new Vector2( 0.0f, 0.5f ), new Vector2( 0.0f, 0.0f ), new Vector2( HEIGHT, HEIGHT ) );
 
             Image img = goI.AddComponent<Image>();
             img.raycastTarget = false;
             ui._icon = img;
 
-            GameObject goT = UIHelper.UI( go.transform, "icon", new Vector2( 1.0f, 0.5f ), new Vector2( 0.0f, 0.0f ), new Vector2( 100.0f, 36.0f ) );
+            GameObject goT = UIHelper.UIFill( go.transform, "icon", 0, 0, 0, 0 );
 
-            TMPro.TextMeshProUGUI text = UIHelper.AddText( goT, "<placeholder>", TMPro.HorizontalAlignmentOptions.Right );
+            TMPro.TextMeshProUGUI text = UIHelper.MakeText( goT, "<placeholder>", TMPro.HorizontalAlignmentOptions.Right );
             ui._amountText = text;
-            
-            ui.SetItem( slot.Item, slot.Amount );
+
+            ui.SetItem( item, amount );
 
             return ui;
         }

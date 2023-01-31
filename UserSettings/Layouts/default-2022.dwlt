@@ -119,7 +119,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 48089
+  controlID: 88
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -144,7 +144,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 200}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 48037
+  controlID: 43
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -169,7 +169,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 48038
+  controlID: 44
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -407,9 +407,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 684c0000
-      m_LastClickedID: 19560
-      m_ExpandedIDs: f21b90fe1e1c90fe2a1c90fe301c90fe361c90fe741c90febcb6a7feccb6a7fed8b6a7fedeb6a7fee4b6a7feecb6a7fefaa1b3fe06a2b3fe0ca2b3fe12a2b3fe1aa2b3fef4a5b3fe24a6b3fe30a6b3fe36a6b3fe3ca6b3fe7ea6b3feba14e3feca14e3fed614e3fedc14e3fee214e3feea14e3fef8d206ffe8b6acff46b8acff56b8acff62b8acff68b8acff72b8acff88b8acfffc92b8ff2493b8ff3a93b8ffbc1de8ffc81de8ffce1de8ffd41de8ffdc1de8ff34fbffff3a4c0000404c00004a4c0000504c0000584c0000624c0000764c0000cc4c0000d64c0000e84c0000
+      m_SelectedIDs: 
+      m_LastClickedID: 0
+      m_ExpandedIDs: 34fbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -691,9 +691,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 420, y: 787, z: 0}
+    m_Target: {x: 50.684708, y: 462.56235, z: 0.46596694}
     speed: 2
-    m_Value: {x: 420, y: 787, z: 0}
+    m_Value: {x: 50.684708, y: 462.56235, z: 0.46596694}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -739,13 +739,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: -0.010809336, y: 0.00359699, z: -0.000038856884, w: -0.9999354}
+    m_Target: {x: -0.054206427, y: 0.05299402, z: -0.0028808918, w: -0.9971183}
     speed: 2
-    m_Value: {x: -0.010809336, y: 0.00359699, z: -0.000038856888, w: -0.9999354}
+    m_Value: {x: -0.054206423, y: 0.052994017, z: -0.0028808916, w: -0.99711823}
   m_Size:
-    m_Target: 109.31411
+    m_Target: 10.311713
     speed: 2
-    m_Value: 109.31411
+    m_Value: 10.311713
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -1827,22 +1827,22 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scripts/UI
+    - Assets/Resources/_GameData/Crafting
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Scripts/UI
+  - Assets/Resources/_GameData/Crafting
   m_LastFoldersGridSize: -1
   m_LastProjectPath: E:\GIT\DwarfMiningGame
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 70}
-    m_SelectedIDs: fa4d0000
-    m_LastClickedID: 19962
-    m_ExpandedIDs: 00000000ce4d0000d04d0000d24d0000d44d0000d64d0000d84d0000da4d000000ca9a3b
+    m_SelectedIDs: 8e4e0000
+    m_LastClickedID: 20110
+    m_ExpandedIDs: 00000000ae4d0000b04d0000b24d0000b44d0000b64d0000b84d0000ba4d0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1870,7 +1870,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000ce4d0000d04d0000d24d0000d44d0000d64d0000d84d0000da4d000000ca9a3b
+    m_ExpandedIDs: 00000000ae4d0000b04d0000b24d0000b44d0000b64d0000b84d0000ba4d0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1895,8 +1895,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 684c0000
-    m_LastClickedInstanceID: 19560
+    m_SelectedInstanceIDs: 
+    m_LastClickedInstanceID: 0
     m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: c6230000
     m_RenameOverlay:
