@@ -30,13 +30,18 @@ namespace DwarfMiningGame.UI
         {
             if( item == null )
             {
-                _icon.color = new Color( 0, 0, 0, 0 );
+                _icon.color = new Color( _icon.color.r, _icon.color.g, _icon.color.b, 0 );
                 return;
             }
 
-            _icon.color = new Color( 1, 1, 1, 1 );
+            _icon.color = new Color( _icon.color.r, _icon.color.g, _icon.color.b, 1 );
             _icon.sprite = item.Icon;
             SetAmount( amount );
+        }
+
+        public void SetTint( Color tint )
+        {
+            _icon.color = new Color( tint.r, tint.g, tint.b, _icon.color.a );
         }
 
         public static InventoryItemUI Create( RectTransform list, Item item, int amount )
@@ -49,6 +54,7 @@ namespace DwarfMiningGame.UI
 
             Image img = goI.AddComponent<Image>();
             img.raycastTarget = false;
+            img.color = new Color( 1, 1, 1, 1 );
             ui._icon = img;
 
             GameObject goT = UIHelper.UIFill( go.transform, "icon", 0, 0, 0, 0 );

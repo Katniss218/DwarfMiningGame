@@ -18,7 +18,7 @@ namespace DwarfMiningGame
         public class CraftingRecipeData
         {
             [field: SerializeField]
-            public bool IsUnlocked { get; set; }
+            public bool IsUnlocked { get; set; } = false;
         }
 
         public Dictionary<CraftingRecipe, CraftingRecipeData> CraftingRecipes;

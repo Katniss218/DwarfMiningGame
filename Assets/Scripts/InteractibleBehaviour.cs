@@ -13,19 +13,22 @@ namespace DwarfMiningGame
         /// <summary>
         /// Defines interactions between this, and an other object.
         /// </summary>
-        public Action<InteractorBehaviour, InteractibleBehaviour> OnInteractWith;
+        public Action<InteractorBehaviour, InteractibleBehaviour> OnInteractionStart;
+        public Action<InteractorBehaviour, InteractibleBehaviour> OnInteractionEnd;
 
-        [field: SerializeField]
-        public float InteractionCooldown { get; set; }
-
-        float _lastInteractionTimestamp = 0.0f;
-
-        public void Interact( InteractorBehaviour interactor )
+        public bool IsInteractingWith( InteractorBehaviour interactor )
         {
-            if( Time.time > _lastInteractionTimestamp + InteractionCooldown )
-            {
-                OnInteractWith?.Invoke( interactor, this );
-            }
+            return interactor.IsInteractingWith( this );
+        }
+
+        public void InteractWith( InteractorBehaviour interactor )
+        {
+            interactor.InteractWith( this );
+        }
+
+        public void StopInteracting( InteractorBehaviour interactor )
+        {
+            interactor.StopInteracting( this );
         }
     }
 }

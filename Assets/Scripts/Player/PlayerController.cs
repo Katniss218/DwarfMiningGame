@@ -74,19 +74,31 @@ namespace DwarfMiningGame.Player
             InteractibleBehaviour closest = null;
             float closestDist = InteractionRange;
 
-            foreach( var ib in interactibleBehaviours )
+            foreach( var interactee in interactibleBehaviours )
             {
-                float currDist = Vector2.Distance( ib.gameObject.transform.position, this.transform.position );
+                float currDist = Vector2.Distance( interactee.gameObject.transform.position, this.transform.position );
                 if( currDist < closestDist )
                 {
-                    closest = ib;
+                    closest = interactee;
                     closestDist = currDist;
                 }
             }
 
             if( closest != null )
             {
-                closest.Interact( this._interactor );
+                this._interactor.InteractWith( closest );
+            }
+        }
+
+        void EndInteractionsOutsideOfInteractionRange()
+        {
+            foreach( var interactee in _interactor.GetAllInteractions() )
+            {
+                float currDist = Vector2.Distance( interactee.gameObject.transform.position, this.transform.position );
+                if( currDist > InteractionRange )
+                {
+                    interactee.StopInteracting( this._interactor );
+                }
             }
         }
 
@@ -122,8 +134,11 @@ namespace DwarfMiningGame.Player
                 UsePickaxe();
             }
 
+            EndInteractionsOutsideOfInteractionRange();
+
             if( !EventSystem.current.IsPointerOverGameObject() && Input.GetKeyDown( KeyCode.F ) )
             {
+                _interactor.StopAllInteractions();
                 InteractWithClosest();
             }
         }

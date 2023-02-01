@@ -17,6 +17,6 @@ namespace DwarfMiningGame.Crafting
         public string ID { get; set; }
 
         [field: SerializeField]
-        public CraftingRecipe[] AvailableRecipes { get; set; }
+        public CraftingRecipe[] Recipes { get; set; }
     }
 }

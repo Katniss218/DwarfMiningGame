@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: smelter
   m_EditorClassIdentifier: 
   <ID>k__BackingField: craftingstation.smelter
-  <AvailableRecipes>k__BackingField:
+  <Recipes>k__BackingField:
   - {fileID: 11400000, guid: 309e211b647d08c41af66cf1f2107d47, type: 2}
+  - {fileID: 11400000, guid: f9392eb2e36b07246ba9b80a6d75bf4b, type: 2}
