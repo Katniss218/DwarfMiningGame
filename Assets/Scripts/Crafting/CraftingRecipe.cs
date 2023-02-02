@@ -33,4 +33,60 @@ namespace DwarfMiningGame.Crafting
         [field: SerializeField]
         public Entry[] Results { get; set; }
     }
+    public static class InventoryEx
+    {
+        public static bool HasEnoughItems( this Inventory inv, CraftingRecipe recipe )
+        {
+            foreach( var entry in recipe.Ingredients )
+            {
+                if( inv.GetAmount( entry.Item ) < entry.Amount )
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public static bool HasEnoughSpaceLeft( this Inventory inv, CraftingRecipe recipe )
+        {
+            float left = inv.GetSpaceLeft();
+
+            foreach( var entry in recipe.Ingredients ) // Ingredients should be removed before the result is added, effectively freeing up their slots.
+            {
+                left += entry.Amount * entry.Item.Size;
+            }
+
+            foreach( var entry in recipe.Results )
+            {
+                left -= entry.Amount * entry.Item.Size;
+            }
+
+            return left >= 0;
+        }
+
+        public static void Craft( this Inventory inv, CraftingRecipe recipe )
+        {
+            if( !inv.HasEnoughItems( recipe ) )
+            {
+                Debug.LogWarning( $"Not enough ingredients in inventory {inv} to craft {recipe}." );
+                return;
+            }
+            if( !inv.HasEnoughSpaceLeft( recipe ) )
+            {
+                Debug.LogWarning( $"Not enough space in inventory {inv} to craft {recipe}." );
+                return;
+            }
+
+            foreach( var ing in recipe.Ingredients ) // Ingredients should be removed before the result is added, effectively freeing up their slots.
+            {
+                inv.TryRemove( ing.Item, ing.Amount );
+            }
+
+            foreach( var ing in recipe.Results )
+            {
+                inv.TryAdd( ing.Item, ing.Amount );
+            }
+        }
+    }
 }

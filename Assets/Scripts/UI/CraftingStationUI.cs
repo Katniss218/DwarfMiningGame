@@ -30,6 +30,24 @@ namespace DwarfMiningGame.UI
             Redraw();
         }
 
+        public void SetLockedRecipe( CraftingRecipe recipe, bool isLocked )
+        {
+            if( _uis.TryGetValue( recipe, out CraftingRecipeUI ui ) )
+            {
+                ui.SetLocked( isLocked ); // Gonna redraw itself.
+            }
+        }
+
+
+        public void SetEnabledRecipe( CraftingRecipe recipe, bool isEnabled )
+        {
+            if( _uis.TryGetValue( recipe, out CraftingRecipeUI ui ) )
+            {
+                ui.SetEnabled( isEnabled ); // Gonna redraw itself.
+            }
+        }
+
+
         public void OnRecipeLockChanged( CraftingRecipe recipe, bool isLocked )
         {
             // listener

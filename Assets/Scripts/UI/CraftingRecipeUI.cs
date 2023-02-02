@@ -58,6 +58,8 @@ namespace DwarfMiningGame.UI
             {
                 Destroy( entry.gameObject );
             }
+            _ingredientUIs.Clear();
+            _resultUIs.Clear();
         }
 
         private Color GetTintColor()

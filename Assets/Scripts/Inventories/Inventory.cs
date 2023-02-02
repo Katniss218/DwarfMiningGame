@@ -11,6 +11,7 @@ namespace DwarfMiningGame.Inventories
         {
             [field: SerializeField]
             public Item Item { get; set; }
+
             [field: SerializeField]
             public int Amount { get; set; }
 
@@ -25,8 +26,7 @@ namespace DwarfMiningGame.Inventories
         public float MaxCapacity { get; set; }
 
         [SerializeField]
-        // list of items, each contributes to a count.
-        List<ItemSlot> _items = new List<ItemSlot>();
+        List<ItemSlot> _items = new List<ItemSlot>(); // list of items, each contributes to a count.
 
         [SerializeField]
         public Action<(Item item, int amt)> OnAdd;
@@ -57,7 +57,10 @@ namespace DwarfMiningGame.Inventories
             return this._items.ToArray();
         }
 
-        public int GetCount( Item item )
+        /// <summary>
+        /// Returns the number of items of the specified type that currently are in the inventory.
+        /// </summary>
+        public int GetAmount( Item item )
         {
             int acc = 0;
             foreach( ItemSlot stack in _items )
@@ -70,7 +73,9 @@ namespace DwarfMiningGame.Inventories
             return acc;
         }
 
-        /// Returns the space occupied by a specific item.
+        /// <summary>
+        /// Returns the volume occupied by a specific type of item.
+        /// </summary>
         public float GetSize( Item item )
         {
             float acc = 0;
@@ -84,6 +89,10 @@ namespace DwarfMiningGame.Inventories
             return acc;
         }
 
+        /// <summary>
+        /// Returns the total size of the inventory in volume units.
+        /// </summary>
+        /// <returns></returns>
         public float GetSize()
         {
             float acc = 0;
@@ -94,7 +103,9 @@ namespace DwarfMiningGame.Inventories
             return acc;
         }
 
-        /// Returns the space left.
+        /// <summary>
+        /// Returns the space left in the inventory (in volume units).
+        /// </summary>
         public float GetSpaceLeft()
         {
             return MaxCapacity - GetSize();

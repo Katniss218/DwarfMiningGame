@@ -21,9 +21,9 @@ namespace DwarfMiningGame.Player
         [field: SerializeField]
         public float InteractionRange { get; set; }
 
+        public PlayerInventory Inventory { get; private set; }
         Rigidbody _rigidbody;
         Collider _collider;
-        PlayerInventory _inventory;
         InteractorBehaviour _interactor;
 
         public bool IsOnGround { get; private set; }
@@ -34,14 +34,14 @@ namespace DwarfMiningGame.Player
         {
             _rigidbody = this.GetComponent<Rigidbody>();
             _collider = this.GetComponent<Collider>();
-            _inventory = this.GetComponent<PlayerInventory>();
+            Inventory = this.GetComponent<PlayerInventory>();
             _interactor = this.GetComponent<InteractorBehaviour>();
         }
 
         void UsePickaxe()
         {
             // Hand item can be not set, or set to a slot that was later removed (item was sold/etc).
-            ItemPickaxe pickaxe = _inventory.MainHand?.Item as ItemPickaxe;
+            ItemPickaxe pickaxe = Inventory.MainHand?.Item as ItemPickaxe;
             if( pickaxe == null )
             {
                 return;
@@ -136,10 +136,16 @@ namespace DwarfMiningGame.Player
 
             EndInteractionsOutsideOfInteractionRange();
 
-            if( !EventSystem.current.IsPointerOverGameObject() && Input.GetKeyDown( KeyCode.F ) )
+            if( Input.GetKeyDown( KeyCode.F ) )
             {
-                _interactor.StopAllInteractions();
-                InteractWithClosest();
+                if( _interactor.GetAllInteractions().Length > 0 ) // Toggle if interacting - stop, if not - interact.
+                {
+                    _interactor.StopAllInteractions();
+                }
+                else
+                {
+                    InteractWithClosest();
+                }
             }
         }
 
