@@ -1,30 +1,42 @@
 ﻿using DwarfMiningGame.Crafting;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace DwarfMiningGame.UI
 {
+    /// <summary>
+    /// The user interface for a <see cref="CraftingStationBehaviour"/>.
+    /// </summary>
     public class CraftingStationUI : MonoBehaviour
     {
-        // a scrollable vertical list of all recipes.
-        // Click on recipe to craft.
-        // locked recipes are black shadows of items with a lock symbol.
-        // recipes with not enough items are greyed out.
+        // #############################
 
-        public CraftingStation CraftingStation { get; private set; }
+        // Design / Assumptions:
+        // - A scrollable vertical list of recipes.
+        //   - Each recipe displays ingredients and results.
+        //   - Locked recipes are black silhouettes of items with a lock symbol.
+        //   - Recipes with ingredients missing from the inventory are greyed out.
 
-        Action<CraftingRecipe> _onClickRecipe;
+        // - Click on a recipe to craft it.
+
+        // #############################
+
+        public CraftingStationBehaviour CraftingStation { get; private set; }
+
+        // holds the action that happens when the recipe entry is clicked. It's a way to pass the inventory through.
+        Action<CraftingRecipe> _onClickEntry;
 
         RectTransform _list;
-        Dictionary<CraftingRecipe, CraftingRecipeUI> _uis = new Dictionary<CraftingRecipe, CraftingRecipeUI>();
+        Dictionary<CraftingRecipe, CraftingRecipeUI> _entryUIs = new Dictionary<CraftingRecipe, CraftingRecipeUI>();
 
         PlayerData _player; // quite ugly.
 
-        public void SetCraftingStation( CraftingStation craftingStation )
+#warning TODO - Look here, I think the problems with the cached variables in CraftingStationBehaviour can be solved by including the behaviour here. Since UI should know about what behaviour it's UI-ing.
+        /// <summary>
+        /// (Re)Binds the UI to a specific crafting station.
+        /// </summary>
+        public void SetCraftingStation( CraftingStationBehaviour craftingStation )
         {
             CraftingStation = craftingStation;
             Redraw();
@@ -32,7 +44,7 @@ namespace DwarfMiningGame.UI
 
         public void SetLockedRecipe( CraftingRecipe recipe, bool isLocked )
         {
-            if( _uis.TryGetValue( recipe, out CraftingRecipeUI ui ) )
+            if( _entryUIs.TryGetValue( recipe, out CraftingRecipeUI ui ) )
             {
                 ui.SetLocked( isLocked ); // Gonna redraw itself.
             }
@@ -41,7 +53,7 @@ namespace DwarfMiningGame.UI
 
         public void SetEnabledRecipe( CraftingRecipe recipe, bool isEnabled )
         {
-            if( _uis.TryGetValue( recipe, out CraftingRecipeUI ui ) )
+            if( _entryUIs.TryGetValue( recipe, out CraftingRecipeUI ui ) )
             {
                 ui.SetEnabled( isEnabled ); // Gonna redraw itself.
             }
@@ -52,7 +64,7 @@ namespace DwarfMiningGame.UI
         {
             // listener
 
-            if( _uis.TryGetValue( recipe, out CraftingRecipeUI ui ) )
+            if( _entryUIs.TryGetValue( recipe, out CraftingRecipeUI ui ) )
             {
                 ui.SetLocked( isLocked );
             }
@@ -66,23 +78,23 @@ namespace DwarfMiningGame.UI
 
         private void DeleteRecipes()
         {
-            foreach( var ui in _uis.Values )
+            foreach( var ui in _entryUIs.Values )
             {
                 Destroy( ui.gameObject );
             }
-            _uis.Clear();
+            _entryUIs.Clear();
         }
 
         private void AddRecipes()
         {
-            foreach( var recipe in CraftingStation.Recipes )
+            foreach( var recipe in CraftingStation.CraftingStation.Recipes )
             {
-                CraftingRecipeUI ui = CraftingRecipeUI.Create( _list, recipe, false, true, _onClickRecipe );
-                _uis.Add( recipe, ui );
+                CraftingRecipeUI ui = CraftingRecipeUI.Create( _list, recipe, false, true, _onClickEntry );
+                _entryUIs.Add( recipe, ui );
             }
         }
 
-        public static CraftingStationUI Create( RectTransform mainCanvas, CraftingStation craftingStation, Action<CraftingRecipe> onClickRecipe )
+        public static CraftingStationUI Create( RectTransform mainCanvas, CraftingStationBehaviour craftingStation, Action<CraftingRecipe> onClickRecipe )
         {
             GameObject rootGO = UIHelper.UI( mainCanvas.transform, "crafting station", new Vector2( 0.5f, 0.5f ), Vector2.zero, new Vector2( 300, 280 ) );
 
@@ -92,7 +104,7 @@ namespace DwarfMiningGame.UI
 
             CraftingStationUI ui = rootGO.AddComponent<CraftingStationUI>();
             ui._list = content.GetComponent<RectTransform>();
-            ui._onClickRecipe = onClickRecipe;
+            ui._onClickEntry = onClickRecipe;
             ui._player = GameManager.Instance.PlayerData;
             ui.SetCraftingStation( craftingStation );
 

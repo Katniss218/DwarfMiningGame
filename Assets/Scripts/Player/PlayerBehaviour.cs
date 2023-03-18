@@ -10,7 +10,7 @@ namespace DwarfMiningGame.Player
     [RequireComponent( typeof( Rigidbody ) )]
     [RequireComponent( typeof( Collider ) )]
     [RequireComponent( typeof( InteractorBehaviour ) )]
-    public class PlayerController : MonoBehaviour
+    public class PlayerBehaviour : MonoBehaviour
     {
         [field: SerializeField]
         public float MoveForce { get; set; }

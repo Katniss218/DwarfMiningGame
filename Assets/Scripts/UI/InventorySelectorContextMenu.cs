@@ -21,14 +21,14 @@ namespace DwarfMiningGame.UI
 
         RectTransform _list;
 
-        Dictionary<Inventory.ItemSlot, InventoryItemUI> _activeSlots = new Dictionary<Inventory.ItemSlot, InventoryItemUI>();
+        Dictionary<Inventory.ItemSlot, ItemUI> _activeSlots = new Dictionary<Inventory.ItemSlot, ItemUI>();
 
         void OnAfterSlotChanged( Inventory.ItemSlot slot )
         {
             // the selector might pass the same slot based on the conditions of the slot,
             // - so we need to check whether or not it's STILL available, and whether it's NOT available ANYMORE.
 
-            if( _activeSlots.TryGetValue( slot, out InventoryItemUI iui ) )
+            if( _activeSlots.TryGetValue( slot, out ItemUI iui ) )
             {
                 if( !_canEquip( slot ) )
                 {
@@ -66,7 +66,7 @@ namespace DwarfMiningGame.UI
 
         void AddItem( Inventory.ItemSlot slot )
         {
-            InventoryItemUI iui = InventoryItemUI.Create( _list, slot.Item, slot.Amount );
+            ItemUI iui = ItemUI.Create( _list, slot.Item, slot.Amount );
             UIHelper.MakeRaycastTarget( iui.gameObject );
 
             LeftClickAction c = iui.gameObject.AddComponent<LeftClickAction>();
@@ -84,7 +84,7 @@ namespace DwarfMiningGame.UI
 
         void RemoveItem( Inventory.ItemSlot slot )
         {
-            InventoryItemUI iui = _activeSlots[slot];
+            ItemUI iui = _activeSlots[slot];
 
             Destroy( iui.gameObject );
             _activeSlots.Remove( slot );

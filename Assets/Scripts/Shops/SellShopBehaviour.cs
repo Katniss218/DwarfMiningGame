@@ -1,41 +1,33 @@
-﻿using DwarfMiningGame.Inventories;
+using DwarfMiningGame.Inventories;
 using DwarfMiningGame.Player;
 using DwarfMiningGame.UI;
-using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
-namespace DwarfMiningGame.Crafting
+namespace DwarfMiningGame.Shops
 {
     [RequireComponent( typeof( InteractibleBehaviour ) )]
     /// <summary>
-    /// Add this to an object to turn it into a crafting station.
+    /// Add this to an object to turn it into a sell shop.
     /// </summary>
-    public class CraftingStationBehaviour : MonoBehaviour
+    public class SellShopBehaviour : MonoBehaviour
     {
-        [field: SerializeField] public CraftingStation CraftingStation { get; private set; }
+        // Sell shop - opens a menu with all your items that the shop can buy from you.
+        //           - Sell item after clicking.
+
+        // Buy shop - opens a menu with shop's items. Buy item after clicking.
 
         public InteractibleBehaviour Interactible { get; private set; }
 
-        CraftingStationUI _uglyVarUI;       // this is ugly (separation of concerns: CraftingStationBehaviour shouldn't be aware that CraftingStationUI exists),
+        SellShopUI _uglyVarUI;              // this is ugly (separation of concerns: CraftingStationBehaviour shouldn't be aware that CraftingStationUI exists),
                                             // but works for now.
                                             // Holds the UI of this crafting station, so we can interact with multiple crafting stations at once without them messing up each others UIs.
         PlayerInventory _uglyVarInventory; // this here because we need to unsubscribe from it when interaction ends.
 
         private void OnInventoryModified( (Item item, int amt) e )
         {
-            UpdateVisibleRecipes();
-        }
-
-        private void UpdateVisibleRecipes()
-        {
-            foreach( var recipe in this.CraftingStation.Recipes )
-            {
-                _uglyVarUI.SetEnabledRecipe( recipe, _uglyVarInventory.HasEnoughItems( recipe ) );
-            }
+            _uglyVarUI.Redraw();
         }
 
         void Awake()
@@ -57,12 +49,12 @@ namespace DwarfMiningGame.Crafting
                 Debug.Log( $"Player '{player.gameObject.name}' interacted with '{this.gameObject.name}'." );
 
                 _uglyVarInventory = player.Inventory;
-                _uglyVarUI = CraftingStationUI.Create( GameManager.MainCanvas, this, ( a ) => _uglyVarInventory.TryCraft( a ) );
+                _uglyVarUI = SellShopUI.Create( GameManager.MainCanvas, this, () => _uglyVarInventory.GetItems(), ( e ) => _uglyVarInventory.TrySellItem( e.item, e.amount ) );
 
                 // Update the UI when the inventory changes, to reflect the current state of the inventory.
                 _uglyVarInventory.OnAdd += OnInventoryModified;
                 _uglyVarInventory.OnRemove += OnInventoryModified;
-                UpdateVisibleRecipes(); // Initialize.
+                _uglyVarUI.Redraw(); // Initialize
             }
         }
 

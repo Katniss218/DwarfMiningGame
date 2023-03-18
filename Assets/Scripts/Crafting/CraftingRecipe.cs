@@ -35,11 +35,11 @@ namespace DwarfMiningGame.Crafting
     }
     public static class InventoryEx
     {
-        public static bool HasEnoughItems( this Inventory inv, CraftingRecipe recipe )
+        public static bool HasEnoughItems( this Inventory inv, CraftingRecipe recipe, int count = 1 )
         {
             foreach( var entry in recipe.Ingredients )
             {
-                if( inv.GetAmount( entry.Item ) < entry.Amount )
+                if( inv.GetAmount( entry.Item ) < entry.Amount * count )
                 {
                     return false;
                 }
@@ -48,31 +48,31 @@ namespace DwarfMiningGame.Crafting
             return true;
         }
 
-        public static bool HasEnoughSpaceLeft( this Inventory inv, CraftingRecipe recipe )
+        public static bool HasEnoughSpaceLeft( this Inventory inv, CraftingRecipe recipe, int count = 1 )
         {
             float left = inv.GetSpaceLeft();
 
             foreach( var entry in recipe.Ingredients ) // Ingredients should be removed before the result is added, effectively freeing up their slots.
             {
-                left += entry.Amount * entry.Item.Size;
+                left += entry.Amount * count * entry.Item.Size;
             }
 
             foreach( var entry in recipe.Results )
             {
-                left -= entry.Amount * entry.Item.Size;
+                left -= entry.Amount * count * entry.Item.Size;
             }
 
             return left >= 0;
         }
 
-        public static void Craft( this Inventory inv, CraftingRecipe recipe )
+        public static void TryCraft( this Inventory inv, CraftingRecipe recipe, int count = 1 )
         {
-            if( !inv.HasEnoughItems( recipe ) )
+            if( !inv.HasEnoughItems( recipe, count ) )
             {
                 Debug.LogWarning( $"Not enough ingredients in inventory {inv} to craft {recipe}." );
                 return;
             }
-            if( !inv.HasEnoughSpaceLeft( recipe ) )
+            if( !inv.HasEnoughSpaceLeft( recipe, count ) )
             {
                 Debug.LogWarning( $"Not enough space in inventory {inv} to craft {recipe}." );
                 return;
@@ -80,12 +80,12 @@ namespace DwarfMiningGame.Crafting
 
             foreach( var ing in recipe.Ingredients ) // Ingredients should be removed before the result is added, effectively freeing up their slots.
             {
-                inv.TryRemove( ing.Item, ing.Amount );
+                inv.TryRemove( ing.Item, ing.Amount * count );
             }
 
             foreach( var ing in recipe.Results )
             {
-                inv.TryAdd( ing.Item, ing.Amount );
+                inv.TryAdd( ing.Item, ing.Amount * count );
             }
         }
     }

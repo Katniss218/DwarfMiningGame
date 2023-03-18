@@ -48,7 +48,7 @@ namespace DwarfMiningGame.UI
 
         List<InventoryEquipmentUI> _equipmentUIs = new List<InventoryEquipmentUI>();
 
-        Dictionary<Inventory.ItemSlot, InventoryItemUI> _itemUIs = new Dictionary<Inventory.ItemSlot, InventoryItemUI>();
+        Dictionary<Inventory.ItemSlot, ItemUI> _itemUIs = new Dictionary<Inventory.ItemSlot, ItemUI>();
 
         void OnAfterEquipmentChanged( int index, Inventory.ItemSlot slot )
         {
@@ -57,7 +57,7 @@ namespace DwarfMiningGame.UI
 
         void OnAfterSlotChanged( Inventory.ItemSlot slot )
         {
-            if( _itemUIs.TryGetValue( slot, out InventoryItemUI ui ) )
+            if( _itemUIs.TryGetValue( slot, out ItemUI ui ) )
             {
                 ui.SetAmount( slot.Amount );
             }
@@ -77,7 +77,7 @@ namespace DwarfMiningGame.UI
 
         void OnSlotRemoved( Inventory.ItemSlot slot )
         {
-            if( _itemUIs.TryGetValue( slot, out InventoryItemUI ui ) )
+            if( _itemUIs.TryGetValue( slot, out ItemUI ui ) )
             {
                 Destroy( ui.gameObject );
                 _itemUIs.Remove( slot );
@@ -86,7 +86,7 @@ namespace DwarfMiningGame.UI
 
         void CreateItemUI( Inventory.ItemSlot slot )
         {
-            InventoryItemUI ui = InventoryItemUI.Create( _itemsList, slot.Item, slot.Amount );
+            ItemUI ui = ItemUI.Create( _itemsList, slot.Item, slot.Amount );
             _itemUIs.Add( slot, ui );
         }
 
@@ -102,7 +102,12 @@ namespace DwarfMiningGame.UI
 
         InventorySelectorContextMenu currentEquipSelectorWindow = null;
 
-        public void RegisterEquipment( Func<Inventory.ItemSlot, bool> canEquipItem, Action<Inventory.ItemSlot> onSelect )
+        /// <summary>
+        /// Creates a new equipment slot UI and binds it to the specified slot of the inventory.
+        /// </summary>
+        /// <param name="canEquipItem">Function that checks whether or not the item is displayed in the selection window for this slot.</param>
+        /// <param name="onSelect">The action to perform upon selecting the item for this slot.</param>
+        public void CreateEquipmentSlotUI( Func<Inventory.ItemSlot, bool> canEquipItem, Action<Inventory.ItemSlot> onSelect )
         {
             InventoryEquipmentUI ui = InventoryEquipmentUI.Create( _equipmentList, () =>
             {
@@ -130,7 +135,7 @@ namespace DwarfMiningGame.UI
             UIHelper.MakeForeground( items );
 
             GameObject itemsContent = UIHelper.AddScrollRect( items, false, true );
-            UIHelper.MakeColumnGridLayoutGroup( itemsContent, 5, 0, new Vector2( InventoryItemUI.WIDTH, InventoryItemUI.HEIGHT ), GridLayoutGroup.Corner.UpperLeft, TextAnchor.UpperLeft, 5, true );
+            UIHelper.MakeColumnGridLayoutGroup( itemsContent, 5, 0, new Vector2( ItemUI.WIDTH, ItemUI.HEIGHT ), GridLayoutGroup.Corner.UpperLeft, TextAnchor.UpperLeft, 5, true );
 
             GameObject equipment = UIHelper.UI( root.transform, "equipment", new Vector2( 1, 0 ), new Vector2( 1, 1 ), new Vector2( 0, -42.5f ), new Vector2( 70, -85 ) );
 
@@ -149,9 +154,9 @@ namespace DwarfMiningGame.UI
                 ui.CreateItemUI( item );
             }
 
-            ui.RegisterEquipment( ( s ) => s.Item is ItemPickaxe, ( s ) => ui.Inventory.MainHand = s );
-            ui.RegisterEquipment( ( s ) => s.Item is Item, ( s ) => ui.Inventory.OffHand = s );
-            ui.RegisterEquipment( ( s ) => s.Item is ItemBag, ( s ) => ui.Inventory.Bag = s );
+            ui.CreateEquipmentSlotUI( ( s ) => s.Item is ItemPickaxe, ( s ) => ui.Inventory.MainHand = s );
+            ui.CreateEquipmentSlotUI( ( s ) => s.Item is Item, ( s ) => ui.Inventory.OffHand = s );
+            ui.CreateEquipmentSlotUI( ( s ) => s.Item is ItemBag, ( s ) => ui.Inventory.Backpack = s );
 
             ui.OnMoneyChanged( inventory.Money );
 

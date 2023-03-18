@@ -7,10 +7,12 @@ using UnityEngine.UI;
 namespace DwarfMiningGame.UI
 {
     /// <summary>
-    /// Controls the display of an item contained in an inventory.
+    /// Simple user interface that displays an item as well as an amount.
     /// </summary>
-    public class InventoryItemUI : MonoBehaviour
+    public class ItemUI : MonoBehaviour
     {
+        // Display any item and any amount as if it was an item stack (slot).
+
         public const float WIDTH = 75.0f;
 
         public const float HEIGHT = 36.0f;
@@ -44,11 +46,11 @@ namespace DwarfMiningGame.UI
             _icon.color = new Color( tint.r, tint.g, tint.b, _icon.color.a );
         }
 
-        public static InventoryItemUI Create( RectTransform list, Item item, int amount )
+        public static ItemUI Create( RectTransform list, Item item, int amount )
         {
             GameObject go = UIHelper.UI( list, "equipment item UI", new Vector2( 0.0f, 1.0f ), new Vector2( 0.0f, 1.0f ), Vector2.zero, new Vector2( WIDTH, HEIGHT ) );
 
-            InventoryItemUI ui = go.AddComponent<InventoryItemUI>();
+            ItemUI ui = go.AddComponent<ItemUI>();
 
             GameObject goI = UIHelper.UI( go.transform, "icon", new Vector2( 0.0f, 0.5f ), new Vector2( 0.0f, 0.0f ), new Vector2( HEIGHT, HEIGHT ) );
 

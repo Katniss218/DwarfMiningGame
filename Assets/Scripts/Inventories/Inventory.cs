@@ -166,12 +166,17 @@ namespace DwarfMiningGame.Inventories
                     }
 
                     slot.Amount -= amountRemoved;
-                    OnRemove?.Invoke( (item, amountRemoved) );
-                    OnAfterSlotChanged?.Invoke( slot );
-                    if( slot.Amount <= 0 )
+                    if( slot.Amount <= 0 ) // This would be an issue for iteration, if not for the fact that only one slot can contain the same item.
                     {
                         _items.Remove( slot );
+                        OnRemove?.Invoke( (item, amountRemoved) ); // duplicate code because event calling order.
+                        OnAfterSlotChanged?.Invoke( slot );
                         OnSlotRemoved?.Invoke( slot );
+                    }
+                    else
+                    {
+                        OnRemove?.Invoke( (item, amountRemoved) );
+                        OnAfterSlotChanged?.Invoke( slot );
                     }
                     return amountRemoved;
                 }

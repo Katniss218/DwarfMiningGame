@@ -7,11 +7,20 @@ using UnityEngine;
 
 namespace DwarfMiningGame.Player
 {
-    public class PlayerCameraController : MonoBehaviour
+    /// <summary>
+    /// Controls the position and orientation of the game camera.
+    /// </summary>
+    public class CameraController : MonoBehaviour
     {
+        /// <summary>
+        /// The camera will focus on and follow this object.
+        /// </summary>
         [field: SerializeField]
         public Transform FollowTarget { get; set; }
 
+        /// <summary>
+        /// The offset applied to the following object's position.
+        /// </summary>
         [field: SerializeField]
         public Vector3 Offset { get; set; }
 

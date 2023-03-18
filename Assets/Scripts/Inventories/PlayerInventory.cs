@@ -6,9 +6,11 @@ namespace DwarfMiningGame.Inventories
 {
     public class PlayerInventory : Inventory
     {
-        // equipment is a list, you click on an item, it gives you a popup where you can select an item to equip.
         [SerializeField]
         private float _money = 0;
+        /// <summary>
+        /// Gets or sets the money of this inventory.
+        /// </summary>
         public float Money
         {
             get
@@ -36,9 +38,16 @@ namespace DwarfMiningGame.Inventories
 
         public Action<int, ItemSlot> OnAfterEquipmentChanged;
 
+        // equipment is a list, you click on an item, it gives you a popup where you can select an item to equip.
         ItemSlot[] _equipment = new ItemSlot[] { null, null, null };
 
         const int SLOT_MAINHAND = 0;
+        const int SLOT_OFFHAND = 1;
+        const int SLOT_BACKPACK = 2;
+
+        /// <summary>
+        /// Gets or sets the item in the primary (main) hand. Shorthand for the equipment slot.
+        /// </summary>
         public ItemSlot MainHand
         {
             get => _equipment[SLOT_MAINHAND];
@@ -49,7 +58,9 @@ namespace DwarfMiningGame.Inventories
             }
         }
 
-        const int SLOT_OFFHAND = 1;
+        /// <summary>
+        /// Gets or sets the item in the secondary (off) hand. Shorthand for the equipment slot.
+        /// </summary>
         public ItemSlot OffHand
         {
             get => _equipment[SLOT_OFFHAND];
@@ -60,14 +71,16 @@ namespace DwarfMiningGame.Inventories
             }
         }
 
-        const int SLOT_BAG = 2;
-        public ItemSlot Bag
+        /// <summary>
+        /// Gets or sets the backpack item. Shorthand for the equipment slot.
+        /// </summary>
+        public ItemSlot Backpack
         {
-            get => _equipment[SLOT_BAG];
+            get => _equipment[SLOT_BACKPACK];
             set
             {
-                _equipment[SLOT_BAG] = value;
-                OnAfterEquipmentChanged( SLOT_BAG, value );
+                _equipment[SLOT_BACKPACK] = value;
+                OnAfterEquipmentChanged( SLOT_BACKPACK, value );
             }
         }
 

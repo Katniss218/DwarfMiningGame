@@ -1,7 +1,7 @@
 ﻿
 
 
-Name convention:
+Naming convention:
 
 _name => privates, protecteds
 name => public
@@ -9,6 +9,6 @@ name => public
 Name => properties, methods, classes.
 
 
-Behaviour - something that allows a functionality on an object (e.g. an interactible object, a crafting station object, a pickupable object, etc).
-Controller - something that controls something else.
-Manager - something that manages an aspect of the game.
+xyzBehaviour - Something that allows a functionality on a GameObject (e.g. an interactible object, a crafting station object, a pickupable object, etc).
+xyzController - Something that controls something else.
+xyzManager - Something that manages an aspect of the game.
