@@ -45,9 +45,6 @@ namespace DwarfMiningGame
             }
         }
 
-#warning TODO - When interactor is destroyed, we should stop interactions. Because objects can't interact with something that's destroyed.
-        // add OnDestroy in a sterile env and test for other objects being destroyed first.
-
         public void StopInteracting( InteractibleBehaviour interactee )
         {
             if( !IsInteractingWith( interactee ) )

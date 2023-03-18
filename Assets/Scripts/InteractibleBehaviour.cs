@@ -20,6 +20,8 @@ namespace DwarfMiningGame
         /// </summary>
         public Action<InteractorBehaviour, InteractibleBehaviour> OnInteractionStop;
 
+        HashSet<InteractorBehaviour> _interactions = new HashSet<InteractorBehaviour>();
+
         /// <summary>
         /// Checks if this interactible is interacting with a specific interactor.
         /// </summary>
@@ -34,6 +36,7 @@ namespace DwarfMiningGame
         public void InteractWith( InteractorBehaviour interactor )
         {
             interactor.InteractWith( this );
+            _interactions.Add( interactor );
         }
 
         /// <summary>
@@ -42,6 +45,15 @@ namespace DwarfMiningGame
         public void StopInteracting( InteractorBehaviour interactor )
         {
             interactor.StopInteracting( this );
+            _interactions.Remove( interactor );
+        }
+
+        public void StopAllInteractions()
+        {
+            foreach( var i in _interactions )
+            {
+                StopInteracting( i );
+            }
         }
     }
 }
