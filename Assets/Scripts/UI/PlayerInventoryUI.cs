@@ -92,7 +92,7 @@ namespace DwarfMiningGame.UI
 
         private void SetMoneyText( float currentMoney )
         {
-            _moneyText.text = $"¤{currentMoney.ToString( "#.00", CultureInfo.InvariantCulture )}";
+            _moneyText.text = FormatMoney(currentMoney);
         }
 
         void OnMoneyChanged( float newMoney )
@@ -119,6 +119,11 @@ namespace DwarfMiningGame.UI
             } );
 
             _equipmentUIs.Add( ui );
+        }
+
+        public static string FormatMoney( float value )
+        {
+            return $"¤{value.ToString( "#.00", CultureInfo.InvariantCulture )}";
         }
 
 

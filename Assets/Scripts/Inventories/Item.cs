@@ -12,10 +12,21 @@ namespace DwarfMiningGame.Inventories
         [field: SerializeField]
         public string ID { get; set; }
 
+        /// <summary>
+        /// The amount of inventory volume/mass taken up by this item.
+        /// </summary>
         public float Size = 1.0f;
 
+        /// <summary>
+        /// The monetary value of this item when buying from a shop.
+        /// </summary>
         [field: SerializeField]
         public float Value { get; set; } = 0.0f;
+
+        /// <summary>
+        /// The monetary value of this item when selling to a shop.
+        /// </summary>
+        public float SellValue { get => this.Value * SellValueMultiplier; }
 
         public Mesh Mesh;
 

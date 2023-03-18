@@ -22,6 +22,8 @@ namespace DwarfMiningGame.UI
 
         ItemUI _inventoryItemUI;
 
+        TMPro.TextMeshProUGUI _priceText;
+
         public void OnPointerClick( PointerEventData eventData )
         {
             if( eventData.button == PointerEventData.InputButton.Left )
@@ -45,6 +47,12 @@ namespace DwarfMiningGame.UI
             ui._slot = slot;
             ui._onClick = onClick;
             ui._inventoryItemUI = ItemUI.Create( (RectTransform)root.transform, slot.Item, slot.Amount );
+
+            GameObject priceText = UIHelper.UIFill( root.transform, "price text", 0, 0, 0, 0 );
+            TMPro.TextMeshProUGUI text = UIHelper.MakeText( priceText, "<price>", TMPro.HorizontalAlignmentOptions.Right );
+            ui._priceText = text;
+
+            ui._priceText.text = $"{PlayerInventoryUI.FormatMoney( slot.Item.SellValue * slot.Amount )}\t(1x {PlayerInventoryUI.FormatMoney( slot.Item.SellValue )})";
 
             return ui;
         }

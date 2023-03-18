@@ -152,6 +152,8 @@ namespace DwarfMiningGame.UI
             Vector2 anchorMin = new Vector2( 0.0f, 0.0f );
             Vector2 anchorMax = new Vector2( 1.0f, 1.0f );
             Vector2 pivot = new Vector2( 0.5f, 0.5f );
+
+#warning TODO - this is wrong.
             Vector2 anchoredPos = new Vector2( left, -top );
             Vector2 sizeDelta = new Vector2( -left - right, -top - bottom );
 

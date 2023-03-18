@@ -84,34 +84,10 @@ namespace DwarfMiningGame.Inventories
             }
         }
 
-        /*
-        /// Bag changes the size of your inventory.
-        // when changing the bag, if you unequip it, the capacity changes, but items are not dropped.
-        public ItemSlot Bag
-        {
-            get => _equipment[0];
-            set
-            {
-                float capacityWithoutOriginalBag = MaxCapacity;
-                if( _equipment[0] != null )
-                {
-                    capacityWithoutOriginalBag -= ((ItemBag)_equipment[0].Item).MaxCapacity;
-                }
-
-                MaxCapacity = capacityWithoutOriginalBag;
-                if( value != null )
-                {
-                    MaxCapacity += ((ItemBag)value.Item).MaxCapacity;
-                }
-
-                _equipment[0] = value;
-            }
-        }
-        */
         /// <summary>
-        /// buys an item and adds it to the inventory. enough money must be in the inventory. otherwise, only part will be bought.
+        /// Buys an item and adds it to the inventory. Enough money must be in the inventory, otherwise, only part will be bought.
         /// </summary>
-        /// <returns>returns how many were bought.</returns>
+        /// <returns>How many were bought.</returns>
         public int TryBuyItem( Item item, int amount )
         {
             // clamp how many we can buy to the available money.
@@ -129,13 +105,13 @@ namespace DwarfMiningGame.Inventories
         }
 
         /// <summary>
-        /// sells an item from the inventory and adds it to the money. enough items must be in the inventory. otherwise only part will be sold.
+        /// Sells an item from the inventory and adds it to the money. Enough items must be in the inventory, otherwise only part will be sold.
         /// </summary>
-        /// <returns>returns how many were sold.</returns>
+        /// <returns>How many were sold.</returns>
         public int TrySellItem( Item item, int amount )
         {
             int amountSold = TryRemove( item, amount );
-            this.Money += item.Value * Item.SellValueMultiplier * amountSold;
+            this.Money += item.SellValue * amountSold;
             return amountSold;
         }
     }
