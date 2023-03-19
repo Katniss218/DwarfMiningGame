@@ -147,6 +147,12 @@ namespace DwarfMiningGame.UI
         // Make - doesn't create any new objects.
         // Add - creates new objects.
 
+        public static GameObject UIFill( Transform parent, string name )
+        {
+
+            return UIFill( parent, name, 0, 0, 0, 0 );
+        }
+
         public static GameObject UIFill( Transform parent, string name, float left, float right, float top, float bottom )
         {
             Vector2 anchorMin = new Vector2( 0.0f, 0.0f );
@@ -221,6 +227,28 @@ namespace DwarfMiningGame.UI
 
         public static readonly Color FOREGROUND_COLOR = new Color( 0.5f, 0.5f, 0.5f, 1.0f );
         public static readonly Color BACKGROUND_COLOR = new Color( 0.25f, 0.25f, 0.25f, 1.0f );
+
+        public static Image MakeSegmentedBar( GameObject go, int segments, Color color, float perc )
+        {
+            Image image = go.AddComponent<Image>();
+            image.raycastTarget = false;
+            image.sprite = AssetRegistry<Sprite>.GetAsset( $"Sprites/ui_progressbar_{segments}_{segments}" );
+            image.color = color;
+            image.type = Image.Type.Filled;
+            image.fillMethod = Image.FillMethod.Horizontal;
+            image.fillOrigin = 0;
+            image.fillAmount = perc;
+            return image;
+        }
+
+        public static void MakeSegmentedBarBackground( GameObject go )
+        {
+            Image image = go.AddComponent<Image>();
+            image.raycastTarget = false;
+            image.sprite = AssetRegistry<Sprite>.GetAsset( "Sprites/ui_progressbar_background" );
+            image.color = FOREGROUND_COLOR;
+            image.type = Image.Type.Sliced;
+        }
 
         public static void MakeForeground( GameObject go )
         {

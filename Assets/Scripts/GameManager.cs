@@ -88,6 +88,19 @@ namespace DwarfMiningGame
             _playerInventory.TryAdd( Registry<Item>.Get( "item.dwarven_pickaxe" ), 1 );
             _playerInventory.Money = 200.0f;
 
+            Inventory.ItemSlot[] items = _playerInventory.GetItems();
+            foreach( var item in items )
+            {
+                if( PlayerInventory.CanEquipMainhand( item ))
+                {
+                    _playerInventory.MainHand = item;
+                }
+                if( PlayerInventory.CanEquipBackpack( item ) )
+                {
+                    _playerInventory.Backpack = item;
+                }
+            }
+
             PlayerInventoryUI.Create( MainCanvas, _playerInventory );
         }
 

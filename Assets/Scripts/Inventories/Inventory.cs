@@ -119,6 +119,16 @@ namespace DwarfMiningGame.Inventories
             return Mathf.FloorToInt(GetSpaceLeft() / item.Size);
         }
 
+        protected virtual void SlotAdded( ItemSlot slot )
+        {
+
+        }
+
+        protected virtual void SlotRemoved( ItemSlot slot )
+        {
+
+        }
+
         /// <summary>
         /// Tries to add a specified amount of the specified item to the inventory. Only part will be added if the full amount can't fit in the inventory.
         /// </summary>
@@ -151,6 +161,7 @@ namespace DwarfMiningGame.Inventories
 
             ItemSlot newSlot = new ItemSlot( item, amountAdded );
             _items.Add( newSlot );
+            SlotAdded(newSlot);
             OnAdd?.Invoke( (item, amountAdded) );
             OnSlotAdded?.Invoke( newSlot );
             OnAfterSlotChanged?.Invoke( newSlot );
@@ -177,6 +188,7 @@ namespace DwarfMiningGame.Inventories
                     if( slot.Amount <= 0 ) // This would be an issue for iteration, if not for the fact that only one slot can contain the same item.
                     {
                         _items.Remove( slot );
+                        SlotRemoved( slot );
                         OnRemove?.Invoke( (item, amountRemoved) ); // duplicate code because event calling order.
                         OnAfterSlotChanged?.Invoke( slot );
                         OnSlotRemoved?.Invoke( slot );

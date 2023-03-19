@@ -18,3 +18,7 @@ MonoBehaviour:
     <Amount>k__BackingField: 1
     <HasLimit>k__BackingField: 0
     <MaxRemaining>k__BackingField: 0
+  - <Item>k__BackingField: {fileID: 11400000, guid: 2ae75177a1efe464085cb33bf539f2c1, type: 2}
+    <Amount>k__BackingField: 1
+    <HasLimit>k__BackingField: 0
+    <MaxRemaining>k__BackingField: 0

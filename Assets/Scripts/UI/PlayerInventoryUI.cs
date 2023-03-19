@@ -13,42 +13,40 @@ namespace DwarfMiningGame.UI
 {
     public sealed class PlayerInventoryUI : MonoBehaviour
     {
-        PlayerInventory _inventory;
-        public PlayerInventory Inventory
-        {
-            get => _inventory;
-            set
-            {
-                if( this._inventory != null )
-                {
-                    this._inventory.OnAfterMoneyChanged -= this.OnMoneyChanged;
-                    this._inventory.OnAfterSlotChanged -= this.OnAfterSlotChanged;
-                    this._inventory.OnSlotAdded -= this.OnSlotAdded;
-                    this._inventory.OnSlotRemoved -= this.OnSlotRemoved;
-                    this._inventory.OnAfterEquipmentChanged -= this.OnAfterEquipmentChanged;
-                }
-
-                this._inventory = value;
-
-                if( this._inventory != null )
-                {
-                    this._inventory.OnAfterMoneyChanged += this.OnMoneyChanged;
-                    this._inventory.OnAfterSlotChanged += this.OnAfterSlotChanged;
-                    this._inventory.OnSlotAdded += this.OnSlotAdded;
-                    this._inventory.OnSlotRemoved += this.OnSlotRemoved;
-                    this._inventory.OnAfterEquipmentChanged += this.OnAfterEquipmentChanged;
-                }
-            }
-        }
+        public PlayerInventory Inventory { get; private set; }
 
         [SerializeField] TMPro.TextMeshProUGUI _moneyText;
 
         [SerializeField] RectTransform _equipmentList;
         [SerializeField] RectTransform _itemsList;
+        Image _invSizeBar;
 
         List<InventoryEquipmentUI> _equipmentUIs = new List<InventoryEquipmentUI>();
 
         Dictionary<Inventory.ItemSlot, ItemUI> _itemUIs = new Dictionary<Inventory.ItemSlot, ItemUI>();
+
+        public void SetInventory( PlayerInventory inventory )
+        {
+            if( this.Inventory != null )
+            {
+                this.Inventory.OnAfterMoneyChanged -= this.OnMoneyChanged;
+                this.Inventory.OnAfterSlotChanged -= this.OnAfterSlotChanged;
+                this.Inventory.OnSlotAdded -= this.OnSlotAdded;
+                this.Inventory.OnSlotRemoved -= this.OnSlotRemoved;
+                this.Inventory.OnAfterEquipmentChanged -= this.OnAfterEquipmentChanged;
+            }
+
+            this.Inventory = inventory;
+
+            if( this.Inventory != null )
+            {
+                this.Inventory.OnAfterMoneyChanged += this.OnMoneyChanged;
+                this.Inventory.OnAfterSlotChanged += this.OnAfterSlotChanged;
+                this.Inventory.OnSlotAdded += this.OnSlotAdded;
+                this.Inventory.OnSlotRemoved += this.OnSlotRemoved;
+                this.Inventory.OnAfterEquipmentChanged += this.OnAfterEquipmentChanged;
+            }
+        }
 
         void OnAfterEquipmentChanged( int index, Inventory.ItemSlot slot )
         {
@@ -57,6 +55,8 @@ namespace DwarfMiningGame.UI
 
         void OnAfterSlotChanged( Inventory.ItemSlot slot )
         {
+            _invSizeBar.fillAmount = Inventory.GetSize() / Inventory.MaxCapacity;
+
             if( _itemUIs.TryGetValue( slot, out ItemUI ui ) )
             {
                 ui.SetAmount( slot.Amount );
@@ -92,7 +92,7 @@ namespace DwarfMiningGame.UI
 
         private void SetMoneyText( float currentMoney )
         {
-            _moneyText.text = FormatMoney(currentMoney);
+            _moneyText.text = FormatMoney( currentMoney );
         }
 
         void OnMoneyChanged( float newMoney )
@@ -107,7 +107,7 @@ namespace DwarfMiningGame.UI
         /// </summary>
         /// <param name="canEquipItem">Function that checks whether or not the item is displayed in the selection window for this slot.</param>
         /// <param name="onSelect">The action to perform upon selecting the item for this slot.</param>
-        public void CreateEquipmentSlotUI( Func<Inventory.ItemSlot, bool> canEquipItem, Action<Inventory.ItemSlot> onSelect )
+        public void CreateEquipmentSlotUI( Inventory.ItemSlot currentItem, Func<Inventory.ItemSlot, bool> canEquipItem, Action<Inventory.ItemSlot> onSelect )
         {
             InventoryEquipmentUI ui = InventoryEquipmentUI.Create( _equipmentList, () =>
             {
@@ -117,13 +117,14 @@ namespace DwarfMiningGame.UI
                 }
                 currentEquipSelectorWindow = InventorySelectorContextMenu.Create( GameManager.ContextMenuCanvas, this.Inventory, true, canEquipItem, onSelect );
             } );
+            ui.SetSlot( currentItem );
 
             _equipmentUIs.Add( ui );
         }
 
         public static string FormatMoney( float value )
         {
-            return $"¤{value.ToString( "#.00", CultureInfo.InvariantCulture )}";
+            return $"¤{value.ToString( "0.00", CultureInfo.InvariantCulture )}";
         }
 
 
@@ -132,6 +133,21 @@ namespace DwarfMiningGame.UI
             GameObject root = UIHelper.UI( panel, "Inventory UI", new Vector2( 0, 1 ), Vector2.zero, new Vector2( 455, 365 ) );
 
             UIHelper.MakeBackground( root );
+
+            GameObject sizeBarGO = UIHelper.UI( root.transform, "$size_bar", new Vector2( 0, 1 ), new Vector2( 5, -5 ), new Vector2( 250, 25 ) );
+            UIHelper.MakeSegmentedBarBackground( sizeBarGO );
+            GameObject sizeBarFillGO = UIHelper.UIFill( sizeBarGO.transform, "fill" );
+            Image sizeImg = UIHelper.MakeSegmentedBar( sizeBarFillGO, 10, new Color( 1, 1, 0.5f ), inventory.GetSize() / inventory.MaxCapacity );
+
+            GameObject healthBarGO = UIHelper.UI( root.transform, "$health_bar", new Vector2( 0, 1 ), new Vector2( 5, -30 ), new Vector2( 250, 25 ) );
+            UIHelper.MakeSegmentedBarBackground( healthBarGO );
+            GameObject healthBarFillGO = UIHelper.UIFill( healthBarGO.transform, "fill" );
+            Image healthImg = UIHelper.MakeSegmentedBar( healthBarFillGO, 10, new Color( 1, 0.2f, 0.2f ), 1.0f );
+
+            GameObject foodBarGO = UIHelper.UI( root.transform, "$food_bar", new Vector2( 0, 1 ), new Vector2( 5, -55 ), new Vector2( 250, 25 ) );
+            UIHelper.MakeSegmentedBarBackground( foodBarGO );
+            GameObject foodBarFillGO = UIHelper.UIFill( foodBarGO.transform, "fill" );
+            Image foodImg = UIHelper.MakeSegmentedBar( foodBarFillGO, 10, new Color( 1, 0.5f, 0.2f ), 1.0f );
 
             GameObject moneyGO = UIHelper.UI( root.transform, "$money", new Vector2( 1, 1 ), new Vector2( -5, -5 ), new Vector2( 200, 25 ) );
             TMPro.TextMeshProUGUI moneyText = UIHelper.MakeText( moneyGO, "<$money>", TMPro.HorizontalAlignmentOptions.Right );
@@ -149,7 +165,8 @@ namespace DwarfMiningGame.UI
 
 
             PlayerInventoryUI ui = root.AddComponent<PlayerInventoryUI>();
-            ui.Inventory = inventory;
+            ui.SetInventory( inventory );
+            ui._invSizeBar = sizeImg;
             ui._itemsList = (RectTransform)itemsContent.transform;
             ui._moneyText = moneyText;
             ui._equipmentList = (RectTransform)equipmentContent.transform;
@@ -159,9 +176,9 @@ namespace DwarfMiningGame.UI
                 ui.CreateItemUI( item );
             }
 
-            ui.CreateEquipmentSlotUI( ( s ) => s.Item is ItemPickaxe, ( s ) => ui.Inventory.MainHand = s );
-            ui.CreateEquipmentSlotUI( ( s ) => s.Item is Item, ( s ) => ui.Inventory.OffHand = s );
-            ui.CreateEquipmentSlotUI( ( s ) => s.Item is ItemBag, ( s ) => ui.Inventory.Backpack = s );
+            ui.CreateEquipmentSlotUI( inventory.MainHand, PlayerInventory.CanEquipMainhand, ( s ) => ui.Inventory.MainHand = s );
+            ui.CreateEquipmentSlotUI( inventory.OffHand, PlayerInventory.CanEquipOffhand, ( s ) => ui.Inventory.OffHand = s );
+            ui.CreateEquipmentSlotUI( inventory.Backpack, PlayerInventory.CanEquipBackpack, ( s ) => ui.Inventory.Backpack = s );
 
             ui.OnMoneyChanged( inventory.Money );
 

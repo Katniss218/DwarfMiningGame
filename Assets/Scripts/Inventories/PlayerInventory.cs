@@ -36,6 +36,9 @@ namespace DwarfMiningGame.Inventories
         /// </summary>
         public Action<float> OnAfterMoneyChanged;
 
+        /// <summary>
+        /// OnAfterEquipmentChanged( slotIndex, newItem )
+        /// </summary>
         public Action<int, ItemSlot> OnAfterEquipmentChanged;
 
         // equipment is a list, you click on an item, it gives you a popup where you can select an item to equip.
@@ -54,7 +57,7 @@ namespace DwarfMiningGame.Inventories
             set
             {
                 _equipment[SLOT_MAINHAND] = value;
-                OnAfterEquipmentChanged( SLOT_MAINHAND, value );
+                OnAfterEquipmentChanged?.Invoke( SLOT_MAINHAND, value );
             }
         }
 
@@ -67,7 +70,7 @@ namespace DwarfMiningGame.Inventories
             set
             {
                 _equipment[SLOT_OFFHAND] = value;
-                OnAfterEquipmentChanged( SLOT_OFFHAND, value );
+                OnAfterEquipmentChanged?.Invoke( SLOT_OFFHAND, value );
             }
         }
 
@@ -80,7 +83,37 @@ namespace DwarfMiningGame.Inventories
             set
             {
                 _equipment[SLOT_BACKPACK] = value;
-                OnAfterEquipmentChanged( SLOT_BACKPACK, value );
+                OnAfterEquipmentChanged?.Invoke( SLOT_BACKPACK, value );
+            }
+        }
+
+        public static bool CanEquipMainhand( ItemSlot item )
+        {
+            return item.Item is ItemPickaxe;
+        }
+
+        public static bool CanEquipOffhand( ItemSlot item )
+        {
+            return true;
+        }
+
+        public static bool CanEquipBackpack( ItemSlot item )
+        {
+            return item.Item is ItemBackpack;
+        }
+
+        protected override void SlotRemoved( ItemSlot slot )
+        {
+            base.SlotRemoved( slot );
+
+            // If someone removed the item referenced as equipment - unreference it.
+            for( int i = 0; i < _equipment.Length; i++ )
+            {
+                if( slot == _equipment[i] )
+                {
+                    _equipment[i] = null;
+                    OnAfterEquipmentChanged?.Invoke( i, null );
+                }
             }
         }
 
