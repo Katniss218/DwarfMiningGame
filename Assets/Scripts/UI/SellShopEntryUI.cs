@@ -48,7 +48,7 @@ namespace DwarfMiningGame.UI
             ui._onClick = onClick;
             ui._inventoryItemUI = ItemUI.Create( (RectTransform)root.transform, slot.Item, slot.Amount );
 
-            GameObject priceText = UIHelper.UIFill( root.transform, "price text", 0, 0, 0, 0 );
+            GameObject priceText = UIHelper.UIFill( root.transform, "price text" );
             TMPro.TextMeshProUGUI text = UIHelper.MakeText( priceText, "<price>", TMPro.HorizontalAlignmentOptions.Right );
             ui._priceText = text;
 

@@ -135,19 +135,19 @@ namespace DwarfMiningGame.UI
             UIHelper.MakeBackground( root );
 
             GameObject sizeBarGO = UIHelper.UI( root.transform, "$size_bar", new Vector2( 0, 1 ), new Vector2( 5, -5 ), new Vector2( 250, 25 ) );
-            UIHelper.MakeSegmentedBarBackground( sizeBarGO );
+            UIHelper.MakeProgressBarBackground( sizeBarGO );
             GameObject sizeBarFillGO = UIHelper.UIFill( sizeBarGO.transform, "fill" );
-            Image sizeImg = UIHelper.MakeSegmentedBar( sizeBarFillGO, 10, new Color( 1, 1, 0.5f ), inventory.GetSize() / inventory.MaxCapacity );
+            Image sizeImg = UIHelper.MakeProgressBar( sizeBarFillGO, 10, new Color( 1, 1, 0.5f ), inventory.GetSize() / inventory.MaxCapacity );
 
             GameObject healthBarGO = UIHelper.UI( root.transform, "$health_bar", new Vector2( 0, 1 ), new Vector2( 5, -30 ), new Vector2( 250, 25 ) );
-            UIHelper.MakeSegmentedBarBackground( healthBarGO );
+            UIHelper.MakeProgressBarBackground( healthBarGO );
             GameObject healthBarFillGO = UIHelper.UIFill( healthBarGO.transform, "fill" );
-            Image healthImg = UIHelper.MakeSegmentedBar( healthBarFillGO, 10, new Color( 1, 0.2f, 0.2f ), 1.0f );
+            Image healthImg = UIHelper.MakeProgressBar( healthBarFillGO, 10, new Color( 1, 0.2f, 0.2f ), 1.0f );
 
             GameObject foodBarGO = UIHelper.UI( root.transform, "$food_bar", new Vector2( 0, 1 ), new Vector2( 5, -55 ), new Vector2( 250, 25 ) );
-            UIHelper.MakeSegmentedBarBackground( foodBarGO );
+            UIHelper.MakeProgressBarBackground( foodBarGO );
             GameObject foodBarFillGO = UIHelper.UIFill( foodBarGO.transform, "fill" );
-            Image foodImg = UIHelper.MakeSegmentedBar( foodBarFillGO, 10, new Color( 1, 0.5f, 0.2f ), 1.0f );
+            Image foodImg = UIHelper.MakeProgressBar( foodBarFillGO, 10, new Color( 1, 0.5f, 0.2f ), 1.0f );
 
             GameObject moneyGO = UIHelper.UI( root.transform, "$money", new Vector2( 1, 1 ), new Vector2( -5, -5 ), new Vector2( 200, 25 ) );
             TMPro.TextMeshProUGUI moneyText = UIHelper.MakeText( moneyGO, "<$money>", TMPro.HorizontalAlignmentOptions.Right );

@@ -25,6 +25,9 @@ namespace DwarfMiningGame.Crafting
                                             // Holds the UI of this crafting station, so we can interact with multiple crafting stations at once without them messing up each others UIs.
         PlayerInventory _uglyVarInventory; // this here because we need to unsubscribe from it when interaction ends.
 
+#warning TODO - The listeners should probably exist on the UI component and not on this object.
+        // Currently the UI is the "dumb" object, and this is what manages it.
+
         private void OnInventoryModified( (Item item, int amt) e )
         {
             UpdateVisibleRecipes();

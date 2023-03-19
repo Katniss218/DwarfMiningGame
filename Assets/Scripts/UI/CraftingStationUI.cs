@@ -30,9 +30,6 @@ namespace DwarfMiningGame.UI
         RectTransform _list;
         Dictionary<CraftingRecipe, CraftingRecipeUI> _entryUIs = new Dictionary<CraftingRecipe, CraftingRecipeUI>();
 
-        PlayerData _player; // quite ugly.
-
-#warning TODO - Look here, I think the problems with the cached variables in CraftingStationBehaviour can be solved by including the behaviour here. Since UI should know about what behaviour it's UI-ing.
         /// <summary>
         /// (Re)Binds the UI to a specific crafting station.
         /// </summary>
@@ -58,7 +55,6 @@ namespace DwarfMiningGame.UI
                 ui.SetEnabled( isEnabled ); // Gonna redraw itself.
             }
         }
-
 
         public void OnRecipeLockChanged( CraftingRecipe recipe, bool isLocked )
         {
@@ -105,7 +101,6 @@ namespace DwarfMiningGame.UI
             CraftingStationUI ui = rootGO.AddComponent<CraftingStationUI>();
             ui._list = content.GetComponent<RectTransform>();
             ui._onClickEntry = onClickRecipe;
-            ui._player = GameManager.Instance.PlayerData;
             ui.SetCraftingStation( craftingStation );
 
             return ui;

@@ -38,7 +38,7 @@ namespace DwarfMiningGame.UI
 
             InventoryEquipmentUI ui = rootGO.AddComponent<InventoryEquipmentUI>();
 
-            GameObject backgroundGO = UIHelper.UIFill( rootGO.transform, "background", 0, 0, 0, 0 );
+            GameObject backgroundGO = UIHelper.UIFill( rootGO.transform, "background" );
             UIHelper.MakeForeground( backgroundGO );
 
             GameObject iconGO = UIHelper.UI( rootGO.transform, "item_icon", new Vector2( 0.5f, 0.5f ), Vector2.zero, new Vector2( 50, 50 ) );

@@ -59,7 +59,7 @@ namespace DwarfMiningGame.UI
             img.color = new Color( 1, 1, 1, 1 );
             ui._icon = img;
 
-            GameObject goT = UIHelper.UIFill( go.transform, "icon", 0, 0, 0, 0 );
+            GameObject goT = UIHelper.UIFill( go.transform, "icon" );
 
             TMPro.TextMeshProUGUI text = UIHelper.MakeText( goT, "<placeholder>", TMPro.HorizontalAlignmentOptions.Right );
             ui._amountText = text;
