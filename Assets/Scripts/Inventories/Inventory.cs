@@ -112,6 +112,14 @@ namespace DwarfMiningGame.Inventories
         }
 
         /// <summary>
+        /// Returns the space left in the inventory (in units of amount of item).
+        /// </summary>
+        public int GetSpaceLeft( Item item )
+        {
+            return Mathf.FloorToInt(GetSpaceLeft() / item.Size);
+        }
+
+        /// <summary>
         /// Tries to add a specified amount of the specified item to the inventory. Only part will be added if the full amount can't fit in the inventory.
         /// </summary>
         /// <returns>How many items were actually added to the inventory.</returns>

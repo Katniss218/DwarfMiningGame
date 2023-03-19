@@ -21,11 +21,11 @@ namespace DwarfMiningGame.Crafting
             public Item Item { get; set; }
 
             [field: SerializeField]
-            public int Amount { get; set; }
+            public int Amount { get; set; } = 1;
         }
 
         [field: SerializeField]
-        public string ID { get; set; }
+        public string ID { get; set; } = "recipe.invalid";
 
         [field: SerializeField]
         public Entry[] Ingredients { get; set; }
@@ -33,7 +33,8 @@ namespace DwarfMiningGame.Crafting
         [field: SerializeField]
         public Entry[] Results { get; set; }
     }
-    public static class InventoryEx
+
+    public static class InventoryEx_Recipe
     {
         public static bool HasEnoughItems( this Inventory inv, CraftingRecipe recipe, int count = 1 )
         {
