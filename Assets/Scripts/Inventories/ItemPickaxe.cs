@@ -5,7 +5,7 @@ using UnityEngine;
 namespace DwarfMiningGame.Inventories
 { 
     [CreateAssetMenu( fileName = "pickaxe item", menuName = "DwarfMiningGame/Item (Pickaxe)", order = 310 )]
-    public class ItemPickaxe : ItemEquippable
+    public class ItemPickaxe : Item, IItemEquippable
     {
         [field: SerializeField]
         public float MiningSpeed { get; set; }
@@ -13,9 +13,14 @@ namespace DwarfMiningGame.Inventories
         [field: SerializeField]
         public float MaxHardness { get; set; }
 
-        public override void OnEquip( Inventory i )
+        public void OnEquip( Equipment eq )
         {
-            throw new System.NotImplementedException();
+            // player should swing whatever is in here.
+        }
+
+        public void OnUnequip( Equipment eq )
+        {
+            
         }
     }
 }

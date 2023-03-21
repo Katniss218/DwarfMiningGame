@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace DwarfMiningGame.Inventories
 {
+    [RequireComponent( typeof( Equipment ) )]
     public class PlayerInventory : Inventory
     {
         [SerializeField]
@@ -41,22 +42,38 @@ namespace DwarfMiningGame.Inventories
         /// </summary>
         public Action<int, ItemSlot> OnAfterEquipmentChanged;
 
-        // equipment is a list, you click on an item, it gives you a popup where you can select an item to equip.
-        ItemSlot[] _equipment = new ItemSlot[] { null, null, null };
-
         const int SLOT_MAINHAND = 0;
         const int SLOT_OFFHAND = 1;
         const int SLOT_BACKPACK = 2;
+
+        // The equipment slots of the player's inventory and their corresponding validator functions.
+        Equipment _equipment;
+
+        void Awake()
+        {
+            _equipment = this.GetComponent<Equipment>();
+
+            _equipment.Slots = new Equipment.EquipmentSlot[]
+            {
+            new Equipment.EquipmentSlot() // mainhand
+            { CurrentItem = null, CanEquip = (i) => i.Item is ItemPickaxe, Equipment = _equipment },
+            new Equipment.EquipmentSlot() // offhand
+            { CurrentItem = null, CanEquip = (i) => true, Equipment = _equipment },
+            new Equipment.EquipmentSlot() // backpack
+            { CurrentItem = null, CanEquip = (i) => i.Item is ItemBackpack, Equipment = _equipment }
+            };
+        }
+
 
         /// <summary>
         /// Gets or sets the item in the primary (main) hand. Shorthand for the equipment slot.
         /// </summary>
         public ItemSlot MainHand
         {
-            get => _equipment[SLOT_MAINHAND];
+            get => _equipment.Slots[SLOT_MAINHAND].CurrentItem;
             set
             {
-                _equipment[SLOT_MAINHAND] = value;
+                _equipment.Slots[SLOT_MAINHAND].Equip( value );
                 OnAfterEquipmentChanged?.Invoke( SLOT_MAINHAND, value );
             }
         }
@@ -66,10 +83,10 @@ namespace DwarfMiningGame.Inventories
         /// </summary>
         public ItemSlot OffHand
         {
-            get => _equipment[SLOT_OFFHAND];
+            get => _equipment.Slots[SLOT_OFFHAND].CurrentItem;
             set
             {
-                _equipment[SLOT_OFFHAND] = value;
+                _equipment.Slots[SLOT_OFFHAND].Equip( value );
                 OnAfterEquipmentChanged?.Invoke( SLOT_OFFHAND, value );
             }
         }
@@ -79,10 +96,10 @@ namespace DwarfMiningGame.Inventories
         /// </summary>
         public ItemSlot Backpack
         {
-            get => _equipment[SLOT_BACKPACK];
+            get => _equipment.Slots[SLOT_BACKPACK].CurrentItem;
             set
             {
-                _equipment[SLOT_BACKPACK] = value;
+                _equipment.Slots[SLOT_BACKPACK].Equip( value );
                 OnAfterEquipmentChanged?.Invoke( SLOT_BACKPACK, value );
             }
         }
@@ -107,12 +124,11 @@ namespace DwarfMiningGame.Inventories
             base.SlotRemoved( slot );
 
             // If someone removed the item referenced as equipment - unreference it.
-            for( int i = 0; i < _equipment.Length; i++ )
+            for( int i = 0; i < _equipment.Slots.Length; i++ )
             {
-                if( slot == _equipment[i] )
+                if( _equipment.Slots[i].CurrentItem == slot )
                 {
-                    _equipment[i] = null;
-                    OnAfterEquipmentChanged?.Invoke( i, null );
+                    _equipment.Slots[i].Unequip();
                 }
             }
         }

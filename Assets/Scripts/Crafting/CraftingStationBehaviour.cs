@@ -27,6 +27,7 @@ namespace DwarfMiningGame.Crafting
 
 #warning TODO - The listeners should probably exist on the UI component and not on this object.
         // Currently the UI is the "dumb" object, and this is what manages it.
+        // But then, this object is a proxy anyway. Ugh, this is hard.
 
         private void OnInventoryModified( (Item item, int amt) e )
         {

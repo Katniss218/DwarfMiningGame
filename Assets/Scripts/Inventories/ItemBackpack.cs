@@ -6,15 +6,21 @@ namespace DwarfMiningGame.Inventories
 {
     /// A backpack is an item that can increase your inventory size.
     [CreateAssetMenu( fileName = "backpack item", menuName = "DwarfMiningGame/Item (Backpack)", order = 320 )]
-    public class ItemBackpack : ItemEquippable
+    public class ItemBackpack : Item, IItemEquippable
     {
         [field: SerializeField]
         public float MaxCapacity { get; set; }
 
-        public override void OnEquip( Inventory i )
+
+        public void OnEquip( Equipment eq )
         {
-            throw new System.NotImplementedException();
+            eq.GetComponent<Inventory>().MaxCapacity += this.MaxCapacity;
         }
-#warning TODO - Make functional. Probably through ItemEquippable subclass with OnEquip() method.
+
+
+        public void OnUnequip( Equipment eq )
+        {
+            eq.GetComponent<Inventory>().MaxCapacity -= this.MaxCapacity;
+        }
     }
 }
